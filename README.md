@@ -1,3 +1,3 @@
 # Dont_kill_the_tree
 
-This is an Android project.
+This is Android project.
