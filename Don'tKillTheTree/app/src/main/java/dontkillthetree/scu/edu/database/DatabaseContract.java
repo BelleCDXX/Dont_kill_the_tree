@@ -1,4 +1,4 @@
-package dontkillthetree.scu.edu.dontkillthetree;
+package dontkillthetree.scu.edu.database;
 
 import android.provider.BaseColumns;
 
