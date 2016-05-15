@@ -1,5 +1,7 @@
 package dontkillthetree.scu.edu.database;
 
+import java.util.Calendar;
+
 /**
  * Created by Joey Zheng on 5/14/16.
  */
@@ -19,13 +21,12 @@ public final class DatabaseStatement {
                 "CREATE TABLE " + DatabaseContract.MilestoneEntry.TABLE_NAME + " (" +
                 DatabaseContract.MilestoneEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME + BLOB_TYPE + COMMA_SEP +
-                DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE +
+                DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +
+                DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED + INTEGER_TYPE +
                 ")";
 
         protected static final String DELETE_ENTRY =
                 "DROP TABLE IF EXISTS " + DatabaseContract.MilestoneEntry.TABLE_NAME;
-
-
     }
 
     public static abstract class ProjectEntry {
@@ -33,7 +34,7 @@ public final class DatabaseStatement {
                 "CREATE TABLE " + DatabaseContract.ProjectEntry.TABLE_NAME + " (" +
                 DatabaseContract.ProjectEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_NAME + BLOB_TYPE + COMMA_SEP +
-                DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE +
+                DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID + INTEGER_TYPE + COMMA_SEP +
                 FOREIGN_KEY + DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID +
                         ")" + REFERENCES + DatabaseContract.MilestoneEntry.TABLE_NAME + "(" + DatabaseContract.MilestoneEntry._ID + ")" +

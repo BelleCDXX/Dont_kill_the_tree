@@ -1,0 +1,55 @@
+package dontkillthetree.scu.edu.Util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+/**
+ * Created by Joey Zheng on 5/14/16.
+ */
+public abstract class Util {
+    /**
+     * Convert a given calendar into string
+     * @param calendar
+     * @return
+     */
+    public static final String calendarToString(Calendar calendar) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
+    /**
+     * Convert a given date String into Calendar
+     * @param date
+     * @return
+     * @throws ParseException
+     */
+    public static final Calendar stringToCalendar(String date) throws ParseException{
+        Calendar result = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        result.setTime(simpleDateFormat.parse(date));
+
+        return result;
+    }
+
+    /**
+     * This method determines if a given due date is on time.
+     * @param dueDate
+     * @param currentDate Give a specific date to compare, or null if you want to compare it to the current date
+     * @return
+     */
+    public static final boolean isOnTime(Calendar dueDate, Calendar currentDate) {
+        if (currentDate == null) {
+            currentDate = Calendar.getInstance();
+        }
+
+        Calendar actualDueDate = (Calendar) dueDate.clone();
+        actualDueDate.set(Calendar.HOUR_OF_DAY, 0);
+        actualDueDate.set(Calendar.MINUTE, 0);
+        actualDueDate.set(Calendar.SECOND, 0);
+        actualDueDate.set(Calendar.MILLISECOND, 0);
+        actualDueDate.add(Calendar.DAY_OF_MONTH, 1);
+
+        return currentDate.before(dueDate);
+    }
+}
