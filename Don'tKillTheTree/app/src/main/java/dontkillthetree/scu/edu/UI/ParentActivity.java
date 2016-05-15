@@ -1,4 +1,4 @@
-package dontkillthetree.scu.edu.dontkillthetree;
+package dontkillthetree.scu.edu.UI;
 
 import android.content.Intent;
 import android.net.Uri;

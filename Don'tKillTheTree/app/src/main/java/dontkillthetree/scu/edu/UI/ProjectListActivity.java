@@ -1,13 +1,13 @@
-package dontkillthetree.scu.edu.dontkillthetree;
+package dontkillthetree.scu.edu.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class HomeActivity extends ParentActivity {
+public class ProjectListActivity extends ParentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_project_list);
     }
 }
