@@ -4,27 +4,34 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
 
 /**
  * Created by Joey Zheng on 5/15/16.
  */
-public class MilestonePropertyChangeListener implements PropertyChangeListener {
+public class MilestoneChangeListener implements ChangeListener {
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
 
-    public MilestonePropertyChangeListener(Context context) {
+    public MilestoneChangeListener(Context context) {
         databaseHelper = new DatabaseHelper(context);
         db = databaseHelper.getWritableDatabase();
     }
 
     public void onPropertyChange(PropertyChangeEvent event) {
         ContentValues values = new ContentValues();
-        values.put(event.getPropertyName(), String.valueOf(event.getValue()));
+        values.put(event.getPropertyName(), event.getValue());
         String selection = DatabaseContract.MilestoneEntry._ID + " = ?";
         String[] selectionArgs = {String.valueOf(event.getId())};
         db.update(DatabaseContract.MilestoneEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+    public void onDispose(DisposeEvent event) {
+        String milestoneToDelete = DatabaseContract.MilestoneEntry._ID + " = " + event.getId();
+        String projectMilestoneToDelete = DatabaseContract.ProjectMilestoneEntry.COLUMN_NAME_MILESTONE_ID + " = " + event.getId();
+        db.delete(DatabaseContract.ProjectMilestoneEntry.TABLE_NAME, projectMilestoneToDelete, null);
+        db.delete(DatabaseContract.MilestoneEntry.TABLE_NAME, milestoneToDelete, null);
+        databaseHelper.close();
     }
 }

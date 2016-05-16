@@ -3,12 +3,12 @@ package dontkillthetree.scu.edu.event;
 /**
  * Created by Joey Zheng on 5/15/16.
  */
-public class PropertyChangeEvent<T> {
-    private long id;
-    private String propertyName;
-    private T value;
+public class PropertyChangeEvent {
+    private final long id;
+    private final String propertyName;
+    private final String value;
 
-    public PropertyChangeEvent(long id, String propertyName, T value) {
+    public PropertyChangeEvent(long id, String propertyName, String value) {
         this.id = id;
         this.propertyName = propertyName;
         this.value = value;
@@ -22,7 +22,7 @@ public class PropertyChangeEvent<T> {
         return propertyName;
     }
 
-    public T getValue() {
+    public String getValue() {
         return value;
     }
 }

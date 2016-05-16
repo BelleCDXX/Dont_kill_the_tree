@@ -33,6 +33,19 @@ public abstract class Util {
     }
 
     /**
+     * Given a calendar, set the calendar to the soonest due date
+     * For example, given 05/15/2016 20:47:55.789 will return 06/16/2016 00:00:00.000
+     * @param calendar
+     */
+    public static final void toNearestDueDate(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+    }
+
+    /**
      * This method determines if a given due date is on time.
      * @param dueDate
      * @param currentDate Give a specific date to compare, or null if you want to compare it to the current date
@@ -42,13 +55,6 @@ public abstract class Util {
         if (currentDate == null) {
             currentDate = Calendar.getInstance();
         }
-
-        Calendar actualDueDate = (Calendar) dueDate.clone();
-        actualDueDate.set(Calendar.HOUR_OF_DAY, 0);
-        actualDueDate.set(Calendar.MINUTE, 0);
-        actualDueDate.set(Calendar.SECOND, 0);
-        actualDueDate.set(Calendar.MILLISECOND, 0);
-        actualDueDate.add(Calendar.DAY_OF_MONTH, 1);
 
         return currentDate.before(dueDate);
     }
