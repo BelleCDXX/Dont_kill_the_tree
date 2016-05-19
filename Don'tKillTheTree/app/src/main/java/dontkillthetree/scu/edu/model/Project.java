@@ -8,17 +8,16 @@ import android.database.sqlite.SQLiteDatabase;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
+import dontkillthetree.scu.edu.event.ChangeListener;
+import dontkillthetree.scu.edu.event.DisposeEvent;
+import dontkillthetree.scu.edu.event.PropertyChangeEvent;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public class Project {
     private final long id;
     private String name;
@@ -27,6 +26,7 @@ public class Project {
     private Milestone currentMilestone;
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
+    private ChangeListener changeListener;
 
     /**
      * Use this constructor when user creates a new project, i.e. no record in the database
@@ -54,7 +54,7 @@ public class Project {
         int i;
         for (i = 1; i <= numberOfMilestones; i++) {
             milestones.add(new Milestone("Milestone " + i, currentDate, context));
-            currentDate.add(Calendar.DAY_OF_MONTH, increment);
+            currentDate.add(Calendar.DATE, increment);
         }
         this.currentMilestone = milestones.get(0);
 
@@ -159,6 +159,16 @@ public class Project {
         } while (cursor.moveToNext());
     }
 
+    public void dispose() {
+        if (changeListener != null) {
+            changeListener.onDispose(new DisposeEvent(id));
+        }
+    }
+
+    public void addPropertyChangeListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
     // getter and setter
     public long getId() {
         return id;
@@ -168,11 +178,62 @@ public class Project {
         return name;
     }
 
+    public void setName(String name) {
+        // update database
+        if (changeListener != null) {
+            changeListener.onPropertyChange(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
+                    name));
+        }
+
+        // update instance
+        this.name = name;
+    }
+
     public Calendar getDueDate() {
         return dueDate;
     }
 
+    public void setDueDate(Calendar dueDate) {
+        // update instance
+        this.dueDate = (Calendar) dueDate.clone();
+        Util.toNearestDueDate(this.dueDate);
+
+        // update database
+        if (changeListener != null) {
+            changeListener.onPropertyChange(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE,
+                    Util.calendarToString(this.dueDate)));
+        }
+    }
+
     public List<Milestone> getMilestones() {
         return milestones;
+    }
+
+    public void removeMilestone(long id) {
+        Milestone milestone = Util.getMilestoneById(milestones, id);
+
+        if (milestone != null) {
+            milestone.dispose();
+            milestones.remove(milestone);
+        }
+    }
+
+    public long addMilestone(String name, Calendar dueDate, Context context) {
+        Milestone newMilestone = new Milestone(name, dueDate, context);
+        milestones.add(newMilestone);
+        sortMilestones();
+        return newMilestone.getId();
+    }
+
+    public Milestone getCurrentMilestone() {
+        return currentMilestone;
+    }
+
+    public void updateCurrentMilestone() {
+
     }
 }

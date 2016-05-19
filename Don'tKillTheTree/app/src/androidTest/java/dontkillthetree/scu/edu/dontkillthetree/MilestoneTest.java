@@ -1,9 +1,16 @@
 package dontkillthetree.scu.edu.dontkillthetree;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.Calendar;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
@@ -11,27 +18,27 @@ import dontkillthetree.scu.edu.event.MilestoneChangeListener;
 import dontkillthetree.scu.edu.event.ChangeListener;
 import dontkillthetree.scu.edu.model.Milestone;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
-public class MilestoneTest extends AndroidTestCase{
-    RenamingDelegatingContext context;
+import static org.junit.Assert.*;
+
+@RunWith(AndroidJUnit4.class)
+public class MilestoneTest{
+    Context context;
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
-        context = new RenamingDelegatingContext(getContext(), "test_");
+        context = InstrumentationRegistry.getTargetContext();
         databaseHelper = new DatabaseHelper(context);
         db = databaseHelper.getWritableDatabase();
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
-        super.tearDown();
+        db.close();
     }
 
+    @Test
     public void milestoneCreation(){
         // set up
         Calendar calendar = Calendar.getInstance();
@@ -60,11 +67,17 @@ public class MilestoneTest extends AndroidTestCase{
         assertEquals("Milestone New Name", cursor.getString(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME)));
 
         // completed
+        projection[0] = DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED;
+        selection = DatabaseContract.MilestoneEntry._ID + " = " + milestone2.getId();
+        cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
+        cursor.moveToFirst();
+        assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)));
+
         milestone2.setCompleted(true);
         projection[0] = DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED;
         selection = DatabaseContract.MilestoneEntry._ID + " = " + milestone2.getId();
         cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
         cursor.moveToFirst();
-        assertEquals(true, cursor.getString(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)));
+        assertEquals(1, cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)));
     }
 }

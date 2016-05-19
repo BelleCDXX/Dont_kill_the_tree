@@ -3,6 +3,9 @@ package dontkillthetree.scu.edu.Util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+
+import dontkillthetree.scu.edu.model.Milestone;
 
 /**
  * Created by Joey Zheng on 5/14/16.
@@ -57,5 +60,15 @@ public abstract class Util {
         }
 
         return currentDate.before(dueDate);
+    }
+
+    public static Milestone getMilestoneById(List<Milestone> milestones, long id) {
+        for (Milestone milestone : milestones) {
+            if (milestone.getId() == id) {
+                return milestone;
+            }
+        }
+
+        return null;
     }
 }

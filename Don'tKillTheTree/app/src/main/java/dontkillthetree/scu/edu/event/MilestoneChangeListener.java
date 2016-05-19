@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
 
-/**
- * Created by Joey Zheng on 5/15/16.
- */
 public class MilestoneChangeListener implements ChangeListener {
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
@@ -21,7 +18,13 @@ public class MilestoneChangeListener implements ChangeListener {
 
     public void onPropertyChange(PropertyChangeEvent event) {
         ContentValues values = new ContentValues();
-        values.put(event.getPropertyName(), event.getValue());
+        if (event.getPropertyName().equals(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)) {
+            values.put(event.getPropertyName(), event.getValue().equals("true") ? 1 : 0);
+        }
+        else {
+            values.put(event.getPropertyName(), event.getValue());
+        }
+
         String selection = DatabaseContract.MilestoneEntry._ID + " = ?";
         String[] selectionArgs = {String.valueOf(event.getId())};
         db.update(DatabaseContract.MilestoneEntry.TABLE_NAME, values, selection, selectionArgs);

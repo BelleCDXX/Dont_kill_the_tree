@@ -14,9 +14,6 @@ import dontkillthetree.scu.edu.event.DisposeEvent;
 import dontkillthetree.scu.edu.event.PropertyChangeEvent;
 import dontkillthetree.scu.edu.event.ChangeListener;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public class Milestone implements Comparable{
     private final long id;
     private String name;
@@ -34,17 +31,18 @@ public class Milestone implements Comparable{
      * @param dueDate
      */
     public Milestone(String name, Calendar dueDate, Context context) {
-        Calendar currentDate = Calendar.getInstance();
-        if (name == null || context == null || dueDate.before(currentDate)) {
-            throw new IllegalArgumentException();
-        }
-
         databaseHelper = new DatabaseHelper(context);
         db = databaseHelper.getWritableDatabase();
 
-        this.name = name;
+        Calendar currentDate = Calendar.getInstance();
         this.dueDate = (Calendar) dueDate.clone();
         Util.toNearestDueDate(this.dueDate);
+
+        if (name == null || context == null || this.dueDate.before(currentDate)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.name = name;
         this.onTime = Util.isOnTime(dueDate, currentDate);
         this.completed = false;
         this.shown = false;
