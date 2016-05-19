@@ -220,12 +220,16 @@ public class Project {
             milestone.dispose();
             milestones.remove(milestone);
         }
+
+        updateCurrentMilestone();
     }
 
     public long addMilestone(String name, Calendar dueDate, Context context) {
         Milestone newMilestone = new Milestone(name, dueDate, context);
         milestones.add(newMilestone);
         sortMilestones();
+        updateCurrentMilestone();
+        
         return newMilestone.getId();
     }
 
@@ -234,6 +238,14 @@ public class Project {
     }
 
     public void updateCurrentMilestone() {
+        sortMilestones();
+        for (Milestone milestone : milestones) {
+            if (!milestone.isCompleted()) {
+                currentMilestone = milestone;
+                return;
+            }
+        }
 
+        currentMilestone = null;
     }
 }
