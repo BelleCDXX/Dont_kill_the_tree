@@ -12,10 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Calendar;
+
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
-import dontkillthetree.scu.edu.event.MilestoneChangeListener;
-import dontkillthetree.scu.edu.event.ChangeListener;
+import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.model.Milestone;
 
 import static org.junit.Assert.*;
@@ -36,18 +36,29 @@ public class MilestoneTest{
     @After
     public void tearDown() throws Exception {
         db.close();
+        databaseHelper.close();
     }
 
     @Test
-    public void milestoneCreation(){
+    public void Test_MilstoneCreation() {
+        Calendar calendar = Calendar.getInstance();
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+
+        String[] projection = {DatabaseContract.MilestoneEntry._ID};
+        String selection = DatabaseContract.MilestoneEntry._ID + " = " + milestone.getId();
+        Cursor cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
+        assertEquals(1, cursor.getCount());
+
+        milestone.dispose();
+    }
+
+    @Test
+    public void Test_MilestoneEdit(){
         // set up
         Calendar calendar = Calendar.getInstance();
-        Milestone milestone = new Milestone("Test Milestone", calendar, context);
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
         calendar.add(Calendar.DAY_OF_MONTH, 2);
-        Milestone milestone2 = new Milestone("Test Milestone 2", calendar, context);
-        ChangeListener changeListener = new MilestoneChangeListener(context);
-        milestone.addPropertyChangeListener(changeListener);
-        milestone2.addPropertyChangeListener(changeListener);
+        Milestone milestone2 = new Milestone("Test Milestone 2", calendar, new MyMilestoneDatabaseOpListener(context), context);
 
         // isOnTime
         String[] projection = {DatabaseContract.MilestoneEntry._ID};
@@ -79,5 +90,22 @@ public class MilestoneTest{
         cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
         cursor.moveToFirst();
         assertEquals(1, cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)));
+
+        milestone.dispose();
+        milestone2.dispose();
+    }
+
+    @Test
+    public void Test_MilestoneDeletion() {
+        Calendar calendar = Calendar.getInstance();
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+
+        long id = milestone.getId();
+        milestone.dispose();
+
+        String[] projection = {DatabaseContract.MilestoneEntry._ID};
+        String selection = DatabaseContract.MilestoneEntry._ID + " = " + id;
+        Cursor cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
+        assertEquals(0, cursor.getCount());
     }
 }
