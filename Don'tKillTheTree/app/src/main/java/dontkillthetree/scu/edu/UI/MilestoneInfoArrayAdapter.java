@@ -51,7 +51,7 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
             @Override
             public void onClick(View v) {
                 MilestoneInfo milestoneInfo = milestoneInfoList.get(position);
-                // build a dialog
+                // build a alertDialog
             }
         });
 
@@ -60,7 +60,7 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
             @Override
             public void onClick(View v) {
                 MilestoneInfo milestoneInfo = milestoneInfoList.get(position);
-                // build a dialog
+                // build a datePickerDialog
             }
         });
 
