@@ -1,16 +1,23 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -52,6 +59,31 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
             public void onClick(View v) {
                 MilestoneInfo milestoneInfo = milestoneInfoList.get(position);
                 // build a alertDialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                // get the layout inflater
+//                LayoutInflater inflater = context.getLayoutInflater(); // doesn't work
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService
+                        (Context.LAYOUT_INFLATER_SERVICE);
+
+                // inflate and set the layout for the dialog
+                builder.setView(inflater.inflate(R.layout.milestone_name_alertdialog, null))
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                showToast("Save button clicked!");
+                                // get the new milestone name
+
+                                // add the new milestone name into db
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public  void onClick(DialogInterface dialog, int d) {
+                                showToast("Cancel button clicked!");
+//                                context.getDialog().cancel();
+                            }
+                        });
+                builder.create().show();
             }
         });
 
@@ -61,6 +93,20 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
             public void onClick(View v) {
                 MilestoneInfo milestoneInfo = milestoneInfoList.get(position);
                 // build a datePickerDialog
+                Calendar mCalendar = Calendar.getInstance();
+                // Use the current data as the default date in the picker
+                int mYear = mCalendar.get(Calendar.YEAR);
+                int mMonth = mCalendar.get(Calendar.MONTH);
+                int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+                        showToast("New due day set!");
+                    }
+                };
+                // Create a new instance of DatePickerDialog
+                DatePickerDialog mDatePickerDialog = new DatePickerDialog(context, mDateSetListener, mYear, mMonth, mDay);
+                mDatePickerDialog.show();
             }
         });
 
@@ -70,5 +116,9 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
     public class ScrapViewHolder {
         TextView milestoneName;
         TextView milestoneDueDay;
+    }
+
+    public void showToast(String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 }

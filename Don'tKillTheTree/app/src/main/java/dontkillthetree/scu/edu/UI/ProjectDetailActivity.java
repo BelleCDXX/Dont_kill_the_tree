@@ -31,6 +31,9 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
 
         // get data from db and create a arrayList for listView
         milestoneInfoList = new ArrayList<>();
+        milestoneInfoList.add(new MilestoneInfo("MS1", "05/21/2016"));
+        milestoneInfoList.add(new MilestoneInfo("MS1", "05/21/2016"));
+        milestoneInfoList.add(new MilestoneInfo("MS1", "05/21/2016"));
 
         // set data to EditText
 
