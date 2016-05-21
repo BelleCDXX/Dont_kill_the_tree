@@ -1,6 +1,5 @@
 package dontkillthetree.scu.edu.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -11,12 +10,9 @@ import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
 import dontkillthetree.scu.edu.event.DisposeEvent;
+import dontkillthetree.scu.edu.event.MilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.PropertyChangeEvent;
-import dontkillthetree.scu.edu.event.ChangeListener;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public class Milestone implements Comparable{
     private final long id;
     private String name;
@@ -24,37 +20,28 @@ public class Milestone implements Comparable{
     private boolean onTime;
     private boolean completed;
     private boolean shown;
-    private DatabaseHelper databaseHelper;
-    private SQLiteDatabase db;
-    private ChangeListener changeListener;
+    private MilestoneDatabaseOpListener milestoneDatabaseOpListener;
 
     /**
      * Use this constructor when user creates a new milestone, i.e. no record in the database
      * @param name
      * @param dueDate
      */
-    public Milestone(String name, Calendar dueDate, Context context) {
+    public Milestone(String name, Calendar dueDate, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) {
         Calendar currentDate = Calendar.getInstance();
-        if (name == null || context == null || dueDate.before(currentDate)) {
+        this.dueDate = (Calendar) dueDate.clone();
+        Util.toNearestDueDate(this.dueDate);
+
+        if (name == null || context == null || this.dueDate.before(currentDate)) {
             throw new IllegalArgumentException();
         }
 
-        databaseHelper = new DatabaseHelper(context);
-        db = databaseHelper.getWritableDatabase();
-
         this.name = name;
-        this.dueDate = (Calendar) dueDate.clone();
-        Util.toNearestDueDate(this.dueDate);
         this.onTime = Util.isOnTime(dueDate, currentDate);
         this.completed = false;
         this.shown = false;
-
-        // insert data into the database and retrieve id
-        ContentValues values = new ContentValues();
-        values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME, name);
-        values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE, Util.calendarToString(this.dueDate));
-        values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED, completed);
-        this.id = db.insert(DatabaseContract.MilestoneEntry.TABLE_NAME, "null", values);
+        this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
+        this.id = this.milestoneDatabaseOpListener.onInsert(this.name, this.dueDate);
     }
 
     /**
@@ -63,9 +50,7 @@ public class Milestone implements Comparable{
      * @param name
      * @param dueDate
      */
-    public Milestone(long id, String name, String dueDate, boolean completed, Context context) throws ParseException{
-        databaseHelper = new DatabaseHelper(context);
-        db = databaseHelper.getWritableDatabase();
+    public Milestone(long id, String name, String dueDate, boolean completed, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) throws ParseException{
         Calendar dueDateCalendar = Util.stringToCalendar(dueDate);
 
         this.id = id;
@@ -74,12 +59,11 @@ public class Milestone implements Comparable{
         this.completed = completed;
         this.onTime = Util.isOnTime(dueDateCalendar, null) || this.completed;
         this.shown = false;
+        this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
     }
 
     public void dispose() {
-        if (changeListener != null) {
-            changeListener.onDispose(new DisposeEvent(id));
-        }
+        milestoneDatabaseOpListener.onDelete(new DisposeEvent(id));
     }
 
     public int compareTo(Object milestone) {
@@ -88,10 +72,6 @@ public class Milestone implements Comparable{
         }
 
         return dueDate.compareTo(((Milestone) milestone).getDueDate());
-    }
-
-    public void addPropertyChangeListener(ChangeListener changeListener) {
-        this.changeListener = changeListener;
     }
 
     // getters and setters
@@ -105,8 +85,8 @@ public class Milestone implements Comparable{
 
     public void setName(String name) {
         // update database
-        if (changeListener != null) {
-            changeListener.onPropertyChange(new PropertyChangeEvent(
+        if (milestoneDatabaseOpListener != null) {
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
                     id,
                     DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME,
                     name));
@@ -127,8 +107,8 @@ public class Milestone implements Comparable{
         this.onTime = Util.isOnTime(this.dueDate, null) || this.completed;
 
         // update database
-        if (changeListener != null) {
-            changeListener.onPropertyChange(new PropertyChangeEvent(
+        if (milestoneDatabaseOpListener != null) {
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
                     id,
                     DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE,
                     Util.calendarToString(this.dueDate)));
@@ -145,8 +125,8 @@ public class Milestone implements Comparable{
 
     public void setCompleted(boolean completed) {
         // update database
-        if (changeListener != null) {
-            changeListener.onPropertyChange(new PropertyChangeEvent(
+        if (milestoneDatabaseOpListener != null) {
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
                     id,
                     DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED,
                     String.valueOf(completed)));
