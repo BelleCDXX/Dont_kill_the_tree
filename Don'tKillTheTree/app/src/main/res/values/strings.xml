@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Don\'t Kill The Tree</string>
+    <string name="set_due_date">Set Due Date</string>
+    <string name="create_project">Create Project</string>
+    <string name="project_name">Project Name</string>
+    <string name="project_due_date">Project Due Date</string>
+    <string name="number_of_milestones">Number of Milestones</string>
+    <string name="january">January</string>
+    <string name="set_milestones">Set Milestones</string>
 </resources>

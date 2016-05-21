@@ -1,5 +1,6 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.support.design.widget.FloatingActionButton;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -28,6 +29,17 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //set floating action button which used to create a new project
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, AddProjectName.class);
+                startActivity(intent);
+            }
+        });
 
         //set tree image
         Tree tree= new Tree();
@@ -76,7 +88,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     }
 
     //test button
-    public void toList(View view){
+    public void goToListButton(View view){
         Intent intent = new Intent(this,ProjectListActivity.class);
         startActivity(intent);
     }
