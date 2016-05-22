@@ -11,21 +11,100 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/project_name_in_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "@string/project_name"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Project name"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:text="Don&apos;t kill the tree"
+        android:id="@+id/projectName"
+        android:layout_alignBaseline="@+id/textView" />
+
 
     <TextView
-        android:id="@+id/due_date_in_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "@string/set_due_date"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Days"
+        android:id="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:id="@+id/days"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignLeft="@+id/projectName" />
 
     <TextView
-        android:id="@+id/number_of_milestones_in_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "@string/number_of_milestones"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="# of milestone"
+        android:id="@+id/textView3"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/days"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4"
+        android:id="@+id/numberOfMilestone"
+        android:layout_alignLeft="@+id/days"
+        android:layout_alignStart="@+id/days"
+        android:layout_alignBaseline="@+id/textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Project partner"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jason"
+        android:id="@+id/projectPartner"
+        android:layout_alignLeft="@+id/numberOfMilestone"
+        android:layout_alignStart="@+id/numberOfMilestone"
+        android:layout_alignBaseline="@+id/textView4" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/saveButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/saveButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="39dp" />
 
 </LinearLayout>
