@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Util.Util;
+
 /**
  * Created by jasonzhang on 5/19/16.
  */
@@ -66,14 +68,16 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
                         (Context.LAYOUT_INFLATER_SERVICE);
 
                 // inflate and set the layout for the dialog
-                builder.setView(inflater.inflate(R.layout.milestone_name_alertdialog, null))
+                final View alertDialogView = inflater.inflate(R.layout.milestone_name_alertdialog, null);
+                builder.setView(alertDialogView)
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                showToast("Save button clicked!");
                                 // get the new milestone name
-
+                                EditText editMilestoneName = (EditText) alertDialogView.findViewById(R.id.editMilestoneName);
+                                String newMilestoneName = editMilestoneName.getText().toString();
                                 // add the new milestone name into db
+                                showToast("New milestone name is: " + newMilestoneName);
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -101,7 +105,9 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
                 DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
-                        showToast("New due day set!");
+                        Calendar mCalendar = Calendar.getInstance();
+                        mCalendar.set(arg1, arg2, arg3);
+                        showToast("New due date is: " + Util.calendarToString(mCalendar));
                     }
                 };
                 // Create a new instance of DatePickerDialog

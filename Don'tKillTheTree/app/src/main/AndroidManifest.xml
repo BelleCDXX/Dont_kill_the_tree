@@ -9,15 +9,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".HomeActivity">
+        <!--<activity android:name=".HomeActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".ProjectListActivity" />
+        <!--<activity android:name=".ProjectDetailActivity" />-->
+        <activity android:name=".ProjectDetailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProjectListActivity" />
-        <activity android:name=".ProjectDetailActivity" />
         <activity android:name=".ParentActivity" />
         <activity android:name=".AddProjectName" />
         <activity android:name=".AddProjectDueDate"></activity>
