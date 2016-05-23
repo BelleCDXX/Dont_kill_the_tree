@@ -27,6 +27,17 @@ public class ParentActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
+//        //float button
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        if (fab != null) {
+//            fab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(this, AddProjectActivity.class);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
 
     }
 
