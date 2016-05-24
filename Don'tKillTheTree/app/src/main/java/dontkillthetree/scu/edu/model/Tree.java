@@ -79,7 +79,7 @@ public class Tree {
             throw new IllegalArgumentException("The decrease amount needs to be non-negative.");
         }
 
-        experience = experience - amount == 0 ? 0 : experience - amount;
+        experience = experience - amount <= 0 ? 0 : experience - amount;
 
         if (currentStage > 0 && experience <= Stages.getStageMaxExp(currentStage - 1)) {
             currentStage = Stages.getStage(experience);
