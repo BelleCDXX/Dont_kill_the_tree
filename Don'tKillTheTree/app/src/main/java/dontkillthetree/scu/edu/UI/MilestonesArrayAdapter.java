@@ -21,17 +21,19 @@ import java.util.Calendar;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
+import dontkillthetree.scu.edu.model.Milestone;
+
 
 /**
  * Created by jasonzhang on 5/19/16.
  */
-public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
-    private final List<MilestoneInfo> milestoneInfoList;
+public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
+    private final List<Milestone> mMilestones;
     private Context context;
 
-    public MilestoneInfoArrayAdapter(Context context, int resource, List<MilestoneInfo> milestoneInfoList) {
-        super(context, resource, milestoneInfoList);
-        this.milestoneInfoList = milestoneInfoList;
+    public MilestonesArrayAdapter(Context context, int resource, List<Milestone> milestones) {
+        super(context, resource, milestones);
+        this.mMilestones = milestones;
         this.context = context;
     }
 
@@ -48,18 +50,18 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
 
             holder = new ScrapViewHolder();
             holder.milestoneName = (TextView) row.findViewById(R.id.milestoneName);
-            holder.milestoneDueDay = (TextView) row.findViewById(R.id.milestoneDueDay);
+            holder.milestoneDueDate = (TextView) row.findViewById(R.id.milestoneDueDate);
             row.setTag(holder);
 
         } else {
             holder = (ScrapViewHolder) row.getTag();
         }
 
-        holder.milestoneName.setText(milestoneInfoList.get(position).getMilestoneName());
+        holder.milestoneName.setText(mMilestones.get(position).getName());
         holder.milestoneName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MilestoneInfo milestoneInfo = milestoneInfoList.get(position);
+                final Milestone mMilestone = mMilestones.get(position);
                 // build a alertDialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 // get the layout inflater
@@ -74,10 +76,11 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 // get the new milestone name
-                                EditText editMilestoneName = (EditText) alertDialogView.findViewById(R.id.editMilestoneName);
-                                String newMilestoneName = editMilestoneName.getText().toString();
-                                // add the new milestone name into db
-                                showToast("New milestone name is: " + newMilestoneName);
+                                EditText ET_milestoneName = (EditText) alertDialogView.findViewById(R.id.editMilestoneName);
+                                String newMilestoneName = ET_milestoneName.getText().toString();
+                                // update the new milestone name into db
+                                mMilestone.setName(newMilestoneName);
+                                showToast("New milestone name set!");
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -91,11 +94,11 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
             }
         });
 
-        holder.milestoneDueDay.setText(milestoneInfoList.get(position).getMilestoneDueDay());
-        holder.milestoneDueDay.setOnClickListener(new View.OnClickListener() {
+        holder.milestoneDueDate.setText(mMilestones.get(position).getDueDate().toString());
+        holder.milestoneDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MilestoneInfo milestoneInfo = milestoneInfoList.get(position);
+                final Milestone mMilestone = mMilestones.get(position);
                 // build a datePickerDialog
                 Calendar mCalendar = Calendar.getInstance();
                 // Use the current data as the default date in the picker
@@ -104,10 +107,11 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
                 int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
                         Calendar mCalendar = Calendar.getInstance();
-                        mCalendar.set(arg1, arg2, arg3);
-                        showToast("New due date is: " + Util.calendarToString(mCalendar));
+                        mCalendar.set(year, month, day);
+                        mMilestone.setDueDate(mCalendar);
+                        showToast("New milestone due date set!");
                     }
                 };
                 // Create a new instance of DatePickerDialog
@@ -121,7 +125,7 @@ public class MilestoneInfoArrayAdapter extends ArrayAdapter<MilestoneInfo> {
 
     public class ScrapViewHolder {
         TextView milestoneName;
-        TextView milestoneDueDay;
+        TextView milestoneDueDate;
     }
 
     public void showToast(String msg) {

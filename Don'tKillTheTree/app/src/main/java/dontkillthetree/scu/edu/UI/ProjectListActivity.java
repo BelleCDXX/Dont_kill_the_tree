@@ -1,50 +1,60 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import dontkillthetree.scu.edu.model.Project;
+import dontkillthetree.scu.edu.model.Projects;
+
 /*
 ** just UI here, not link to the project
  */
 public class ProjectListActivity extends ParentActivity implements AdapterView.OnItemClickListener{
     private ListView projectListView;
-    //test, can change later
-    private ArrayList<String> testList = new ArrayList<>();
-
+    private Context context;
+    private List<Project> projectList = new ArrayList<>();
+    private String TAG = "SEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_list);
 
+        context = this;
+
+        //Get the ListView
         projectListView = (ListView)findViewById(R.id.ProjectListView);
 
-        //test adpter here, change later
-        initialTestList();
-        ArrayAdapter<String> testAdapter = new ArrayAdapter<String>
-                (this,android.R.layout.simple_expandable_list_item_1,testList);
-        projectListView.setAdapter(testAdapter);
-        projectListView.setOnItemClickListener( ProjectListActivity.this);
-    }
-    //initial testList, can delete later
-   private void initialTestList(){
-        testList.add("TestString1");
-        testList.add("TestString2");
-        testList.add("TestString3");
-       Toast.makeText(ProjectListActivity.this, testList.get(0), Toast.LENGTH_SHORT).show();
+        //Populate the arrayList with Project object
+        try {
+            projectList = Projects.getAllProjects(context);
+        } catch(ParseException ex) {
+            Log.i(TAG, ex.toString());
+        }
+
+        //Set arrayAdapter
+        projectListView.setAdapter(new ArrayAdapter<Project>(this, R.layout.project_row, projectList));
+        projectListView.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final Project mProject = projectList.get(position);
+//        final Project mProject = (Project) projectListView.getItemAtPosition(position);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(ProjectListActivity.this);
         builder.setIcon(R.mipmap.ic_launcher)
                 .setTitle("Choosing")
@@ -52,20 +62,23 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                 .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         // link to project detail activity
-
-                        //Intent intent = new Intent(ProjectListActivity.this, ProjectDetailActivity.class);
-                        //intent.putExtra("project_detail", currentProject);
-                        //startActivity(intent);
+                        Intent intent = new Intent(ProjectListActivity.this, ProjectDetailActivity.class);
+                        intent.putExtra("project_detail", mProject.getId());
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //delete the milestone
+                        // update the status of milestone as COMPLETED
+                        mProject.getCurrentMilestone().setCompleted(true);
                     }
                 })
                 .setCancelable(true);
         builder.create().show();
+    }
+
+    private void toastShow(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }
