@@ -53,6 +53,7 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Project mProject = projectList.get(position);
+//        final Project mProject = (Project) projectListView.getItemAtPosition(position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ProjectListActivity.this);
         builder.setIcon(R.mipmap.ic_launcher)
