@@ -46,6 +46,7 @@ public class TreeTest {
 
         String[] projection = {DatabaseContract.TreeEntry.COLUMN_NAME_STAGE, DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE};
         Cursor cursor = db.query(DatabaseContract.TreeEntry.TABLE_NAME, projection, null, null, null, null, null);
+        cursor.moveToFirst();
 
         assertEquals(1, cursor.getCount());
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
@@ -63,21 +64,25 @@ public class TreeTest {
 
         String[] projection = {DatabaseContract.TreeEntry.COLUMN_NAME_STAGE, DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE};
         Cursor cursor = db.query(DatabaseContract.TreeEntry.TABLE_NAME, projection, null, null, null, null, null);
+        cursor.moveToFirst();
         assertEquals(1, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
         assertEquals(150, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE)));
 
         tree.decreaseExperience(50);
         cursor = db.query(DatabaseContract.TreeEntry.TABLE_NAME, projection, null, null, null, null, null);
+        cursor.moveToFirst();
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
         assertEquals(100, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE)));
 
         tree.increaseExperience(601);
         cursor = db.query(DatabaseContract.TreeEntry.TABLE_NAME, projection, null, null, null, null, null);
+        cursor.moveToFirst();
         assertEquals(6, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
         assertEquals(700, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE)));
 
         tree.decreaseExperience(800);
         cursor = db.query(DatabaseContract.TreeEntry.TABLE_NAME, projection, null, null, null, null, null);
+        cursor.moveToFirst();
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE)));
     }

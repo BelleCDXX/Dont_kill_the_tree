@@ -44,7 +44,7 @@ public class MyTreeDatabaseOpListener implements TreeDatabaseOpListener {
         db.close();
         databaseHelper.close();
 
-        return new int[0];
+        return result;
     }
 
     @Override

@@ -56,7 +56,7 @@ public final class DatabaseStatement {
                 ")";
 
         protected static final String DELETE_ENTRY =
-                "DROP TABLE IF EXISTS" + DatabaseContract.ProjectMilestoneEntry.TABLE_NAME;
+                "DROP TABLE IF EXISTS " + DatabaseContract.ProjectMilestoneEntry.TABLE_NAME;
     }
 
     public static abstract class TreeEntry {
@@ -67,6 +67,6 @@ public final class DatabaseStatement {
                 ")";
 
         protected static final String DELETE_ENTRY =
-                "DROP TABLE IF EXISTS" + DatabaseContract.TreeEntry.TABLE_NAME;
+                "DROP TABLE IF EXISTS " + DatabaseContract.TreeEntry.TABLE_NAME;
     }
 }

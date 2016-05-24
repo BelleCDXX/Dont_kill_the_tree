@@ -42,7 +42,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         });
 
         //set tree image
-        Tree tree= new Tree();
+        Tree tree= Tree.getInstance(this);
         treeImage = (ImageView)findViewById(R.id.treeImage);
         Bitmap b = getBitmapFromAsset(this,tree.getCurrentImage());
         treeImage.setImageBitmap(b);
