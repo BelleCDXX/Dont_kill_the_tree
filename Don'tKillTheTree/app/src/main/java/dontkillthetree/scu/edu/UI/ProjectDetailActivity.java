@@ -1,6 +1,11 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -9,38 +14,63 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.List;
 
-public class ProjectDetailActivity extends ParentActivity implements AdapterView.OnItemClickListener {
-    private List<MilestoneInfo> milestoneInfoList;
+import dontkillthetree.scu.edu.database.DatabaseContract;
+import dontkillthetree.scu.edu.database.DatabaseHelper;
+import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
+import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
+import dontkillthetree.scu.edu.model.Milestone;
+import dontkillthetree.scu.edu.model.Project;
 
-    public static final String EXTRA_PROJECT_NAME = "Project Name";
-    public static final String EXTRA_PROJECT_DUE_DATE = "Project Due Name";
-    public static final String EXTRA_NUMBER_OF_MILESTONES = "Number of Milestones";
+public class ProjectDetailActivity extends ParentActivity implements AdapterView.OnItemClickListener {
+    private SQLiteDatabase db;
+    private SQLiteOpenHelper dbHelper;
+    private Context context;
+    private final String TAG = "Sen";
+    private List<Milestone> mMilestones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_detail);
 
+        context = this;
+        dbHelper = new DatabaseHelper(context);
+        db = dbHelper.getReadableDatabase();
+
+
         // get the widgets
-        EditText projectName = (EditText) findViewById(R.id.projectName);
-        EditText days = (EditText) findViewById(R.id.days);
-        EditText numberOfMilestone = (EditText) findViewById(R.id.numberOfMilestone);
-        EditText projectPartner = (EditText) findViewById(R.id.projectPartner);
+        EditText ET_projectName = (EditText) findViewById(R.id.projectName);
+        EditText ET_dueDate = (EditText) findViewById(R.id.dueDate);
+        EditText ET_numberOfMilestone = (EditText) findViewById(R.id.numberOfMilestone);
+        EditText ET_projectPartner = (EditText) findViewById(R.id.projectPartner);
         ListView listView = (ListView) findViewById(R.id.listView);
 
-        // get data from db and create a arrayList for listView
-        milestoneInfoList = new ArrayList<>();
-        milestoneInfoList.add(new MilestoneInfo("MS1", "05/21/2016"));
-        milestoneInfoList.add(new MilestoneInfo("MS1", "05/21/2016"));
-        milestoneInfoList.add(new MilestoneInfo("MS1", "05/21/2016"));
+        // get data from db and create a list for listView
+        long mProjectId = (long) getIntent().getExtras().get("projectId");
+        String[] projection = {DatabaseContract.ProjectEntry._ID};
+        String selection = DatabaseContract.ProjectEntry._ID + " = " + mProjectId;
+        Cursor mCursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
+        mCursor.moveToFirst();
+        String mProjectName = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
+        String mDueDate = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE));
+        try {
+            Project mProject = new Project(mProjectId, mProjectName, mDueDate, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
+            mMilestones = mProject.getMilestones();
+        } catch (ParseException e) {
+            Log.i(TAG, e.toString());
+        }
 
         // set data to EditText
+        ET_projectName.setText(mProjectName);
+        ET_dueDate.setText(mDueDate);
+        ET_numberOfMilestone.setText(mMilestones.size());
+        ET_projectPartner.setText("WRONG");
 
-        // create milestone list in run-time
-        listView.setAdapter(new MilestoneInfoArrayAdapter(this, R.layout.milestone_row, milestoneInfoList));
+        // create milestone listView in run-time
+        listView.setAdapter(new MilestonesArrayAdapter(this, R.layout.milestone_row, mMilestones));
         listView.setOnItemClickListener(this);
 
         // get the save button
