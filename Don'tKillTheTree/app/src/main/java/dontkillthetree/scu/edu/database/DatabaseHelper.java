@@ -23,6 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(DatabaseStatement.MilestoneEntry.CREATE_ENTRY);
         db.execSQL(DatabaseStatement.ProjectEntry.CREATE_ENTRY);
         db.execSQL(DatabaseStatement.ProjectMilestoneEntry.CREATE_ENTRY);
+        db.execSQL(DatabaseStatement.TreeEntry.CREATE_ENTRTY);
     }
 
     @Override
@@ -33,5 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(DatabaseStatement.MilestoneEntry.CREATE_ENTRY);
         db.execSQL(DatabaseStatement.ProjectEntry.CREATE_ENTRY);
         db.execSQL(DatabaseStatement.ProjectMilestoneEntry.CREATE_ENTRY);
+        db.execSQL(DatabaseStatement.TreeEntry.DELETE_ENTRY);
+        db.execSQL(DatabaseStatement.TreeEntry.CREATE_ENTRTY);
     }
 }

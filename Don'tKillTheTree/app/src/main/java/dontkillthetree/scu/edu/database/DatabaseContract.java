@@ -32,4 +32,9 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_PROJECT_ID = "ProjectID";
         public static final String COLUMN_NAME_MILESTONE_ID = "MilestoneID";
     }
+
+    public static abstract class TreeEntry implements BaseColumns {
+        public static final String TABLE_NAME = "Tree";
+        public static final String COLUMN_NAME_STAGE = "Stage";
+    }
 }
