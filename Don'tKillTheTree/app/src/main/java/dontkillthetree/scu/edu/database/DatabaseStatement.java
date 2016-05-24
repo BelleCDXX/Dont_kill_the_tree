@@ -56,6 +56,17 @@ public final class DatabaseStatement {
                 ")";
 
         protected static final String DELETE_ENTRY =
-                "DROP TABLE IF EXISTS" + DatabaseContract.ProjectMilestoneEntry.TABLE_NAME;
+                "DROP TABLE IF EXISTS " + DatabaseContract.ProjectMilestoneEntry.TABLE_NAME;
+    }
+
+    public static abstract class TreeEntry {
+        protected static final String CREATE_ENTRTY =
+                "CREATE TABLE " + DatabaseContract.TreeEntry.TABLE_NAME + " (" +
+                DatabaseContract.TreeEntry.COLUMN_NAME_STAGE + INTEGER_TYPE + COMMA_SEP +
+                DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE + INTEGER_TYPE +
+                ")";
+
+        protected static final String DELETE_ENTRY =
+                "DROP TABLE IF EXISTS " + DatabaseContract.TreeEntry.TABLE_NAME;
     }
 }
