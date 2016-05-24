@@ -1,8 +1,14 @@
 package dontkillthetree.scu.edu.model;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import dontkillthetree.scu.edu.database.DatabaseContract;
+import dontkillthetree.scu.edu.event.MyTreeDatabaseOpListener;
+import dontkillthetree.scu.edu.event.PropertyChangeEvent;
 
 /**
  * Created by cheng11 on 5/19/16.
@@ -11,30 +17,22 @@ public class Tree {
 
     private static int currentStage;
     private static int experience;
+    private static Tree instance;
+    private static MyTreeDatabaseOpListener myTreeDatabaseOpListener;
 
-    /**
-     * Use this constructor when install the app
-     */
-    public Tree (){
-        currentStage = 0;
+    private Tree (Context context){
+        myTreeDatabaseOpListener = new MyTreeDatabaseOpListener(context);
+        int[] results = myTreeDatabaseOpListener.onSelect();
+        this.currentStage = results[0];
+        this.experience = results[1];
     }
 
-    /**
-     * if experience is enough to go to the next stage of the tree
-     */
-    public void toNextStage(){
-        if(hasNextStage()){
-            currentStage ++;
+    public static Tree getInstance(Context context) {
+        if (instance == null) {
+            instance = new Tree(context);
         }
-    }
 
-    //check if the currentStage is max number we allowed
-    private boolean hasNextStage(){
-        if (currentStage == Stages.getMaxStage()){
-            return false;
-        }else{
-            return true;
-        }
+        return instance;
     }
 
     //getters and setters
@@ -63,6 +61,10 @@ public class Tree {
             currentStage++;
         }
 
+        // update the database
+        myTreeDatabaseOpListener.onUpdate(new PropertyChangeEvent(0, DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE, String.valueOf(experience)));
+        myTreeDatabaseOpListener.onUpdate(new PropertyChangeEvent(0, DatabaseContract.TreeEntry.COLUMN_NAME_STAGE, String.valueOf(currentStage)));
+
         return experience;
     }
 
@@ -83,10 +85,28 @@ public class Tree {
             currentStage--;
         }
 
+        // update the database
+        myTreeDatabaseOpListener.onUpdate(new PropertyChangeEvent(0, DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE, String.valueOf(experience)));
+        myTreeDatabaseOpListener.onUpdate(new PropertyChangeEvent(0, DatabaseContract.TreeEntry.COLUMN_NAME_STAGE, String.valueOf(currentStage)));
+
         return experience;
     }
 
     public String getCurrentImage(){
         return Stages.getImage(currentStage);
+    }
+
+    // private methods
+
+    /**
+     * Check if the tree has next stage
+     * @return
+     */
+    private boolean hasNextStage(){
+        if (currentStage == Stages.getMaxStage()){
+            return false;
+        }else{
+            return true;
+        }
     }
 }
