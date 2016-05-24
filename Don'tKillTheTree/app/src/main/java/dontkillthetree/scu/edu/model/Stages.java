@@ -27,6 +27,21 @@ public class Stages {
     private Stages(){}
 
     /**
+     * Get a 0-indexed stage number from a given experience
+     * @param experience Experience, for example 201
+     * @return 0-indexed stage number.
+     */
+    public static int getStage(int experience) {
+        for (int i = 0; i < stageExperience.size(); i++) {
+            if (experience <= stageExperience.get(i)) {
+                return i;
+            }
+        }
+
+        return stageExperience.size() - 1;
+    }
+
+    /**
      * Get the image of a given stage
      * @param stage 0-indexed stage
      * @return

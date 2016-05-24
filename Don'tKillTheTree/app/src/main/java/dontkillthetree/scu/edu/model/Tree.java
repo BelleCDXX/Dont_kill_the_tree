@@ -58,7 +58,7 @@ public class Tree {
         experience = experience + amount > maxStageExp ? maxStageExp : experience + amount;
 
         if (experience > Stages.getStageMaxExp(currentStage) && hasNextStage()) {
-            currentStage++;
+            currentStage = Stages.getStage(experience);
         }
 
         // update the database
@@ -82,7 +82,7 @@ public class Tree {
         experience = experience - amount == 0 ? 0 : experience - amount;
 
         if (currentStage > 0 && experience <= Stages.getStageMaxExp(currentStage - 1)) {
-            currentStage--;
+            currentStage = Stages.getStage(experience);
         }
 
         // update the database
@@ -94,6 +94,10 @@ public class Tree {
 
     public String getCurrentImage(){
         return Stages.getImage(currentStage);
+    }
+
+    public void dispose() {
+        instance = null;
     }
 
     // private methods

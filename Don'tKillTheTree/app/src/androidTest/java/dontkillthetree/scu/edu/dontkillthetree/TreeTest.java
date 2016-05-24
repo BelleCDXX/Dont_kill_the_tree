@@ -32,6 +32,8 @@ public class TreeTest {
         context = InstrumentationRegistry.getTargetContext();
         databaseHelper = new DatabaseHelper(context);
         db = databaseHelper.getWritableDatabase();
+
+        db.delete(DatabaseContract.TreeEntry.TABLE_NAME, null, null);
     }
 
     @After
@@ -46,15 +48,14 @@ public class TreeTest {
 
         String[] projection = {DatabaseContract.TreeEntry.COLUMN_NAME_STAGE, DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE};
         Cursor cursor = db.query(DatabaseContract.TreeEntry.TABLE_NAME, projection, null, null, null, null, null);
-        cursor.moveToFirst();
-
         assertEquals(1, cursor.getCount());
+        cursor.moveToFirst();
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE)));
         assertEquals(0, tree.getCurrentStage());
         assertEquals(0, tree.getExperience());
 
-        db.delete(DatabaseContract.TreeEntry.TABLE_NAME, null, null);
+        tree.dispose();
     }
 
     @Test
@@ -85,5 +86,7 @@ public class TreeTest {
         cursor.moveToFirst();
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_STAGE)));
         assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE)));
+
+        tree.dispose();
     }
 }

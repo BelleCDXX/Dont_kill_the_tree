@@ -38,7 +38,7 @@ public class MyTreeDatabaseOpListener implements TreeDatabaseOpListener {
             values.put(DatabaseContract.TreeEntry.COLUMN_NAME_EXPERIENCE, 0);
             db.insert(DatabaseContract.TreeEntry.TABLE_NAME, "null", values);
             result[0] = 0;
-            result[1] = 1;
+            result[1] = 0;
         }
 
         db.close();
