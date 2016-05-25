@@ -1,6 +1,8 @@
 package dontkillthetree.scu.edu.model;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import dontkillthetree.scu.edu.UI.AddProjectDueDate;
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.event.DisposeEvent;

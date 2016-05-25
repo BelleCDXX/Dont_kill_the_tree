@@ -1,8 +1,8 @@
 package dontkillthetree.scu.edu.UI;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,34 +10,48 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import dontkillthetree.scu.edu.Calender.CalendarAdapter;
+import dontkillthetree.scu.edu.Util.Util;
+import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
+import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
+import dontkillthetree.scu.edu.model.Project;
 //import dontkillthetree.scu.edu.Calender.CalendarCollection;
 
 public class AddProjectDueDate extends ParentActivity implements NumberPicker.OnValueChangeListener {
 
-    String projectName;
-    String projectDueDate;
-    int numberOfMilestones;
-    TextView numOfMilestones;
+    private String projectName;
+    //private String projectDueDate;
+    private int numberOfMilestones;
+    private TextView numOfMilestones;
+    private Calendar selectedDueDate;
 
 
     public GregorianCalendar cal_month, cal_month_copy;
     private CalendarAdapter cal_adapter;
     private TextView tv_month;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project_due_date);
+
+        context = this;
 
         projectName = (String) getIntent().getExtras().get(ProjectDetailActivity.EXTRA_PROJECT_NAME);
 
@@ -94,12 +108,13 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
             gridview.setAdapter(cal_adapter);
         }
         if (gridview != null) {
+            // set activities when click on calendar
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
 
-                    ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
+                    //((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
                     String selectedGridDate = CalendarAdapter.day_string
                             .get(position);
 
@@ -108,16 +123,28 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                     int gridvalue = Integer.parseInt(gridvalueString);
 
                     if ((gridvalue > 10) && (position < 8)) {
+                        ((CalendarAdapter) parent.getAdapter()).changeToPreviousColor(v,position);
                         setPreviousMonth();
                         refreshCalendar();
                     } else if ((gridvalue < 7) && (position > 28)) {
+                        ((CalendarAdapter) parent.getAdapter()).changeToPreviousColor(v,position);
                         setNextMonth();
                         refreshCalendar();
                     }
-                    ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
+                    else{
+                        Calendar dueDate = getCalendarDueDate(selectedGridDate);
+                        // test if chose after current date
+                        Calendar currentDate = Calendar.getInstance();
+                        if (dueDate.after(currentDate)){
+                            ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
+                            selectedDueDate = dueDate;
+                        }
 
-                    //save selected date to projectDueDate
-                    projectDueDate = selectedGridDate;
+                        //save selected date to projectDueDate
+                        //projectDueDate = selectedGridDate;
+
+                    }
+
 
                     //((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, AddProjectDueDate.this);
                 }
@@ -140,7 +167,7 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
         final NumberPicker np = (NumberPicker) dialog.findViewById(R.id.milestone_number_picker);
         //set max num of milestones
         np.setMaxValue(20);
-        np.setMinValue(0);
+        np.setMinValue(1);
 
         np.setWrapSelectorWheel(false);
         np.setOnValueChangedListener(this);
@@ -212,7 +239,41 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
         }
     }
 
+    // convert due date to Calendar object
+    private Calendar getCalendarDueDate(String projectDueDate){
+        // change format to MM/dd/yyyy
+        String changedFormat = "" +
+                projectDueDate.substring(5, 7) + "/" +
+                projectDueDate.substring(8) + "/" +
+                projectDueDate.substring(0,4);
 
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.US); // Locale.US
+        Date date = null;
+        try {
+            date = df.parse(changedFormat);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        //test
+        //Toast.makeText(AddProjectDueDate.this, Util.calendarToString(cal), Toast.LENGTH_SHORT).show();
+        return cal;
+    }
+
+    // save project date to database and return project ID
+    private long saveData(String projectName, Calendar selectedDueDate, int numberOfMilestones){
+
+
+        Project project = new Project(
+                projectName,
+                selectedDueDate,
+                numberOfMilestones,
+                new MyProjectDatabaseOpListener(context),
+                new MyMilestoneDatabaseOpListener(context), context);
+
+        return project.getId();
+    }
 
     //set menu, add create project icon
     @Override
@@ -226,16 +287,18 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
         int id = item.getItemId();
         switch (id) {
             case R.id.create_project:
+                // when click create project button in the action bar
                 numberOfMilestones = getNumberOfMilestones();
-                if(projectDueDate == null){
+                if(selectedDueDate == null){
                     Toast.makeText(AddProjectDueDate.this, "Please select a due date.", Toast.LENGTH_SHORT).show();
                 }
+                else if (numberOfMilestones <= 0){
+                    Toast.makeText(AddProjectDueDate.this, "Number of milestones should be grater than 0.", Toast.LENGTH_SHORT).show();
+                }
                 else {
-
+                    long projectID = saveData(projectName, selectedDueDate, numberOfMilestones);
                     Intent intent = new Intent(AddProjectDueDate.this, ProjectDetailActivity.class);
-                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_NAME, projectName);
-                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_DUE_DATE, projectDueDate);
-                    intent.putExtra(ProjectDetailActivity.EXTRA_NUMBER_OF_MILESTONES, numberOfMilestones);
+                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID, projectID);
                     startActivity(intent);
                 }
                 break;

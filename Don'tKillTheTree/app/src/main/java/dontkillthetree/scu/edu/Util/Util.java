@@ -37,15 +37,15 @@ public abstract class Util {
 
     /**
      * Given a calendar, set the calendar to the soonest due date
-     * For example, given 05/15/2016 20:47:55.789 will return 06/16/2016 00:00:00.000
+     * For example, given 05/15/2016 20:47:55.789 will return 05/15/2016 23:59:59.999
      * @param calendar
      */
     public static final void toNearestDueDate(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        //calendar.add(Calendar.DAY_OF_MONTH, 1);
     }
 
     /**

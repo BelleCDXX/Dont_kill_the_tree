@@ -31,6 +31,10 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
     private final String TAG = "Sen";
     private List<Milestone> mMilestones;
 
+    // don't delete these
+    public static final String EXTRA_PROJECT_NAME = "project_name";
+    public static final String EXTRA_PROJECT_ID = "project_id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +53,13 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         ListView listView = (ListView) findViewById(R.id.listView);
 
         // get data from db and create a list for listView
-        long mProjectId = (long) getIntent().getExtras().get("projectId");
-        String[] projection = {DatabaseContract.ProjectEntry._ID};
+        long mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID);
+        String[] projection = {DatabaseContract.ProjectEntry._ID,
+                DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
+                DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE};
         String selection = DatabaseContract.ProjectEntry._ID + " = " + mProjectId;
         Cursor mCursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
+
         mCursor.moveToFirst();
         String mProjectName = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
         String mDueDate = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE));
@@ -66,7 +73,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         // set data to EditText
         ET_projectName.setText(mProjectName);
         ET_dueDate.setText(mDueDate);
-        ET_numberOfMilestone.setText(mMilestones.size());
+        ET_numberOfMilestone.setText(Integer.toString(mMilestones.size()));
         ET_projectPartner.setText("WRONG");
 
         // create milestone listView in run-time

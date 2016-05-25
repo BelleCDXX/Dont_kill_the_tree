@@ -120,14 +120,18 @@ public class CalendarAdapter extends BaseAdapter {
 
         if (day_string.get(position).equals(curentDateString)) {
 
+            // set current date background
             v.setBackgroundColor(Color.CYAN);
-        } else {
-            v.setBackgroundColor(Color.parseColor("#343434"));
         }
+        /*
+        else {
+            v.setBackgroundColor(Color.parseColor("#343434"));
+        }*/
 
 
         dayView.setText(gridvalue);
 
+        /*
         // create date string for comparison
         String date = day_string.get(position);
 
@@ -140,7 +144,7 @@ public class CalendarAdapter extends BaseAdapter {
         }
 
         // show icon if date is not empty and it exists in the items array
-        /*
+
         ImageView iw = (ImageView) v.findViewById(R.id.date_icon);
         if (date.length() > 0 && items != null && items.contains(date)) {
             iw.setVisibility(View.VISIBLE);
@@ -160,7 +164,8 @@ public class CalendarAdapter extends BaseAdapter {
             previousView.setBackgroundColor(Color.parseColor("#343434"));
         }
 
-        view.setBackgroundColor(Color.CYAN);
+        // set selected date background
+        view.setBackgroundColor(Color.GREEN);
 
         int len=day_string.size();
         if (len > position) {
@@ -174,9 +179,28 @@ public class CalendarAdapter extends BaseAdapter {
             }
 
         }
-
-
         return view;
+    }
+
+    public View changeToPreviousColor(View view, int position){
+        if (previousView != null) {
+            previousView.setBackgroundColor(Color.parseColor("#343434"));
+        }
+
+        int len=day_string.size();
+        if (len > position) {
+            if (day_string.get(position).equals(curentDateString)) {
+
+            }else{
+                //String test = day_string.get(position);
+                //Toast.makeText(context, test, Toast.LENGTH_SHORT).show();
+                previousView = view;
+
+            }
+
+        }
+        return view;
+
     }
 
     public void refreshDays() {
