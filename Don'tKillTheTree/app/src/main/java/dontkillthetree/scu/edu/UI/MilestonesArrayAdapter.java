@@ -94,7 +94,7 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
             }
         });
 
-        holder.milestoneDueDate.setText(mMilestones.get(position).getDueDate().toString());
+        holder.milestoneDueDate.setText(Util.calendarToString(mMilestones.get(position).getDueDate()));
         holder.milestoneDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
