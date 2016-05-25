@@ -80,6 +80,7 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                                 String newMilestoneName = ET_milestoneName.getText().toString();
                                 // update the new milestone name into db
                                 mMilestone.setName(newMilestoneName);
+                                notifyDataSetChanged();
                                 showToast("New milestone name set!");
                             }
                         })
@@ -111,6 +112,7 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                         Calendar mCalendar = Calendar.getInstance();
                         mCalendar.set(year, month, day);
                         mMilestone.setDueDate(mCalendar);
+                        notifyDataSetChanged();
                         showToast("New milestone due date set!");
                     }
                 };

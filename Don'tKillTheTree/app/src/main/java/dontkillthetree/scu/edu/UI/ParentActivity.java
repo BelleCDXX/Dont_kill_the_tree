@@ -56,7 +56,7 @@ public class ParentActivity extends AppCompatActivity {
                 break;
             case android.R.id.home:
                 Intent intent4 = new Intent(this, ProjectListActivity.class);
-                intent4.addFlags(intent4.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                intent4.addFlags(intent4.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent4);
                 break;
             default:

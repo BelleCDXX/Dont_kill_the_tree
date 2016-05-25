@@ -33,7 +33,8 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
 
     // don't delete these
     public static final String EXTRA_PROJECT_NAME = "project_name";
-    public static final String EXTRA_PROJECT_ID = "project_id";
+    public static final String EXTRA_PROJECT_ID_FROM_CREATE = "project_id_from_create";
+    public static final String EXTRA_PROJECT_ID_FROM_LIST = "project_id_from_list";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +54,12 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         ListView listView = (ListView) findViewById(R.id.listView);
 
         // get data from db and create a list for listView
-
-        long mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID);
+        long mProjectId;
+        if (getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_CREATE) != null) {
+            mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_CREATE);
+        } else {
+            mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_LIST);
+        }
         String[] projection = {DatabaseContract.ProjectEntry._ID,
                 DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
                 DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE};

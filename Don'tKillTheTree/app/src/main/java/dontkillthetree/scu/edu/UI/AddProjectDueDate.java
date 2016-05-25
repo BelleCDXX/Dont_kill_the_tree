@@ -299,7 +299,7 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                 else {
                     long projectID = saveData(projectName, selectedDueDate, numberOfMilestones);
                     Intent intent = new Intent(AddProjectDueDate.this, ProjectDetailActivity.class);
-                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID, projectID);
+                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID_FROM_CREATE, projectID);
                     startActivity(intent);
                 }
                 break;
