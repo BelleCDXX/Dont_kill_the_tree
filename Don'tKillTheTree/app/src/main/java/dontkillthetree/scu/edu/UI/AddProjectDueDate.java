@@ -77,13 +77,18 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
         tv_month = (TextView) findViewById(R.id.tv_month);
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
 
+        GridView gridview = (GridView) findViewById(R.id.gv_calendar);
+        if (gridview != null) {
+            gridview.setAdapter(cal_adapter);
+        }
+
         ImageButton previous = (ImageButton) findViewById(R.id.ib_prev);
 
         if (previous != null) {
             previous.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v){
                     setPreviousMonth();
                     refreshCalendar();
                 }
@@ -103,10 +108,7 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
             });
         }
 
-        GridView gridview = (GridView) findViewById(R.id.gv_calendar);
-        if (gridview != null) {
-            gridview.setAdapter(cal_adapter);
-        }
+
         if (gridview != null) {
             // set activities when click on calendar
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,11 +125,9 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                     int gridvalue = Integer.parseInt(gridvalueString);
 
                     if ((gridvalue > 10) && (position < 8)) {
-                        ((CalendarAdapter) parent.getAdapter()).changeToPreviousColor(v,position);
                         setPreviousMonth();
                         refreshCalendar();
                     } else if ((gridvalue < 7) && (position > 28)) {
-                        ((CalendarAdapter) parent.getAdapter()).changeToPreviousColor(v,position);
                         setNextMonth();
                         refreshCalendar();
                     }
@@ -138,6 +138,7 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                         if (dueDate.after(currentDate)){
                             ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
                             selectedDueDate = dueDate;
+                            refreshCalendar();
                         }
 
                         //save selected date to projectDueDate
@@ -205,13 +206,13 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
     }
 
     protected void setPreviousMonth() {
-        if (cal_month.get(GregorianCalendar.MONTH) == cal_month
-                .getActualMinimum(GregorianCalendar.MONTH)) {
-            cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1),
-                    cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
-        } else {
-            cal_month.set(GregorianCalendar.MONTH,
-                    cal_month.get(GregorianCalendar.MONTH) - 1);
+        if (cal_month.get(GregorianCalendar.MONTH) == cal_month.getActualMinimum(GregorianCalendar.MONTH))
+        {
+            cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
+        }
+        else
+        {
+            cal_month.set(GregorianCalendar.MONTH, cal_month.get(GregorianCalendar.MONTH) - 1);
         }
 
     }

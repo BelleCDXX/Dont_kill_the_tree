@@ -33,6 +33,7 @@ public class CalendarAdapter extends BaseAdapter {
      */
     public GregorianCalendar pmonthmaxset;
     private GregorianCalendar selectedDate;
+    private String selectedGridDate;
     int firstDay;
     int maxWeeknumber;
     int maxP;
@@ -123,10 +124,13 @@ public class CalendarAdapter extends BaseAdapter {
             // set current date background
             v.setBackgroundColor(Color.CYAN);
         }
-        /*
+        else if (day_string.get(position).equals(selectedGridDate)){
+            // set selected date background
+            v.setBackgroundColor(Color.GREEN);
+        }
         else {
             v.setBackgroundColor(Color.parseColor("#343434"));
-        }*/
+        }
 
 
         dayView.setText(gridvalue);
@@ -164,43 +168,18 @@ public class CalendarAdapter extends BaseAdapter {
             previousView.setBackgroundColor(Color.parseColor("#343434"));
         }
 
+        selectedGridDate = CalendarAdapter.day_string.get(position);
+
         // set selected date background
         view.setBackgroundColor(Color.GREEN);
 
         int len=day_string.size();
         if (len > position) {
-            if (day_string.get(position).equals(curentDateString)) {
-
-            }else{
-                //String test = day_string.get(position);
-                //Toast.makeText(context, test, Toast.LENGTH_SHORT).show();
+            if (!day_string.get(position).equals(curentDateString)) {
                 previousView = view;
-
             }
-
         }
         return view;
-    }
-
-    public View changeToPreviousColor(View view, int position){
-        if (previousView != null) {
-            previousView.setBackgroundColor(Color.parseColor("#343434"));
-        }
-
-        int len=day_string.size();
-        if (len > position) {
-            if (day_string.get(position).equals(curentDateString)) {
-
-            }else{
-                //String test = day_string.get(position);
-                //Toast.makeText(context, test, Toast.LENGTH_SHORT).show();
-                previousView = view;
-
-            }
-
-        }
-        return view;
-
     }
 
     public void refreshDays() {
