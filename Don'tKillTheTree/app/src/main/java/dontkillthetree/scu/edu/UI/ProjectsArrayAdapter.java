@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
@@ -56,7 +57,7 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Project> {
 
         holder.projectName.setText(mProjects.get(position).getName());
         holder.milestoneName.setText(mProjects.get(position).getCurrentMilestone().getName());
-        holder.milestoneDueDate.setText(mProjects.get(position).getCurrentMilestone().getDueDate().toString());
+        holder.milestoneDueDate.setText(Util.calendarToString(mProjects.get(position).getCurrentMilestone().getDueDate()));
 
         return row;
     }

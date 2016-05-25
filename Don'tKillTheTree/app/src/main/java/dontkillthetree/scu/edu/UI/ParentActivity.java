@@ -27,18 +27,43 @@ public class ParentActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-//        //float button
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        if (fab != null) {
-//            fab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(this, AddProjectActivity.class);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_show_tree:
+                Intent intent1 = new Intent(this, HomeActivity.class);
+                intent1.addFlags(intent1.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent1);
+                break;
+            case R.id.action_show_project_list:
+                Intent intent2 = new Intent(this, ProjectListActivity.class);
+                intent2.addFlags(intent2.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent2);
+                break;
+            case R.id.action_uninstall:
+                Uri packageURI = Uri.parse("package:" + HomeActivity.class.getPackage().getName());
+                Intent intent3 = new Intent(Intent.ACTION_DELETE, packageURI);
+                startActivity(intent3);
+                break;
+            case android.R.id.home:
+                Intent intent4 = new Intent(this, ProjectListActivity.class);
+                intent4.addFlags(intent4.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent4);
+                break;
+            default:
+                toastShow("unknown action ...");
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void toastShow(String msg) {

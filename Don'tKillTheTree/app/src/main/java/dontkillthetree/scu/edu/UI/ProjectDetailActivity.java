@@ -53,6 +53,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         ListView listView = (ListView) findViewById(R.id.listView);
 
         // get data from db and create a list for listView
+
         long mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID);
         String[] projection = {DatabaseContract.ProjectEntry._ID,
                 DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
@@ -81,17 +82,17 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         listView.setOnItemClickListener(this);
 
         // get the save button
-        Button saveButton = (Button) findViewById(R.id.saveButton);
-        if (saveButton != null) {
-            saveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // add data to db
-                }
-            });
-        } else {
-            toastShow("fail to get the save button!");
-        }
+//        Button saveButton = (Button) findViewById(R.id.saveButton);
+//        if (saveButton != null) {
+//            saveButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // add data to db
+//                }
+//            });
+//        } else {
+//            toastShow("fail to get the save button!");
+//        }
     }
 
 
