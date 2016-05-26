@@ -20,17 +20,28 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
+import dontkillthetree.scu.edu.Util.Util;
+import dontkillthetree.scu.edu.model.Milestone;
+import dontkillthetree.scu.edu.model.Project;
+import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
 
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
+    private final static String[] DEFAULT_ITEM = {"none"};
+
     private Tree mTree;
     private Spinner spinner;
     private Handler mHandler;
     private int progressBarSpeed = 10;
     private String TAG = "SEN";
-    private String[] items = { "Data-0", "Data-1", "Data-2", "Data-3", "Data-4", "Data-5", "Data-6", "Data-7" };
+    private ArrayList<String> upcomings = null;
+    String[] items = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +81,13 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }).start();
 
 
-        //set spinner here
+        //set spinner heres
+        if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
+            items = DEFAULT_ITEM;
+        }else {
+            upcomings = getUpcomingMilestones();
+            items = upcomings.toArray(new String[getUpcomingMilestones().size()]);
+        }
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new ArrayAdapter<String>(
                 this,
@@ -110,6 +127,26 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //set spinner heres
+        if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
+            items = DEFAULT_ITEM;
+        }else {
+            upcomings = getUpcomingMilestones();
+            items = upcomings.toArray(new String[getUpcomingMilestones().size()]);
+        }
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setAdapter(new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                // android.R.layout.simple_list_item_1,
+                items)
+        );
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getApplicationContext(), "Position: " + position + ", Data: " + items[position], Toast.LENGTH_SHORT).show();
     }
@@ -124,4 +161,46 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         Intent intent = new Intent(this,ProjectListActivity.class);
         startActivity(intent);
     }
+
+    //getupcoming milestone
+    private ArrayList<String> getUpcomingMilestones(){
+        ArrayList<Project> projects = new ArrayList<Project>();
+        ArrayList<String> milestones = new ArrayList<String>();
+        Calendar nearest = null;
+
+
+        try {
+            Projects.getAllProjects(this);
+            projects = (ArrayList<Project>) Projects.projects;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(projects.size()< 1){
+            return milestones;
+        }
+        //get upcoming duedate
+        for(int i = 0; i< projects.size();i++){
+            Milestone m = projects.get(i).getCurrentMilestone();
+            if(nearest == null){
+                nearest = m.getDueDate();
+            }else if(m.getDueDate().compareTo(nearest) > 0){
+                nearest = m.getDueDate();
+            }
+        }
+
+        //get upcoming milestones
+        for (int i=0;i<projects.size();i++){
+            Milestone m = projects.get(i).getCurrentMilestone();
+            if(nearest.equals(nearest)){
+                String s= projects.get(i).getName()+" _ "+m.getName() + " _ DUE AT: " + Util.calendarToString(m.getDueDate());
+                milestones.add(s);
+            }
+        }
+
+        return milestones;
+    }
 }
+
+
+
