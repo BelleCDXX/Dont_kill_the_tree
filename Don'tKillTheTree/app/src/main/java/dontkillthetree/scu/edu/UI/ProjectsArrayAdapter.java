@@ -56,8 +56,14 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Project> {
         }
 
         holder.projectName.setText(mProjects.get(position).getName());
-        holder.milestoneName.setText(mProjects.get(position).getCurrentMilestone().getName());
-        holder.milestoneDueDate.setText(Util.calendarToString(mProjects.get(position).getCurrentMilestone().getDueDate()));
+
+        if (mProjects.get(position).getCurrentMilestone() == null) {
+            holder.milestoneName.setText("Done");
+            holder.milestoneDueDate.setText("Done");
+        } else {
+            holder.milestoneName.setText(mProjects.get(position).getCurrentMilestone().getName());
+            holder.milestoneDueDate.setText(Util.calendarToString(mProjects.get(position).getCurrentMilestone().getDueDate()));
+        }
 
         return row;
     }
