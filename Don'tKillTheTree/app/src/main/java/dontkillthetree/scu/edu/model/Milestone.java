@@ -2,6 +2,7 @@ package dontkillthetree.scu.edu.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -33,6 +34,10 @@ public class Milestone implements Comparable{
         Util.toNearestDueDate(this.dueDate);
 
         if (name == null || context == null || this.dueDate.before(currentDate)) {
+            //test
+            Log.i("cxiong", "name: "+name);
+            Log.i("cxiong", "context: "+context);
+            Log.i("cxiong", "date: "+(this.dueDate.before(currentDate)) + ": " + Util.calendarToString(this.dueDate));
             throw new IllegalArgumentException();
         }
 

@@ -80,16 +80,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         );
         spinner.setOnItemSelectedListener(this);
 
-        //set floating action button which used to create a new project
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, AddProjectName.class);
-                startActivity(intent);
-            }
-        });
+
     }
 
 

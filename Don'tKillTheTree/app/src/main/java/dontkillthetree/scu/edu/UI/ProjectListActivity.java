@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -49,13 +50,34 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
         //Set arrayAdapter
         projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
         projectListView.setOnItemClickListener(this);
+
+        //set floating action button which used to create a new project
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        toastShow("onResume");
-        ((ProjectsArrayAdapter)projectListView.getAdapter()).notifyDataSetChanged();
+        Log.i("cxiong", "onResume run");
+
+        try {
+            Projects.getAllProjects(context);
+            projectList = Projects.projects;
+            //projectList = Projects.getAllProjects(context);
+        } catch(ParseException ex) {
+            Log.i(TAG, ex.toString());
+        }
+
+        //Set arrayAdapter
+        projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
     }
 
     @Override

@@ -1,11 +1,14 @@
 package dontkillthetree.scu.edu.UI;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,11 +33,13 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
     private Context context;
     private final String TAG = "Sen";
     private List<Milestone> mMilestones;
+    private Project mProject;
 
     // don't delete these
     public static final String EXTRA_PROJECT_NAME = "project_name";
     public static final String EXTRA_PROJECT_ID_FROM_CREATE = "project_id_from_create";
     public static final String EXTRA_PROJECT_ID_FROM_LIST = "project_id_from_list";
+    public static final String EXTRA_ON_CREATE_PROCESS = "on_create_process";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +65,20 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         } else {
             mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_LIST);
         }
+
         String[] projection = {DatabaseContract.ProjectEntry._ID,
                 DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
                 DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE};
+
         String selection = DatabaseContract.ProjectEntry._ID + " = " + mProjectId;
         Cursor mCursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
 
         mCursor.moveToFirst();
         String mProjectName = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
         String mDueDate = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE));
+
         try {
-            Project mProject = new Project(mProjectId, mProjectName, mDueDate, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
+            mProject = new Project(mProjectId, mProjectName, mDueDate, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
             mMilestones = mProject.getMilestones();
         } catch (ParseException e) {
             Log.i(TAG, e.toString());
@@ -108,5 +116,46 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
 
     private void toastShow(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        try{
+            boolean onCreateProcess = (boolean) getIntent().getExtras().get(EXTRA_ON_CREATE_PROCESS);
+            if (onCreateProcess){
+                mProject.dispose();
+                getIntent().putExtra(EXTRA_ON_CREATE_PROCESS, false);
+            }
+        }catch (Exception e){
+            Log.i("cxiong", "not on create process");
+        }
+
+    }
+
+    // set menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.project_detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.save_project:
+                // when click save project button in the action bar
+                finish();
+                Intent intent = new Intent(this, ProjectListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+                break;
+            default:
+                return true;
+        }
+        return true;
     }
 }
