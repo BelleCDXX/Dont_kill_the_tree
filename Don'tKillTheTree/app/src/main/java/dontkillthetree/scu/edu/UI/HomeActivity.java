@@ -10,6 +10,8 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -190,6 +192,29 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }
 
         return milestones;
+    }
+
+    //set menu, add go to list icon
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.go_to_list_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.go_to_list:
+                // when click go to list button in the action bar
+                Intent intent = new Intent(HomeActivity.this, ProjectListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                break;
+            default:
+                return true;
+        }
+        return true;
     }
 }
 

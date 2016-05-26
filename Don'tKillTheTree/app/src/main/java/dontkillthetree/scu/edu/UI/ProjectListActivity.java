@@ -5,8 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +38,11 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
         setContentView(R.layout.activity_project_list);
 //        context = ProjectListActivity.this;
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         //Get the ListView
         projectListView = (ListView)findViewById(R.id.projectListView);
 
@@ -52,15 +60,15 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
         projectListView.setOnItemClickListener(this);
 
         //set floating action button which used to create a new project
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
-                startActivity(intent);
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        assert fab != null;
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override
@@ -112,5 +120,34 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
 
     private void toastShow(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    //set menu, add go to tree icon
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.create_project_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.create_project_menu:
+                // when click go to tree button in the action bar
+                Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                // when click go to tree button in the action bar
+                Intent intent4 = new Intent(this, HomeActivity.class);
+                intent4.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent4);
+//                finish();
+                break;
+            default:
+                return true;
+        }
+        return true;
     }
 }

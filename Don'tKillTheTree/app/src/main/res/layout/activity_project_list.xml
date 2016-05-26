@@ -10,14 +10,6 @@
     tools:context="dontkillthetree.scu.edu.UI.ProjectListActivity"
     android:orientation="vertical">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_add"
-        android:layout_gravity="bottom"/>
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,8 +17,5 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-
-
 
 </LinearLayout>

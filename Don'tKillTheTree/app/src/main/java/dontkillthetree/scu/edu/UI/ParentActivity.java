@@ -23,9 +23,6 @@ public class ParentActivity extends AppCompatActivity {
         actionBar.setSubtitle("Group1");
         actionBar.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.action_bar_background));
         actionBar.setIcon(R.mipmap.ic_launcher);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
 
     }
 
@@ -56,7 +53,7 @@ public class ParentActivity extends AppCompatActivity {
                 startActivity(intent3);
                 break;
             case android.R.id.home:
-                Intent intent4 = new Intent(this, ProjectListActivity.class);
+                Intent intent4 = new Intent(this, HomeActivity.class);
                 intent4.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent4);
 //                finish();
