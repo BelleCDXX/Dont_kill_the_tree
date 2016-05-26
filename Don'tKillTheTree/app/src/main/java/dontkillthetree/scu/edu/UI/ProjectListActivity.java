@@ -112,6 +112,16 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                         // update the experience of Tree
                         Tree mTree = Tree.getInstance(context);
                         mTree.increaseExperience(expIncreased);
+
+                        try {
+                            Projects.getAllProjects(context);
+                            projectList = Projects.projects;
+                            //projectList = Projects.getAllProjects(context);
+                        } catch(ParseException ex) {
+                            Log.i(TAG, ex.toString());
+                        }
+                        //Set arrayAdapter
+                        projectListView.setAdapter(new ProjectsArrayAdapter(context, R.layout.project_row, projectList));
                     }
                 })
                 .setCancelable(true);
