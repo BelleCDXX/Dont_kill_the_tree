@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,42 +19,48 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
+import dontkillthetree.scu.edu.model.Tree;
 
-/*
-** just UI here, not link to the project
- */
 public class ProjectListActivity extends ParentActivity implements AdapterView.OnItemClickListener{
-    private ListView projectListView;
-    private Context context;
+    private Context context = this;
     private List<Project> projectList = new ArrayList<>();
+    private ListView projectListView;
+    private int expIncreased = 30;
     private String TAG = "SEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_list);
-
-        context = this;
+//        context = ProjectListActivity.this;
 
         //Get the ListView
-        projectListView = (ListView)findViewById(R.id.ProjectListView);
+        projectListView = (ListView)findViewById(R.id.projectListView);
 
         //Populate the arrayList with Project object
         try {
-            projectList = Projects.getAllProjects(context);
+            Projects.getAllProjects(context);
+            projectList = Projects.projects;
+            //projectList = Projects.getAllProjects(context);
         } catch(ParseException ex) {
             Log.i(TAG, ex.toString());
         }
 
         //Set arrayAdapter
-        projectListView.setAdapter(new ArrayAdapter<Project>(this, R.layout.project_row, projectList));
+        projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
         projectListView.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toastShow("onResume");
+        ((ProjectsArrayAdapter)projectListView.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Project mProject = projectList.get(position);
-//        final Project mProject = (Project) projectListView.getItemAtPosition(position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ProjectListActivity.this);
         builder.setIcon(R.mipmap.ic_launcher)
@@ -64,7 +71,7 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                     public void onClick(DialogInterface dialog, int which) {
                         // link to project detail activity
                         Intent intent = new Intent(ProjectListActivity.this, ProjectDetailActivity.class);
-                        intent.putExtra("project_detail", mProject.getId());
+                        intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID_FROM_LIST, mProject.getId());
                         startActivity(intent);
                     }
                 })
@@ -72,6 +79,9 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                     public void onClick(DialogInterface dialog, int which) {
                         // update the status of milestone as COMPLETED
                         mProject.getCurrentMilestone().setCompleted(true);
+                        // update the experience of Tree
+                        Tree mTree = Tree.getInstance(context);
+                        mTree.increaseExperience(expIncreased);
                     }
                 })
                 .setCancelable(true);

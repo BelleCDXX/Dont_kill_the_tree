@@ -29,6 +29,7 @@ import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
 import dontkillthetree.scu.edu.model.Project;
+import dontkillthetree.scu.edu.model.Projects;
 //import dontkillthetree.scu.edu.Calender.CalendarCollection;
 
 public class AddProjectDueDate extends ParentActivity implements NumberPicker.OnValueChangeListener {
@@ -273,6 +274,12 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 
+        // debug
+        try {
+            Projects.getAllProjects(context);
+        }
+        catch (ParseException ex){}
+
         return project.getId();
     }
 
@@ -299,7 +306,7 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                 else {
                     long projectID = saveData(projectName, selectedDueDate, numberOfMilestones);
                     Intent intent = new Intent(AddProjectDueDate.this, ProjectDetailActivity.class);
-                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID, projectID);
+                    intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID_FROM_CREATE, projectID);
                     startActivity(intent);
                 }
                 break;

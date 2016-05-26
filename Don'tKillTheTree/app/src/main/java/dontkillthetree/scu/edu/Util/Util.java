@@ -71,4 +71,17 @@ public abstract class Util {
 
         return null;
     }
+
+    /**
+     * This method cut the string shorter
+     * @param s
+     * @return String
+     */
+    public static String cutString(String s) {
+        if (s.length() <= 20) {
+            return s;
+        } else {
+            return s.substring(0, 16) + "...";
+        }
+    }
 }

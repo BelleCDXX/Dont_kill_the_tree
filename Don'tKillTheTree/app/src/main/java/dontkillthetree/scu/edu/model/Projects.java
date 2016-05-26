@@ -17,9 +17,10 @@ import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
  * Created by Joey Zheng on 5/20/16.
  */
 public class Projects {
+    public static List<Project> projects = null;
 
-    public static List<Project> getAllProjects(Context context) throws ParseException{
-        List<Project> projects = new ArrayList();
+    public static void getAllProjects(Context context) throws ParseException{
+        List<Project> result = new ArrayList();
         DatabaseHelper databaseHelper = new DatabaseHelper(context);;
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
@@ -31,7 +32,7 @@ public class Projects {
         Cursor cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             while (cursor.moveToNext()) {
-                projects.add(new Project(
+                result.add(new Project(
                         cursor.getLong(cursor.getColumnIndex(DatabaseContract.ProjectEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME)),
                         cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE)),
@@ -40,6 +41,7 @@ public class Projects {
             }
         }
 
-        return projects;
+        projects = result;
+//         return result;
     }
 }
