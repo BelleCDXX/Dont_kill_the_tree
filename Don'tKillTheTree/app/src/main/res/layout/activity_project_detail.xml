@@ -18,7 +18,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Project name"
+            android:text="Project name: "
             android:id="@+id/textView" />
 
             <Space
@@ -26,12 +26,11 @@ android:orientation="vertical">
             android:layout_height="20px"
             android:layout_weight="1" />
 
-            <EditText
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="None"
-            android:id="@+id/projectName"
-            android:layout_alignBaseline="@+id/textView" />
+            android:id="@+id/projectName" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +41,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Due Date"
+            android:text="Due Date: "
             android:id="@+id/textView2" />
 
             <Space
@@ -50,12 +49,11 @@ android:orientation="vertical">
                 android:layout_height="20px"
                 android:layout_weight="1" />
 
-            <EditText
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="None"
-            android:id="@+id/dueDate"
-            android:layout_alignBaseline="@+id/textView2" />
+            android:id="@+id/dueDate" />
     </LinearLayout>
 
     <LinearLayout
@@ -66,7 +64,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="milestones"
+            android:text="milestones: "
             android:id="@+id/textView3" />
 
             <Space
@@ -74,12 +72,11 @@ android:orientation="vertical">
                 android:layout_height="20px"
                 android:layout_weight="1" />
 
-            <EditText
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="None"
-            android:id="@+id/numberOfMilestone"
-            android:layout_alignBaseline="@+id/textView3" />
+            android:id="@+id/numberOfMilestone" />
     </LinearLayout>
 
     <LinearLayout
@@ -90,7 +87,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Project partner"
+            android:text="Project partner: "
             android:id="@+id/textView4" />
 
             <Space
@@ -98,12 +95,11 @@ android:orientation="vertical">
                 android:layout_height="20px"
                 android:layout_weight="1" />
 
-            <EditText
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="None"
-            android:id="@+id/projectPartner"
-            android:layout_alignBaseline="@+id/textView4" />
+            android:id="@+id/projectPartner" />
     </LinearLayout>
 
     <LinearLayout

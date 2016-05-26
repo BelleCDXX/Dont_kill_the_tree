@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -52,10 +53,10 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
 
 
         // get the widgets
-        EditText ET_projectName = (EditText) findViewById(R.id.projectName);
-        EditText ET_dueDate = (EditText) findViewById(R.id.dueDate);
-        EditText ET_numberOfMilestone = (EditText) findViewById(R.id.numberOfMilestone);
-        EditText ET_projectPartner = (EditText) findViewById(R.id.projectPartner);
+        TextView ET_projectName = (TextView) findViewById(R.id.projectName);
+        TextView ET_dueDate = (TextView) findViewById(R.id.dueDate);
+        TextView ET_numberOfMilestone = (TextView) findViewById(R.id.numberOfMilestone);
+        TextView ET_projectPartner = (TextView) findViewById(R.id.projectPartner);
         ListView listView = (ListView) findViewById(R.id.listView);
 
         // get data from db and create a list for listView
@@ -88,7 +89,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         ET_projectName.setText(mProjectName);
         ET_dueDate.setText(mDueDate);
         ET_numberOfMilestone.setText(Integer.toString(mMilestones.size()));
-        ET_projectPartner.setText("WRONG");
+        ET_projectPartner.setText("None");
 
         // create milestone listView in run-time
         listView.setAdapter(new MilestonesArrayAdapter(this, R.layout.milestone_row, mMilestones));
