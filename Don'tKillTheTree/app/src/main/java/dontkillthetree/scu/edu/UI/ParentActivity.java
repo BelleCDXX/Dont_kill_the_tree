@@ -48,6 +48,7 @@ public class ParentActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(this, ProjectListActivity.class);
                 intent2.addFlags(intent2.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent2);
+//                finish();
                 break;
             case R.id.action_uninstall:
                 Uri packageURI = Uri.parse("package:" + HomeActivity.class.getPackage().getName());
@@ -56,8 +57,9 @@ public class ParentActivity extends AppCompatActivity {
                 break;
             case android.R.id.home:
                 Intent intent4 = new Intent(this, ProjectListActivity.class);
-//                intent4.addFlags(intent4.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent4.addFlags(intent4.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent4);
+//                finish();
                 break;
             default:
                 toastShow("unknown action ...");

@@ -19,12 +19,13 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
+import dontkillthetree.scu.edu.model.Tree;
 
 public class ProjectListActivity extends ParentActivity implements AdapterView.OnItemClickListener{
     private Context context = this;
     private List<Project> projectList = new ArrayList<>();
     private ListView projectListView;
-    private ArrayAdapter<Project> mAdapter;
+    private int expIncreased = 30;
     private String TAG = "SEN";
 
     @Override
@@ -38,36 +39,23 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
 
         //Populate the arrayList with Project object
         try {
-            projectList = Projects.getAllProjects(context);
+            Projects.getAllProjects(context);
+            projectList = Projects.projects;
+            //projectList = Projects.getAllProjects(context);
         } catch(ParseException ex) {
             Log.i(TAG, ex.toString());
         }
 
         //Set arrayAdapter
-        mAdapter = new ProjectsArrayAdapter(this, R.layout.project_row, projectList);
-        projectListView.setAdapter(mAdapter);
+        projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
         projectListView.setOnItemClickListener(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAdapter.notifyDataSetChanged();
-        toastShow("onStart");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        mAdapter.notifyDataSetChanged();
-        toastShow("onRestart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
         toastShow("onResume");
+        ((ProjectsArrayAdapter)projectListView.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -91,13 +79,14 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                     public void onClick(DialogInterface dialog, int which) {
                         // update the status of milestone as COMPLETED
                         mProject.getCurrentMilestone().setCompleted(true);
+                        // update the experience of Tree
+                        Tree mTree = Tree.getInstance(context);
+                        mTree.increaseExperience(expIncreased);
                     }
                 })
                 .setCancelable(true);
         builder.create().show();
     }
-
-
 
     private void toastShow(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
