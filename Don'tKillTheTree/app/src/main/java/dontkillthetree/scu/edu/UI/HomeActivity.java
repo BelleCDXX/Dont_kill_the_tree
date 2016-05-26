@@ -158,8 +158,10 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     //getupcoming milestone
     private ArrayList<String> getUpcomingMilestones(){
         ArrayList<Project> projects = new ArrayList<Project>();
+        ArrayList<Project> currentProjects = new ArrayList<Project>();
         ArrayList<String> milestones = new ArrayList<String>();
         Calendar nearest = null;
+        int count = 0;
 
 
         try {
@@ -172,9 +174,16 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         if(projects.size()< 1){
             return milestones;
         }
+        //get ontime project's number
+        for(Project p:projects){
+            if(p.getCurrentMilestone() != null){
+                count ++;
+                currentProjects.add(p);
+            }
+        }
         //get upcoming duedate
-        for(int i = 0; i< projects.size();i++){
-            Milestone m = projects.get(i).getCurrentMilestone();
+        for(int i = 0; i< currentProjects.size();i++){
+            Milestone m = currentProjects.get(i).getCurrentMilestone();
             if(nearest == null){
                 nearest = m.getDueDate();
             }else if(m.getDueDate().compareTo(nearest) > 0){
@@ -183,17 +192,37 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }
 
         //get upcoming milestones
-        for (int i=0;i<projects.size();i++){
-            Milestone m = projects.get(i).getCurrentMilestone();
+        for (int i=0;i<currentProjects.size();i++){
+            Milestone m = currentProjects.get(i).getCurrentMilestone();
             if(nearest.equals(nearest)){
-                String s= projects.get(i).getName()+" _ "+m.getName() + " _ DUE AT: " + Util.calendarToString(m.getDueDate());
+                String s= currentProjects.get(i).getName()+" _ "+m.getName() + " _ DUE AT: " + Util.calendarToString(nearest);
                 milestones.add(s);
             }
         }
 
         return milestones;
     }
+    //check if project is completed
+    /*private boolean isProjectComplted(Project project){
+        int count = 0;
+        List<Milestone> list = new ArrayList<Milestone>();
 
+        if(project.getMilestones().size()<1){
+            return true;
+        }
+        list = project.getMilestones();
+
+        for(Milestone m:list){
+            if(!m.isCompleted()){
+                count++;
+            }
+        }
+
+        if(count > 0){
+            return false;
+        }
+        return true;
+    }*/
     //set menu, add go to list icon
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
