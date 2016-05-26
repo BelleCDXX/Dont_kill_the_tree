@@ -31,7 +31,7 @@ public class Projects {
                 DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID};
         Cursor cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, null, null, null, null, null);
         if (cursor.moveToFirst()) {
-            while (cursor.moveToNext()) {
+            do {
                 result.add(new Project(
                         cursor.getLong(cursor.getColumnIndex(DatabaseContract.ProjectEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME)),
@@ -39,6 +39,7 @@ public class Projects {
                         new MyProjectDatabaseOpListener(context),
                         new MyMilestoneDatabaseOpListener(context)));
             }
+            while (cursor.moveToNext());
         }
 
         projects = result;

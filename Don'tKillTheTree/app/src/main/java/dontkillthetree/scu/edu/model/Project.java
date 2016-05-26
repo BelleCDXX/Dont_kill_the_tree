@@ -47,13 +47,13 @@ public class Project {
         this.name = name;
         this.dueDate = (Calendar) dueDate.clone();
         Util.toNearestDueDate(this.dueDate);
-        int increment = (int) (this.dueDate.getTimeInMillis() - currentDate.getTimeInMillis()) / (24 * 60 * 60 * 1000 * numberOfMilestones);
+        int increment = (int) ((this.dueDate.getTimeInMillis() - currentDate.getTimeInMillis()) / (24 * 60 * 60 * 1000 * (numberOfMilestones + 1)));
 
         // create milestones
         int i;
         for (i = 1; i <= numberOfMilestones; i++) {
-            milestones.add(new Milestone("Milestone " + i, currentDate, milestoneDatabaseOpListener, context));
             currentDate.add(Calendar.DATE, increment);
+            milestones.add(new Milestone("Milestone " + i, currentDate, milestoneDatabaseOpListener, context));
         }
         this.currentMilestone = milestones.get(0);
         this.projectDatabaseOpListener = projectDatabaseOpListener;

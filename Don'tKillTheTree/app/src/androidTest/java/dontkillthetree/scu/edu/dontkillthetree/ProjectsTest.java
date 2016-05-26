@@ -60,7 +60,8 @@ public class ProjectsTest {
         List<Project> projects = new ArrayList<>();
 
         try {
-            projects = Projects.getAllProjects(context);
+            Projects.getAllProjects(context);
+            projects = Projects.projects;
         }
         catch(ParseException ex) {
             fail(ex.getMessage());
