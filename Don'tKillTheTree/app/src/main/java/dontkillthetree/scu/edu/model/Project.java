@@ -176,7 +176,6 @@ public class Project {
                 return;
             }
         }
-
         currentMilestone = null;
     }
 }

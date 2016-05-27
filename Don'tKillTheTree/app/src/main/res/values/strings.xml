@@ -7,7 +7,7 @@
     <string name="number_of_milestones">Number of Milestones</string>
     <string name="january">January</string>
     <string name="set_milestones">Set Milestones</string>
-    <string name="save_project">Save</string>
+    <string name="save_project">Done</string>
     <string name="go_to_list">List</string>
     <string name="create_project_menu">Create</string>
 </resources>

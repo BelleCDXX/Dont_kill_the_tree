@@ -36,6 +36,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
     private SQLiteDatabase db;
     private SQLiteOpenHelper dbHelper;
     private Context context;
+    ListView listView;
     private final String TAG = "Sen";
     private List<Milestone> mMilestones;
     private Project mProject;
@@ -56,13 +57,12 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         dbHelper = new DatabaseHelper(context);
         db = dbHelper.getReadableDatabase();
 
-
         // get the widgets
         TextView ET_projectName = (TextView) findViewById(R.id.projectName);
         TextView ET_dueDate = (TextView) findViewById(R.id.dueDate);
         TextView ET_numberOfMilestone = (TextView) findViewById(R.id.numberOfMilestone);
         TextView ET_projectPartner = (TextView) findViewById(R.id.projectPartner);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
 
         // get data from db and create a list for listView
         long mProjectId;
@@ -112,6 +112,15 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
 //        } else {
 //            toastShow("fail to get the save button!");
 //        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("SZhang", "onResume");
+        mMilestones = mProject.getMilestones();
+        listView.setAdapter(new MilestonesArrayAdapter(this, R.layout.milestone_row, mMilestones));
+        listView.setOnItemClickListener(this);
     }
 
 
