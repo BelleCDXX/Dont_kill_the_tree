@@ -39,6 +39,7 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
     private int numberOfMilestones;
     private TextView numOfMilestones;
     private Calendar selectedDueDate;
+    private Calendar currentDate = Calendar.getInstance();
 
 
     public GregorianCalendar cal_month, cal_month_copy;
@@ -135,7 +136,6 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                     else{
                         Calendar dueDate = getCalendarDueDate(selectedGridDate);
                         // test if chose after current date
-                        Calendar currentDate = Calendar.getInstance();
                         if (dueDate.after(currentDate)){
                             ((CalendarAdapter) parent.getAdapter()).setSelected(v,position);
                             selectedDueDate = dueDate;
@@ -296,14 +296,22 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
         switch (id) {
             case R.id.create_project:
                 // when click create project button in the action bar
-                numberOfMilestones = getNumberOfMilestones();
+                numberOfMilestones = getNumberOfMilestones() - 1;
                 if(selectedDueDate == null){
                     Toast.makeText(AddProjectDueDate.this, "Please select a due date.", Toast.LENGTH_SHORT).show();
                 }
-                else if (numberOfMilestones <= 0){
+                else if (numberOfMilestones < 0){
                     Toast.makeText(AddProjectDueDate.this, "Number of milestones should be grater than 0.", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //test if num of milestones is too large
+                    Calendar dateAddMilestones = (Calendar) currentDate.clone();
+                    dateAddMilestones.add(Calendar.DATE, numberOfMilestones);
+                    if(dateAddMilestones.after(selectedDueDate)){
+                        Toast.makeText(AddProjectDueDate.this, "Too many milestones.", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+
                     long projectID = saveData(projectName, selectedDueDate, numberOfMilestones);
                     Intent intent = new Intent(AddProjectDueDate.this, ProjectDetailActivity.class);
                     intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID_FROM_CREATE, projectID);

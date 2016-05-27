@@ -39,7 +39,7 @@ public class Project {
      */
     public Project(String name, Calendar dueDate, int numberOfMilestones, ProjectDatabaseOpListener projectDatabaseOpListener, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) {
         Calendar currentDate = Calendar.getInstance();
-        if (name == null || context == null || dueDate.before(currentDate) || numberOfMilestones <= 0) {
+        if (name == null || context == null || dueDate.before(currentDate) || numberOfMilestones <= -1) {
             throw new IllegalArgumentException();
         }
 
@@ -55,6 +55,8 @@ public class Project {
             currentDate.add(Calendar.DATE, increment);
             milestones.add(new Milestone("Milestone " + i, currentDate, milestoneDatabaseOpListener, context));
         }
+        milestones.add(new Milestone("Due!" , dueDate, milestoneDatabaseOpListener, context));
+
         this.currentMilestone = milestones.get(0);
         this.projectDatabaseOpListener = projectDatabaseOpListener;
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;

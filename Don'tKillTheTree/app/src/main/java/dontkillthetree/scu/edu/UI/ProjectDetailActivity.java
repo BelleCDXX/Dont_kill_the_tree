@@ -1,11 +1,14 @@
 package dontkillthetree.scu.edu.UI;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +30,7 @@ import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
+import dontkillthetree.scu.edu.model.Tree;
 
 public class ProjectDetailActivity extends ParentActivity implements AdapterView.OnItemClickListener {
     private SQLiteDatabase db;
@@ -35,6 +39,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
     private final String TAG = "Sen";
     private List<Milestone> mMilestones;
     private Project mProject;
+    private String mProjectName;
 
     // don't delete these
     public static final String EXTRA_PROJECT_NAME = "project_name";
@@ -75,7 +80,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         Cursor mCursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
 
         mCursor.moveToFirst();
-        String mProjectName = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
+        mProjectName = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
         String mDueDate = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE));
 
         try {
@@ -158,5 +163,13 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
                 return true;
         }
         return true;
+    }
+
+    public void showFullProjectName(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetailActivity.this);
+        builder.setTitle("Project Name:")
+                .setMessage(mProjectName)
+                .setCancelable(true);
+        builder.create().show();
     }
 }
