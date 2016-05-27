@@ -108,7 +108,9 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                 .setNegativeButton("Complete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // update the status of milestone as COMPLETED
-                        mProject.getCurrentMilestone().setCompleted(true);
+                        if(mProject.getCurrentMilestone() != null){
+                            mProject.getCurrentMilestone().setCompleted(true);
+                        }
                         // update the experience of Tree
                         Tree mTree = Tree.getInstance(context);
                         mTree.increaseExperience(expIncreased);
