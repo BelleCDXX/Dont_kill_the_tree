@@ -43,7 +43,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     private Handler mHandler;
     //private int progressBarSpeed = 10;
     private String TAG = "SEN";
-    String[] items = null;
 
     int mCurrentStage = 0;
     int mStageMaxExp = 0;
@@ -98,6 +97,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
 
         //set spinner heres
+        String[] items = DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
             items = DEFAULT_ITEM;
         }else {
@@ -136,6 +136,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     protected void onResume() {
         super.onResume();
         //set spinner heres
+        String[] items=DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
             items = DEFAULT_ITEM;
         }else {
@@ -208,20 +209,24 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
                 currentProjects.add(p);
             }
         }
+        if(currentProjects.size()<1){
+            return milestones;
+        }
+        Log.i("JCheng","size: "+currentProjects.size());
         //get upcoming duedate
         for(int i = 0; i< currentProjects.size();i++){
             Milestone m = currentProjects.get(i).getCurrentMilestone();
             if(nearest == null){
                 nearest = m.getDueDate();
-            }else if(m.getDueDate().compareTo(nearest) > 0){
+            }else if(m.getDueDate().compareTo(nearest) < 0){
                 nearest = m.getDueDate();
             }
         }
-
+    Log.i("Jc","nearst: "+Util.calendarToString(nearest));
         //get upcoming milestones
         for (int i=0;i<currentProjects.size();i++){
             Milestone m = currentProjects.get(i).getCurrentMilestone();
-            if(nearest.equals(nearest)){
+            if(currentProjects.get(i).getCurrentMilestone().getDueDate().equals(nearest)){
                 String s= currentProjects.get(i).getName()+"_"+m.getName() + " DUE AT:" + Util.calendarToString(nearest);
                 milestones.add(s);
             }
@@ -231,7 +236,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     }
     private void levelUpToast(){
         if(mCurrentStage > lastStage){
-            Toast.makeText(getApplicationContext(),"Congratulation! Tree level up!",Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(),"Congratulation! Tree level up!",Toast.LENGTH_SHORT).show();
             lastStage = mCurrentStage;
         }
     }
