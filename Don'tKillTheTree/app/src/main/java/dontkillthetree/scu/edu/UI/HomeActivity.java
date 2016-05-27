@@ -43,7 +43,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     private Handler mHandler;
     //private int progressBarSpeed = 10;
     private String TAG = "SEN";
-    private ArrayList<String> upcomings = null;
     String[] items = null;
 
     int mCurrentStage = 0;
@@ -102,8 +101,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
             items = DEFAULT_ITEM;
         }else {
-            upcomings = getUpcomingMilestones();
-            items = upcomings.toArray(new String[getUpcomingMilestones().size()]);
+            items = getUpcomingMilestones().toArray(new String[getUpcomingMilestones().size()]);
         }
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new ArrayAdapter<String>(
@@ -141,8 +139,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
             items = DEFAULT_ITEM;
         }else {
-            upcomings = getUpcomingMilestones();
-            items = upcomings.toArray(new String[getUpcomingMilestones().size()]);
+            items = getUpcomingMilestones().toArray(new String[getUpcomingMilestones().size()]);
         }
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new ArrayAdapter<String>(
