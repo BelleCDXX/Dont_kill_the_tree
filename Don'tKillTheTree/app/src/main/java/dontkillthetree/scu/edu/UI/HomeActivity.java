@@ -35,21 +35,29 @@ import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
 
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
+
     private final static String[] DEFAULT_ITEM = {"none"};
 
     private Tree mTree;
     private Spinner spinner;
     private Handler mHandler;
-    private int progressBarSpeed = 10;
+    //private int progressBarSpeed = 10;
     private String TAG = "SEN";
     private ArrayList<String> upcomings = null;
     String[] items = null;
+
+    int mCurrentStage = 0;
+    int mStageMaxExp = 0;
+    int lastStage = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         mTree = Tree.getInstance(this);
+        mCurrentStage = mTree.getCurrentStage();
+        lastStage = mCurrentStage;
 
         //set tree image
         ImageView treeImage = (ImageView)findViewById(R.id.treeImage);
@@ -58,7 +66,13 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
         //set exp bar
         final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        new Thread(new Runnable() {
+        mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
+        mProgressBar.setMax(mStageMaxExp);
+
+        int mCurrentExp = mTree.getExperience();
+        mProgressBar.setProgress(mCurrentExp);
+
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 // set the max exp of current stage
@@ -80,7 +94,8 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
                     }
                 }
             }
-        }).start();
+        }).start();*/
+
 
 
         //set spinner heres
@@ -137,16 +152,31 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
                 items)
         );
         spinner.setOnItemSelectedListener(this);
+
+        //renew exp bar
+        final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mCurrentStage = mTree.getCurrentStage();
+        mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
+        mProgressBar.setMax(mStageMaxExp);
+
+        int mCurrentExp = mTree.getExperience();
+        mProgressBar.setProgress(mCurrentExp);
+
+        //renew image
+        ImageView treeImage = (ImageView)findViewById(R.id.treeImage);
+        Bitmap b = getBitmapFromAsset(this,mTree.getCurrentImage());
+        treeImage.setImageBitmap(b);
+        levelUpToast();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(), "Position: " + position + ", Data: " + items[position], Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
+
     }
 
     //test button
@@ -195,13 +225,20 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         for (int i=0;i<currentProjects.size();i++){
             Milestone m = currentProjects.get(i).getCurrentMilestone();
             if(nearest.equals(nearest)){
-                String s= currentProjects.get(i).getName()+" _ "+m.getName() + " _ DUE AT: " + Util.calendarToString(nearest);
+                String s= currentProjects.get(i).getName()+"_"+m.getName() + " DUE AT:" + Util.calendarToString(nearest);
                 milestones.add(s);
             }
         }
 
         return milestones;
     }
+    private void levelUpToast(){
+        if(mCurrentStage > lastStage){
+            Toast.makeText(getApplicationContext(),"Congratulation! Tree level up!",Toast.LENGTH_SHORT);
+            lastStage = mCurrentStage;
+        }
+    }
+
     //check if project is completed
     /*private boolean isProjectComplted(Project project){
         int count = 0;

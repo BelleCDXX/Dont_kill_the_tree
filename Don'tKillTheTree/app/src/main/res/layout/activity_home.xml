@@ -12,11 +12,12 @@
 
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="150dp"
         android:id="@+id/treeImage"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
@@ -29,10 +30,11 @@
         android:layout_marginBottom="10dp" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
-        android:layout_marginTop="86dp" />
+        android:layout_marginTop="86dp"
+        />
 
 
 </LinearLayout>
