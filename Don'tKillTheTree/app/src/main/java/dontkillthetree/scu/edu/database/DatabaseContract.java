@@ -2,9 +2,6 @@ package dontkillthetree.scu.edu.database;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by jasonzhang on 5/13/16.
- */
 public final class DatabaseContract {
 
     // To prevent someone from accidentally instantiating the contract class,

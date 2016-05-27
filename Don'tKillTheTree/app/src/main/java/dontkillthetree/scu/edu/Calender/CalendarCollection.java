@@ -1,8 +1,5 @@
 package dontkillthetree.scu.edu.Calender;
 
-/**
- * Created by xcw0420 on 5/19/16.
- */
 import java.util.ArrayList;
 
 public class CalendarCollection {

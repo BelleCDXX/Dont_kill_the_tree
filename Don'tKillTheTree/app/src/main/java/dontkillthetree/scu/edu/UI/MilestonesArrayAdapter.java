@@ -24,9 +24,6 @@ import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Milestone;
 
 
-/**
- * Created by jasonzhang on 5/19/16.
- */
 public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
     private final List<Milestone> mMilestones;
     private Context context;

@@ -21,9 +21,6 @@ import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 
-/**
- * Created by jasonzhang on 5/24/16.
- */
 public class ProjectsArrayAdapter extends ArrayAdapter<Project> {
     private final List<Project> mProjects;
     private Context context;

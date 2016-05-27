@@ -30,7 +30,6 @@ import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
-//import dontkillthetree.scu.edu.Calender.CalendarCollection;
 
 public class AddProjectDueDate extends ParentActivity implements NumberPicker.OnValueChangeListener {
 

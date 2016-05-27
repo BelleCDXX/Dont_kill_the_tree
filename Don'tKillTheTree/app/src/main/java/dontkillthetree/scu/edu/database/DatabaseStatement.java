@@ -2,9 +2,6 @@ package dontkillthetree.scu.edu.database;
 
 import java.util.Calendar;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public final class DatabaseStatement {
     private static final String PRIMARY_KEY = " PRIMARY KEY AUTOINCREMENT";
     private static final String FOREIGN_KEY = "FOREIGN KEY(";

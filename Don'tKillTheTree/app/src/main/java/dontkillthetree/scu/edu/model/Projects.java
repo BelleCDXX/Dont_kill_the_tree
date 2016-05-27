@@ -13,9 +13,6 @@ import dontkillthetree.scu.edu.database.DatabaseHelper;
 import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
 
-/**
- * Created by Joey Zheng on 5/20/16.
- */
 public class Projects {
     public static List<Project> projects = null;
 

@@ -10,9 +10,6 @@ import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.event.MyTreeDatabaseOpListener;
 import dontkillthetree.scu.edu.event.PropertyChangeEvent;
 
-/**
- * Created by cheng11 on 5/19/16.
- */
 public class Tree {
 
     private static int currentStage;

@@ -7,9 +7,6 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Milestone;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public abstract class Util {
     /**
      * Convert a given calendar into string
