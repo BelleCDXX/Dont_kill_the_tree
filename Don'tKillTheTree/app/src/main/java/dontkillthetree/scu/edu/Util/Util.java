@@ -73,7 +73,7 @@ public abstract class Util {
     }
 
     /**
-     * This method cut the string shorter
+     * This method cut the string shorter, if the length of string is longer than 20, it will be cut with length 17
      * @param s
      * @return String
      */
