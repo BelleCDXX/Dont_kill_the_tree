@@ -27,6 +27,7 @@ public class MyMilestoneDatabaseOpListener implements MilestoneDatabaseOpListene
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME, name);
         values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE, Util.calendarToString(dueDate));
+        values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME, true);
         values.put(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED, false);
         id = db.insert(DatabaseContract.MilestoneEntry.TABLE_NAME, "null", values);
 
@@ -42,6 +43,9 @@ public class MyMilestoneDatabaseOpListener implements MilestoneDatabaseOpListene
 
         ContentValues values = new ContentValues();
         if (event.getPropertyName().equals(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)) {
+            values.put(event.getPropertyName(), event.getValue().equals("true") ? 1 : 0);
+        }
+        else if (event.getPropertyName().equals(DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME)) {
             values.put(event.getPropertyName(), event.getValue().equals("true") ? 1 : 0);
         }
         else {
