@@ -125,6 +125,15 @@ public class Milestone implements Comparable{
 
     public boolean isOnTime() {
         onTime = Util.isOnTime(dueDate, null) || completed;
+
+        if (milestoneDatabaseOpListener != null) {
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME,
+                    String.valueOf(onTime)
+            ));
+        }
+
         return onTime;
     }
 
