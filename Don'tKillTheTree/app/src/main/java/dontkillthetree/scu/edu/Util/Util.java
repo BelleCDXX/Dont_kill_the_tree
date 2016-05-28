@@ -42,7 +42,6 @@ public abstract class Util {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
-        //calendar.add(Calendar.DAY_OF_MONTH, 1);
     }
 
     /**
