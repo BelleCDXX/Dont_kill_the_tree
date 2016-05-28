@@ -113,6 +113,13 @@ public class MilestoneTest{
         milestone2.dispose();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void Test_IllegalMilestone() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+    }
+
     @Test
     public void Test_MilestoneDeletion() {
         Calendar calendar = Calendar.getInstance();
