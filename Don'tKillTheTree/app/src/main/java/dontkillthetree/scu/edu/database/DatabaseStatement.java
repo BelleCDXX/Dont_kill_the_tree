@@ -19,6 +19,7 @@ public final class DatabaseStatement {
                 DatabaseContract.MilestoneEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME + BLOB_TYPE + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +
+                DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME + INTEGER_TYPE + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED + INTEGER_TYPE +
                 ")";
 

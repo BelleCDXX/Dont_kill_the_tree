@@ -21,6 +21,7 @@ public final class DatabaseContract {
         public static final String _ID = "ID";
         public static final String COLUMN_NAME_NAME = "Name";
         public static final String COLUMN_NAME_DUE_DATE = "DueDate";
+        public static final String COLUMN_NAME_IS_ON_TIME = "IsOnTime";
         public static final String COLUMN_NAME_COMPLETED = "Completed";
     }
 

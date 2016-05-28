@@ -34,15 +34,11 @@ public class Milestone implements Comparable{
         Util.toNearestDueDate(this.dueDate);
 
         if (name == null || context == null || this.dueDate.before(currentDate)) {
-            //test
-            Log.i("cxiong", "name: "+name);
-            Log.i("cxiong", "context: "+context);
-            Log.i("cxiong", "date: "+(this.dueDate.before(currentDate)) + ": " + Util.calendarToString(this.dueDate));
             throw new IllegalArgumentException();
         }
 
         this.name = name;
-        this.onTime = Util.isOnTime(dueDate, currentDate);
+        this.onTime = true;
         this.completed = false;
         this.shown = false;
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
@@ -116,7 +112,14 @@ public class Milestone implements Comparable{
             milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
                     id,
                     DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE,
-                    Util.calendarToString(this.dueDate)));
+                    Util.calendarToString(this.dueDate)
+            ));
+
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME,
+                    String.valueOf(onTime)
+            ));
         }
     }
 
@@ -129,17 +132,24 @@ public class Milestone implements Comparable{
     }
 
     public void setCompleted(boolean completed) {
+        // update instance
+        this.completed = completed;
+        this.onTime = Util.isOnTime(this.dueDate, null) || this.completed;
+
         // update database
         if (milestoneDatabaseOpListener != null) {
             milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
                     id,
                     DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED,
-                    String.valueOf(completed)));
-        }
+                    String.valueOf(completed)
+            ));
 
-        // update instance
-        this.completed = completed;
-        this.onTime = Util.isOnTime(this.dueDate, null) || this.completed;
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME,
+                    String.valueOf(onTime)
+            ));
+        }
     }
 
     public boolean isShown() {

@@ -40,7 +40,7 @@ public class MilestoneTest{
     }
 
     @Test
-    public void Test_MilstoneCreation() {
+    public void Test_MilestoneCreation() {
         Calendar calendar = Calendar.getInstance();
         Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
 
@@ -66,8 +66,26 @@ public class MilestoneTest{
         Cursor cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
         cursor.moveToFirst();
         assertEquals(2, cursor.getCount());
-        assertEquals(false, milestone.isOnTime());
+        assertEquals(true, milestone.isOnTime());
         assertEquals(true, milestone2.isOnTime());
+
+        calendar.add(Calendar.DATE, -3);
+        milestone.setDueDate(calendar);
+        assertEquals(false, milestone.isOnTime());
+        String[] onTimeProjection = {DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME};
+        selection = DatabaseContract.MilestoneEntry._ID + " = " + milestone.getId();
+        cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, onTimeProjection, selection, null, null, null, null);
+        cursor.moveToFirst();
+        assertEquals(0, cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME)));
+
+        calendar.add(Calendar.DATE, 3);
+        milestone.setDueDate(calendar);
+        assertEquals(true, milestone.isOnTime());
+        String[] onTimeProjection2 = {DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME};
+        selection = DatabaseContract.MilestoneEntry._ID + " = " + milestone.getId();
+        cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, onTimeProjection2, selection, null, null, null, null);
+        cursor.moveToFirst();
+        assertEquals(1, cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME)));
 
         // name edit
         milestone.setName("Milestone New Name");
