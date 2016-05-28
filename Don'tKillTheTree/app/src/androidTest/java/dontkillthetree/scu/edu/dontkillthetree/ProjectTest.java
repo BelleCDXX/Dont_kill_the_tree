@@ -45,7 +45,7 @@ public class ProjectTest{
     }
 
     @Test
-    public void Test_ProjectCreation() {
+    public void Test_ProjectCreationAndRecovery() {
         Calendar dueDate = Calendar.getInstance();
         dueDate.add(Calendar.DAY_OF_MONTH, 1);
         Project project = new Project(
@@ -58,8 +58,16 @@ public class ProjectTest{
         String[] projection = {DatabaseContract.ProjectEntry._ID};
         String selection = DatabaseContract.ProjectEntry._ID + " = " + project.getId();
         Cursor cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
-
         assertEquals(1, cursor.getCount());
+
+        Project project2 = null;
+        try {
+            project2 = new Project(project.getId(), new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
+            assertEquals("Project1", project2.getName());
+        }
+        catch (ParseException e) {
+            fail("Project Recovery Test Failed.");
+        }
 
         project.dispose();
     }
@@ -76,15 +84,35 @@ public class ProjectTest{
                 new MyMilestoneDatabaseOpListener(context), context);
 
         List<Milestone> milestones = project.getMilestones();
-        assertEquals(2, milestones.size());
-
-        project.addMilestone("Milestone 3", dueDate, context);
-        milestones = project.getMilestones();
         assertEquals(3, milestones.size());
 
+        dueDate.add(Calendar.DATE, -1);
+        project.addMilestone("Milestone 3", dueDate);
+        project.sortMilestones();
+        milestones = project.getMilestones();
+        assertEquals(4, milestones.size());
+        assertEquals(false, project.isCompleted());
+
         for (int i = 1; i <= milestones.size(); i++) {
-            assertEquals("Milestone " + i, milestones.get(i - 1).getName());
+            if (i != milestones.size()) {
+                assertEquals("Milestone " + i, milestones.get(i - 1).getName());
+                milestones.get(i - 1).setCompleted(true);
+            }
+            else {
+                assertEquals(false, project.isCompleted());
+                assertEquals("Due!", milestones.get(i - 1).getName());
+                milestones.get(i - 1).setCompleted(true);
+                assertEquals(true, project.isCompleted());
+            }
         }
+
+
+        String[] projection = {DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME};
+        String selection = DatabaseContract.ProjectEntry._ID + " = " + project.getId();
+        Cursor cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
+        cursor.moveToFirst();
+        assertEquals(1, cursor.getInt(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME)));
+        assertEquals(true, project.isOnTime());
 
         project.dispose();
     }

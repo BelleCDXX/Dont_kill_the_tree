@@ -23,6 +23,7 @@ public class Project {
     private final long id;
     private String name;
     private Calendar dueDate;
+    private boolean onTime;
     private List<Milestone> milestones;
     private Milestone currentMilestone;
     private ProjectDatabaseOpListener projectDatabaseOpListener;
@@ -53,9 +54,9 @@ public class Project {
         int i;
         for (i = 1; i <= numberOfMilestones; i++) {
             currentDate.add(Calendar.DATE, increment);
-            milestones.add(new Milestone("Milestone " + i, currentDate, milestoneDatabaseOpListener, context));
+            milestones.add(new Milestone("Milestone " + i, currentDate, milestoneDatabaseOpListener));
         }
-        milestones.add(new Milestone("Due!" , dueDate, milestoneDatabaseOpListener, context));
+        milestones.add(new Milestone("Due!" , this.dueDate, milestoneDatabaseOpListener));
 
         this.currentMilestone = milestones.get(0);
         this.projectDatabaseOpListener = projectDatabaseOpListener;
@@ -66,20 +67,15 @@ public class Project {
     /**
      * Use this constructor when it is recovered from the database
      * @param id
-     * @param name
-     * @param dueDate
      * @throws ParseException
      */
-    public Project(long id, String name, String dueDate, ProjectDatabaseOpListener projectDatabaseOpListener, MilestoneDatabaseOpListener milestoneDatabaseOpListener) throws ParseException{
-        if (name == null || dueDate == null) {
-            throw new IllegalArgumentException();
-        }
-
+    public Project(long id, ProjectDatabaseOpListener projectDatabaseOpListener, MilestoneDatabaseOpListener milestoneDatabaseOpListener) throws ParseException{
         this.projectDatabaseOpListener = projectDatabaseOpListener;
-        Calendar dueDateCalendar = Util.stringToCalendar(dueDate);
+        String[] dbProject = projectDatabaseOpListener.onSelect(id);
+        Calendar dueDateCalendar = Util.stringToCalendar(dbProject[1]);
 
         this.id = id;
-        this.name = name;
+        this.name = dbProject[0];
         this.dueDate = dueDateCalendar;
         this.milestones = new ArrayList<>();
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
@@ -130,6 +126,7 @@ public class Project {
         // update instance
         this.dueDate = (Calendar) dueDate.clone();
         Util.toNearestDueDate(this.dueDate);
+        onTime = Util.isOnTime(this.dueDate, null);
 
         // update database
         if (projectDatabaseOpListener != null) {
@@ -137,6 +134,12 @@ public class Project {
                     id,
                     DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE,
                     Util.calendarToString(this.dueDate)));
+
+            projectDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE,
+                    String.valueOf(onTime)
+            ));
         }
     }
 
@@ -155,8 +158,8 @@ public class Project {
         updateCurrentMilestone();
     }
 
-    public long addMilestone(String name, Calendar dueDate, Context context) {
-        Milestone newMilestone = new Milestone(name, dueDate, milestoneDatabaseOpListener, context);
+    public long addMilestone(String name, Calendar dueDate) {
+        Milestone newMilestone = new Milestone(name, dueDate, milestoneDatabaseOpListener);
         milestones.add(newMilestone);
         sortMilestones();
         updateCurrentMilestone();
@@ -177,5 +180,43 @@ public class Project {
             }
         }
         currentMilestone = null;
+    }
+
+    public boolean isOnTime() {
+        onTime = Util.isOnTime(dueDate, null) || isAllMilestonesOnTime();
+
+        if (milestoneDatabaseOpListener != null) {
+            milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME,
+                    String.valueOf(onTime)
+            ));
+        }
+
+        return onTime;
+    }
+
+    public boolean isCompleted() {
+        return isAllMilestonesCompleted();
+    }
+
+    private boolean isAllMilestonesOnTime() {
+        for (Milestone milestone : milestones) {
+            if (!milestone.isOnTime()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isAllMilestonesCompleted() {
+        for (Milestone milestone : milestones) {
+            if (!milestone.isCompleted()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

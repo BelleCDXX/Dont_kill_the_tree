@@ -9,6 +9,7 @@ import java.util.List;
 import dontkillthetree.scu.edu.model.Milestone;
 
 public interface ProjectDatabaseOpListener{
+    String[] onSelect(long id);
     long onInsert(String name, Calendar dueDate, List<Milestone> milestones);
     void getMilestones(long id, List<Milestone> milestones, MilestoneDatabaseOpListener milestoneDatabaseOpListener) throws ParseException;
     void onUpdate(PropertyChangeEvent event);

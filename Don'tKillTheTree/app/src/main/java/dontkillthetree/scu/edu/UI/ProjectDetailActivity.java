@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
 import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
@@ -33,14 +34,11 @@ import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Tree;
 
 public class ProjectDetailActivity extends ParentActivity implements AdapterView.OnItemClickListener {
-    private SQLiteDatabase db;
-    private SQLiteOpenHelper dbHelper;
     private Context context;
     ListView listView;
     private final String TAG = "Sen";
     private List<Milestone> mMilestones;
     private Project mProject;
-    private String mProjectName;
 
     // don't delete these
     public static final String EXTRA_PROJECT_NAME = "project_name";
@@ -54,8 +52,6 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         setContentView(R.layout.activity_project_detail);
 
         context = this;
-        dbHelper = new DatabaseHelper(context);
-        db = dbHelper.getReadableDatabase();
 
         // get the widgets
         TextView ET_projectName = (TextView) findViewById(R.id.projectName);
@@ -72,27 +68,16 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
             mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_LIST);
         }
 
-        String[] projection = {DatabaseContract.ProjectEntry._ID,
-                DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
-                DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE};
-
-        String selection = DatabaseContract.ProjectEntry._ID + " = " + mProjectId;
-        Cursor mCursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
-
-        mCursor.moveToFirst();
-        mProjectName = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
-        String mDueDate = (String) mCursor.getString(mCursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE));
-
         try {
-            mProject = new Project(mProjectId, mProjectName, mDueDate, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
+            mProject = new Project(mProjectId, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
             mMilestones = mProject.getMilestones();
         } catch (ParseException e) {
             Log.i(TAG, e.toString());
         }
 
         // set data to EditText
-        ET_projectName.setText(mProjectName);
-        ET_dueDate.setText(mDueDate);
+        ET_projectName.setText(mProject.getName());
+        ET_dueDate.setText(Util.calendarToString(mProject.getDueDate()));
         ET_numberOfMilestone.setText(Integer.toString(mMilestones.size()));
         ET_projectPartner.setText("None");
 
@@ -177,7 +162,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
     public void showFullProjectName(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetailActivity.this);
         builder.setTitle("Project Name:")
-                .setMessage(mProjectName)
+                .setMessage(mProject.getName())
                 .setCancelable(true);
         builder.create().show();
     }
