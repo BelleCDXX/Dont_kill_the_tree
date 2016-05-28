@@ -57,6 +57,9 @@ public class Milestone implements Comparable{
         this.shown = false;
     }
 
+    /**
+     * Call this method to delete a milestone from the database
+     */
     public void dispose() {
         milestoneDatabaseOpListener.onDelete(new DisposeEvent(id));
     }

@@ -97,6 +97,9 @@ public class Project {
         Collections.sort(milestones);
     }
 
+    /**
+     * Call this method to delete a project from the database, this will also delete all its milestones
+     */
     public void dispose() {
         projectDatabaseOpListener.onDelete(new DisposeEvent(id));
     }
