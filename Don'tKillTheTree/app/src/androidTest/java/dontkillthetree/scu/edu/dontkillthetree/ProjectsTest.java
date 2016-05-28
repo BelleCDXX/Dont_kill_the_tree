@@ -54,6 +54,8 @@ public class ProjectsTest {
                 "Project1",
                 dueDate,
                 2,
+                null,
+                null,
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 

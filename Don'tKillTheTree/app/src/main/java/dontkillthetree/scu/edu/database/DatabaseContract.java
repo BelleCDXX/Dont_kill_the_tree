@@ -15,6 +15,8 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_DUE_DATE = "DueDate";
         public static final String COLUMN_NAME_IS_ON_TIME = "IsOnTime";
         public static final String COLUMN_NAME_CURRENT_MILESTONE_ID = "CurrentMilestoneID";
+        public static final String COLUMN_NAME_GUARDIAN_NAME = "GuardianName";
+        public static final String COLUMN_NAME_GUARDIAN_PHONE = "GuardianPhoneNumber";
     }
 
     public static abstract class MilestoneEntry implements BaseColumns {

@@ -1,8 +1,6 @@
 package dontkillthetree.scu.edu.model;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -10,12 +8,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import dontkillthetree.scu.edu.UI.AddProjectDueDate;
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.event.DisposeEvent;
 import dontkillthetree.scu.edu.event.MilestoneDatabaseOpListener;
-import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
+import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
 import dontkillthetree.scu.edu.event.ProjectDatabaseOpListener;
 import dontkillthetree.scu.edu.event.PropertyChangeEvent;
 
@@ -26,6 +23,8 @@ public class Project {
     private boolean onTime;
     private List<Milestone> milestones;
     private Milestone currentMilestone;
+    private String guardianName;
+    private String guardianPhone;
     private ProjectDatabaseOpListener projectDatabaseOpListener;
     private MilestoneDatabaseOpListener milestoneDatabaseOpListener;
 
@@ -34,11 +33,13 @@ public class Project {
      * @param name
      * @param dueDate
      * @param numberOfMilestones
+     * @param guardianName
+     * @param guardianPhone
      * @param projectDatabaseOpListener
      * @param milestoneDatabaseOpListener
      * @param context
      */
-    public Project(String name, Calendar dueDate, int numberOfMilestones, ProjectDatabaseOpListener projectDatabaseOpListener, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) {
+    public Project(String name, Calendar dueDate, int numberOfMilestones, String guardianName, String guardianPhone, ProjectDatabaseOpListener projectDatabaseOpListener, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) {
         Calendar currentDate = Calendar.getInstance();
         if (name == null || context == null || dueDate.before(currentDate) || numberOfMilestones <= -1) {
             throw new IllegalArgumentException();
@@ -48,9 +49,11 @@ public class Project {
         this.name = name;
         this.dueDate = (Calendar) dueDate.clone();
         Util.toNearestDueDate(this.dueDate);
-        int increment = (int) ((this.dueDate.getTimeInMillis() - currentDate.getTimeInMillis()) / (24 * 60 * 60 * 1000 * (numberOfMilestones + 1)));
+        this.guardianName = guardianName;
+        this.guardianPhone = guardianPhone;
 
         // create milestones
+        int increment = (int) ((this.dueDate.getTimeInMillis() - currentDate.getTimeInMillis()) / (24 * 60 * 60 * 1000 * (numberOfMilestones + 1)));
         int i;
         for (i = 1; i <= numberOfMilestones; i++) {
             currentDate.add(Calendar.DATE, increment);
@@ -61,7 +64,7 @@ public class Project {
         this.currentMilestone = milestones.get(0);
         this.projectDatabaseOpListener = projectDatabaseOpListener;
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
-        this.id = this.projectDatabaseOpListener.onInsert(name, this.dueDate, milestones);
+        this.id = this.projectDatabaseOpListener.onInsert(name, this.dueDate, this.guardianName, this.guardianPhone, milestones);
     }
 
     /**
@@ -77,6 +80,8 @@ public class Project {
         this.id = id;
         this.name = dbProject[0];
         this.dueDate = dueDateCalendar;
+        this.guardianName = dbProject[2];
+        this.guardianPhone = dbProject[3];
         this.milestones = new ArrayList<>();
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
 
@@ -171,6 +176,9 @@ public class Project {
         return currentMilestone;
     }
 
+    /**
+     * Calculate the current milestone
+     */
     public void updateCurrentMilestone() {
         sortMilestones();
         for (Milestone milestone : milestones) {
@@ -188,7 +196,7 @@ public class Project {
         if (milestoneDatabaseOpListener != null) {
             milestoneDatabaseOpListener.onUpdate(new PropertyChangeEvent(
                     id,
-                    DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME,
+                    DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME,
                     String.valueOf(onTime)
             ));
         }
@@ -198,6 +206,46 @@ public class Project {
 
     public boolean isCompleted() {
         return isAllMilestonesCompleted();
+    }
+
+    /**
+     * Get the guardian name
+     * @return Be careful that if the guardian name was not set, it will return null
+     */
+    public String getGuardianName() {
+        return guardianName;
+    }
+
+    public void setGuardianName(String name) {
+        this.guardianName = name;
+
+        if (projectDatabaseOpListener != null && guardianName != null) {
+            projectDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME,
+                    guardianName
+            ));
+        }
+    }
+
+    /**
+     * Get the guardian phone number
+     * @return Be careful that if the guardian phone number was not set, it will return null
+     */
+    public String getGuardianPhone() {
+        return guardianPhone;
+    }
+
+    public void setGuardianPhone(String phone) {
+        this.guardianPhone = phone;
+
+        if (projectDatabaseOpListener != null && guardianPhone != null) {
+            projectDatabaseOpListener.onUpdate(new PropertyChangeEvent(
+                    id,
+                    DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE,
+                    guardianPhone
+            ));
+        }
     }
 
     private boolean isAllMilestonesOnTime() {

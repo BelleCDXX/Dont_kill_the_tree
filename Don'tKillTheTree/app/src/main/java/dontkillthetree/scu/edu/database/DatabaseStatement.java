@@ -35,6 +35,8 @@ public final class DatabaseStatement {
                 DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME + INTEGER_TYPE + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID + INTEGER_TYPE + COMMA_SEP +
+                DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME + BLOB_TYPE + COMMA_SEP +
+                DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE + BLOB_TYPE + COMMA_SEP + 
                 FOREIGN_KEY + DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID +
                         ")" + REFERENCES + DatabaseContract.MilestoneEntry.TABLE_NAME + "(" + DatabaseContract.MilestoneEntry._ID + ")" +
                 ")";

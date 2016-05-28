@@ -52,6 +52,8 @@ public class ProjectTest{
                 "Project1",
                 dueDate,
                 2,
+                "Guardian",
+                null,
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 
@@ -64,6 +66,8 @@ public class ProjectTest{
         try {
             project2 = new Project(project.getId(), new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
             assertEquals("Project1", project2.getName());
+            assertEquals("Guardian", project2.getGuardianName());
+            assertEquals(null, project2.getGuardianPhone());
         }
         catch (ParseException e) {
             fail("Project Recovery Test Failed.");
@@ -80,12 +84,15 @@ public class ProjectTest{
                 "Project1",
                 dueDate,
                 2,
+                null,
+                null,
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 
         List<Milestone> milestones = project.getMilestones();
         assertEquals(3, milestones.size());
 
+        // add milestone
         dueDate.add(Calendar.DATE, -1);
         project.addMilestone("Milestone 3", dueDate);
         project.sortMilestones();
@@ -93,6 +100,7 @@ public class ProjectTest{
         assertEquals(4, milestones.size());
         assertEquals(false, project.isCompleted());
 
+        // is completed and milestone name verification
         for (int i = 1; i <= milestones.size(); i++) {
             if (i != milestones.size()) {
                 assertEquals("Milestone " + i, milestones.get(i - 1).getName());
@@ -106,13 +114,26 @@ public class ProjectTest{
             }
         }
 
-
+        // is on time
         String[] projection = {DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME};
         String selection = DatabaseContract.ProjectEntry._ID + " = " + project.getId();
         Cursor cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
         cursor.moveToFirst();
         assertEquals(1, cursor.getInt(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME)));
         assertEquals(true, project.isOnTime());
+
+        // guardian name
+        assertEquals(null, project.getGuardianName());
+        String[] guardianProjection = {DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME};
+        cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, guardianProjection, selection, null, null, null, null);
+        cursor.moveToFirst();
+        assertEquals(true, cursor.isNull(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME)));
+        project.setGuardianName("Guardian");
+        assertEquals("Guardian", project.getGuardianName());
+        cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, guardianProjection, selection, null, null, null, null);
+        cursor.moveToFirst();
+        assertEquals(false, cursor.isNull(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME)));
+        assertEquals("Guardian", cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME)));
 
         project.dispose();
     }
@@ -125,6 +146,8 @@ public class ProjectTest{
                 "Project1",
                 dueDate,
                 2,
+                null,
+                null,
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 
