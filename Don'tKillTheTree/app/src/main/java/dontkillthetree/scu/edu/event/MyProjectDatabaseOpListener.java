@@ -25,7 +25,34 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         this.context = context;
     }
 
-    public long onInsert(String name, Calendar dueDate, List<Milestone> milestones) {
+    public String[] onSelect(long id) {
+        String[] result = new String[4];
+        databaseHelper = new DatabaseHelper(this.context);
+        db = databaseHelper.getWritableDatabase();
+
+        String[] projection = {
+                DatabaseContract.ProjectEntry.COLUMN_NAME_NAME,
+                DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE,
+                DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME,
+                DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE
+        };
+        String selection = DatabaseContract.ProjectEntry._ID + " = " + id;
+        Cursor cursor = db.query(DatabaseContract.ProjectEntry.TABLE_NAME, projection, selection, null, null, null, null);
+        cursor.moveToFirst();
+        result[0] = cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME));
+        result[1] = cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE));
+        result[2] = cursor.isNull(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME)) ?
+                null : cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME));
+        result[3] = cursor.isNull(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE)) ?
+                null : cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE));
+
+        db.close();
+        databaseHelper.close();
+
+        return result;
+    }
+
+    public long onInsert(String name, Calendar dueDate, String guardianName, String guardianPhone, List<Milestone> milestones) {
         long id;
         databaseHelper = new DatabaseHelper(this.context);
         db = databaseHelper.getWritableDatabase();
@@ -34,7 +61,20 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.ProjectEntry.COLUMN_NAME_NAME, name);
         values.put(DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE, Util.calendarToString(dueDate));
+        values.put(DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME, true);
         values.put(DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID, milestones.get(0).getId());
+        if (guardianName == null) {
+            values.putNull(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME);
+        }
+        else {
+            values.put(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME, guardianName);
+        }
+        if (guardianPhone == null) {
+            values.putNull(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE);
+        }
+        else {
+            values.put(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE, guardianPhone);
+        }
         id = db.insert(DatabaseContract.ProjectEntry.TABLE_NAME, "null", values);
 
         // create ProjectMilestone entry
@@ -76,10 +116,7 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         } while (cursor.moveToNext());
 
         String[] milestoneProject = {
-                DatabaseContract.MilestoneEntry._ID,
-                DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME,
-                DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE,
-                DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED};
+                DatabaseContract.MilestoneEntry._ID};
 
         StringBuilder selectionStringBuilder = new StringBuilder(DatabaseContract.MilestoneEntry._ID + " in (");
         for (int i = 0; i < milestoneIds.size(); i++) {
@@ -98,11 +135,7 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         do {
             milestones.add(new Milestone(
                     cursor.getLong(cursor.getColumnIndex(DatabaseContract.MilestoneEntry._ID)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE)),
-                    cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)) == 1,
-                    milestoneDatabaseOpListener,
-                    context));
+                    milestoneDatabaseOpListener));
         } while (cursor.moveToNext());
 
         db.close();
@@ -114,7 +147,14 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         db = databaseHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(event.getPropertyName(), event.getValue());
+
+        if (event.getPropertyName().equals(DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME)) {
+            values.put(event.getPropertyName(), event.getValue().equals("true") ? 1 : 0);
+        }
+        else {
+            values.put(event.getPropertyName(), event.getValue());
+        }
+
         String selection = DatabaseContract.ProjectEntry._ID + " = ?";
         String[] selectionArgs = {String.valueOf(event.getId())};
         db.update(DatabaseContract.ProjectEntry.TABLE_NAME, values, selection, selectionArgs);

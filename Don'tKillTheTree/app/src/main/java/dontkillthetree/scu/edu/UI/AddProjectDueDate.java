@@ -270,6 +270,8 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
                 projectName,
                 selectedDueDate,
                 numberOfMilestones,
+                null,
+                null,
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 
