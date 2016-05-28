@@ -124,6 +124,7 @@ public class Milestone implements Comparable{
     }
 
     public boolean isOnTime() {
+        onTime = Util.isOnTime(dueDate, null) || completed;
         return onTime;
     }
 
