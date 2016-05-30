@@ -1,5 +1,6 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.content.Context;
@@ -28,21 +29,26 @@ import java.util.Calendar;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
+import dontkillthetree.scu.edu.model.Audio;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
+import dontkillthetree.scu.edu.service.BackgroundMusic;
 
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
 
     private final static String[] DEFAULT_ITEM = {"none"};
+
+    private static MediaPlayer mMediaPlayer;
 
     private Tree mTree;
     private Spinner spinner;
     private Handler mHandler;
     //private int progressBarSpeed = 10;
     private String TAG = "SEN";
+    private Context context = this;
 
     int mCurrentStage = 0;
     int mStageMaxExp = 0;
@@ -94,8 +100,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             }
         }).start();*/
 
-
-
         //set spinner heres
         String[] items = DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
@@ -112,29 +116,18 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         );
         spinner.setOnItemSelectedListener(this);
 
+        // start playing background music
+//        mMediaPlayer = MediaPlayer.create(context, R.raw.start_all_over_again);
+//        mMediaPlayer.setLooping(true);
+//        mMediaPlayer.start();
+        BackgroundMusic.startPlay(context);
 
-    }
-
-
-    //get bitmap from assets
-    private static Bitmap getBitmapFromAsset(Context context, String filePath) {
-        AssetManager assetManager = context.getAssets();
-
-        InputStream istr;
-        Bitmap bitmap = null;
-        try {
-            istr = assetManager.open(filePath);
-            bitmap = BitmapFactory.decodeStream(istr);
-        } catch (IOException e) {
-            // handle exception
-        }
-
-        return bitmap;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         //set spinner heres
         String[] items=DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
@@ -165,6 +158,45 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         Bitmap b = getBitmapFromAsset(this,mTree.getCurrentImage());
         treeImage.setImageBitmap(b);
         levelUpToast();
+
+    }
+
+//    @Override
+//    protected void onUserLeaveHint() {
+//        super.onUserLeaveHint();
+//        BackgroundMusic.stopPlay(context);
+//
+//    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        BackgroundMusic.stopPlay(context);
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        mMediaPlayer.release();
+//        mMediaPlayer = null;
+        BackgroundMusic.stopPlay(context);
+    }
+
+
+    //get bitmap from assets
+    private static Bitmap getBitmapFromAsset(Context context, String filePath) {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open(filePath);
+            bitmap = BitmapFactory.decodeStream(istr);
+        } catch (IOException e) {
+            // handle exception
+        }
+
+        return bitmap;
     }
 
     @Override
@@ -275,6 +307,8 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         switch (id) {
             case R.id.go_to_list:
                 // when click go to list button in the action bar
+                Audio.makeClickSound(context);
+
                 Intent intent = new Intent(HomeActivity.this, ProjectListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);

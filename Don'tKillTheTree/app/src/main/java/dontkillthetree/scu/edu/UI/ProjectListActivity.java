@@ -160,6 +160,7 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
             default:
                 return true;
         }
-        return true;
+//        return true;
+        return super.onOptionsItemSelected(item);
     }
 }
