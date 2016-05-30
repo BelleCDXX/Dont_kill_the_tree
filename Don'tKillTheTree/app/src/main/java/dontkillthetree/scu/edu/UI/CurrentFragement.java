@@ -41,6 +41,7 @@ public class CurrentFragement extends ListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        context = getActivity();
         super.onActivityCreated(savedInstanceState);
         projects = ProjectListActivity.projectList;
         currentProjects = checkList();
@@ -50,6 +51,7 @@ public class CurrentFragement extends ListFragment {
 
     @Override
     public void onResume() {
+        context = getActivity();
         super.onResume();
         projects = ProjectListActivity.projectList;
         currentProjects = checkList();
