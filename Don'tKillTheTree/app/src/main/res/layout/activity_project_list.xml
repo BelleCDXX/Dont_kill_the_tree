@@ -14,18 +14,17 @@
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/TabLayout"
+        android:layout_below="@+id/TabLayout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:background="#FFFFFF" >
     </FrameLayout>
     <RelativeLayout
         android:id="@+id/TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         >
         <ImageView
             android:id="@+id/tabLine"
@@ -44,7 +43,8 @@
                 android:layout_weight="1"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
-                android:id="@+id/currentLayout">
+                android:id="@+id/currentLayout"
+                android:background="@android:color/darker_gray">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

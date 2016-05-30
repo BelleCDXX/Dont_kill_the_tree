@@ -43,6 +43,7 @@ public class DoneFragement extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        context = getActivity();
         projects = ProjectListActivity.projectList;
         List<Project> doneProjects = listCheck();
         DoneProjectAdapter adapter = new DoneProjectAdapter(context, R.layout.project_row, doneProjects);
