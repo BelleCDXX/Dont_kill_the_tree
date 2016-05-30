@@ -42,7 +42,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     private Spinner spinner;
     private Handler mHandler;
     //private int progressBarSpeed = 10;
-    private String TAG = "SEN";
+
 
     int mCurrentStage = 0;
     int mStageMaxExp = 0;
