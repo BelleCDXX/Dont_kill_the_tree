@@ -8,7 +8,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +19,8 @@
         <activity android:name=".ProjectDetailActivity" />
         <activity android:name=".ParentActivity" />
         <activity android:name=".AddProjectName" />
-        <activity android:name=".AddProjectDueDate"></activity>
+        <activity android:name=".AddProjectDueDate" />
+        <activity android:name=".ListContainerActivity"></activity>
     </application>
 
 </manifest>
