@@ -53,6 +53,7 @@ public class DoneFragement extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        context = getActivity();
         projects = ProjectListActivity.projectList;
         List<Project> doneProjects = listCheck();
         DoneProjectAdapter adapter = new DoneProjectAdapter(context, R.layout.project_row, doneProjects);
