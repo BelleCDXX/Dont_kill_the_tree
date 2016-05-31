@@ -17,7 +17,6 @@ public abstract class CreateNotifyIntent {
 
     public static void makeIntent(Context context){
         PrepareNotify prepareNotify = new PrepareNotify(context);
-        prepareNotify.getMilestonesForNotify();
 
         ArrayList<String> notifyText = prepareNotify.getNotifyText();
         ArrayList<Calendar> notifyTime = prepareNotify.getNotifyTime();

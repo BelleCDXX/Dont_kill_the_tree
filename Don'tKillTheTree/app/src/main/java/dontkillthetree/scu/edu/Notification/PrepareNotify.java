@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
@@ -22,6 +23,9 @@ public class PrepareNotify {
 
     public PrepareNotify(Context context){
         this.context = context;
+        notifyText = new ArrayList<>();
+        notifyTime = new ArrayList<>();
+        updateMilestonesForNotify();
     }
 
     public ArrayList<String> getNotifyText(){
@@ -33,18 +37,18 @@ public class PrepareNotify {
     }
 
     // get on-time and un-complete milestones to create notification
-    public void getMilestonesForNotify(){
-        ArrayList<Project> projects = new ArrayList<Project>();
-        ArrayList<Milestone> milestonesForNotify = new ArrayList<Milestone>();
-        notifyText = new ArrayList<String>();
-        notifyTime = new ArrayList<Calendar>();
+    public void updateMilestonesForNotify(){
+        List<Project> projects = new ArrayList<>();
+        List<Milestone> milestonesForNotify = new ArrayList<>();
+        notifyText.clear();
+        notifyTime.clear();
         //Calendar nearest = null;
         //int count = 0;
 
 
         try {
             Projects.getAllProjects(context);
-            projects = (ArrayList<Project>) Projects.projects;
+            projects = Projects.projects;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -53,7 +57,7 @@ public class PrepareNotify {
             return;
         }
         //get ontime project's number
-        ArrayList<Milestone> milestones;
+        List<Milestone> milestones;
         for(Project project:projects){
             milestones = project.getMilestonesForNotify();
             if(!(milestones.size() < 1)) {
