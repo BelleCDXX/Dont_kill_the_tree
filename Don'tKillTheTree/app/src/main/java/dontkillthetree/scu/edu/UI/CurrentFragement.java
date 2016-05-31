@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Notification.CreateNotifyIntent;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Tree;
@@ -105,6 +106,9 @@ public class CurrentFragement extends ListFragment {
                         }
                         ProjectListActivity activity = (ProjectListActivity)context;
                         activity.refresh();
+
+                        // create/update notification
+                        CreateNotifyIntent.makeIntent(context);
                         //Set arrayAdapter
                         //setListAdapter(new ProjectsArrayAdapter(context,R.layout.project_row,currentProjects));
                         //projectListView.setAdapter(new ProjectsArrayAdapter(context, R.layout.project_row, projectList));

@@ -58,8 +58,16 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
 
         numOfMilestones = ((TextView)findViewById(R.id.number_of_milestones));
 
-        // set num of milestones button listener
+        // set num of milestones button and textview listener
         findViewById(R.id.set_num_of_milestones).setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v) {
+                showMilestoneDialog();
+            }
+        });
+        findViewById(R.id.number_of_milestones).setOnClickListener(new View.OnClickListener()
         {
 
             @Override

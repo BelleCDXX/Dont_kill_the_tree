@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
@@ -212,9 +213,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         if(currentProjects.size()<1){
             return milestones;
         }
-        Log.i("JCheng","size: "+currentProjects.size());
+        Log.i("JCheng","size: " + currentProjects.size());
         //get upcoming duedate
-        for(int i = 0; i< currentProjects.size();i++){
+        for(int i = 0; i < currentProjects.size(); i++){
             Milestone m = currentProjects.get(i).getCurrentMilestone();
             if(nearest == null){
                 nearest = m.getDueDate();
@@ -240,6 +241,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             lastStage = mCurrentStage;
         }
     }
+
 
     //check if project is completed
     /*private boolean isProjectComplted(Project project){
