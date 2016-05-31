@@ -22,6 +22,7 @@ public class Project {
     private Calendar dueDate;
     private boolean onTime;
     private List<Milestone> milestones;
+    private List<Milestone> milestonesForNotify;
     private Milestone currentMilestone;
     private String guardianName;
     private String guardianPhone;
@@ -65,6 +66,8 @@ public class Project {
         this.projectDatabaseOpListener = projectDatabaseOpListener;
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
         this.id = this.projectDatabaseOpListener.onInsert(name, this.dueDate, this.guardianName, this.guardianPhone, milestones);
+        this.milestonesForNotify = new ArrayList<>();
+        updateMilestonesForNotify();
     }
 
     /**
@@ -88,6 +91,8 @@ public class Project {
         this.projectDatabaseOpListener.getMilestones(this.id, this.milestones, this.milestoneDatabaseOpListener);
         sortMilestones();
         updateCurrentMilestone();
+        milestonesForNotify = new ArrayList<>();
+        updateMilestonesForNotify();
     }
 
     /**
@@ -179,6 +184,11 @@ public class Project {
         return currentMilestone;
     }
 
+    public List<Milestone> getMilestonesForNotify(){
+        updateMilestonesForNotify();
+        return milestonesForNotify;
+    }
+
     /**
      * Calculate the current milestone
      */
@@ -191,6 +201,16 @@ public class Project {
             }
         }
         currentMilestone = null;
+    }
+
+    private void updateMilestonesForNotify(){
+        sortMilestones();
+        milestonesForNotify.clear();
+        for(Milestone milestone : milestones){
+            if(!milestone.isCompleted() && milestone.isOnTime()){
+                milestonesForNotify.add(milestone);
+            }
+        }
     }
 
     public boolean isOnTime() {

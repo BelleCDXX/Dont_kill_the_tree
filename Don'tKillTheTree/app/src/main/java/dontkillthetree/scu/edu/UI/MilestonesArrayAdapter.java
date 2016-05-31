@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Notification.CreateNotifyIntent;
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Milestone;
 
@@ -80,6 +81,8 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                                     mMilestone.setName(newMilestoneName);
                                     notifyDataSetChanged();
                                     showToast("New milestone name set!");
+                                    // create/update notification
+                                    // CreateNotifyIntent.makeIntent(context);
                                 }
                             })
                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -114,6 +117,8 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                             mMilestone.setDueDate(mCalendar);
                             notifyDataSetChanged();
                             showToast("New milestone due date set!");
+                            // create/update notification
+                            CreateNotifyIntent.makeIntent(context);
                         }
                     };
                     // Create a new instance of DatePickerDialog
