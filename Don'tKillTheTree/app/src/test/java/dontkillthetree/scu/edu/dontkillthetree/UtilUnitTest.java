@@ -29,4 +29,15 @@ public class UtilUnitTest {
 
         assertEquals(false, Util.isOnTime(dueDate, currentDate));
     }
+
+//    @Test
+//    public void Test_CalendarIncrementation() {
+//        Calendar calendar = Calendar.getInstance();
+//        Calendar dueDate = Calendar.getInstance();
+//        System.out.println(Util.calendarToString(calendar));
+//
+//        dueDate.add(Calendar.DATE, 60);
+//        System.out.println(Util.calendarToString(calendar));
+//        assertEquals(true, calendar.before(dueDate));
+//    }
 }

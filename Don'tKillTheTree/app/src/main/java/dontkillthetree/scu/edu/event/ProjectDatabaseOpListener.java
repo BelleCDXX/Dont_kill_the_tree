@@ -8,11 +8,9 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Milestone;
 
-/**
- * Created by Joey Zheng on 5/20/16.
- */
 public interface ProjectDatabaseOpListener{
-    long onInsert(String name, Calendar dueDate, List<Milestone> milestones);
+    String[] onSelect(long id);
+    long onInsert(String name, Calendar dueDate, String guardianName, String guardianPhone, List<Milestone> milestones);
     void getMilestones(long id, List<Milestone> milestones, MilestoneDatabaseOpListener milestoneDatabaseOpListener) throws ParseException;
     void onUpdate(PropertyChangeEvent event);
     /**

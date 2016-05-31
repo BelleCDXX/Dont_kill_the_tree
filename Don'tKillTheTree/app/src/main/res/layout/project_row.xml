@@ -17,19 +17,19 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Milestone name"
-            android:id="@+id/milestone_name" />
-
-        <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            android:layout_weight="1" />
+            android:id="@+id/milestone_name"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_weight="1"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Due date"
-            android:id="@+id/milestone_due_date" />
+            android:id="@+id/milestone_due_date"
+            android:singleLine="true"
+            android:layout_gravity="end"/>
 
     </LinearLayout>
 

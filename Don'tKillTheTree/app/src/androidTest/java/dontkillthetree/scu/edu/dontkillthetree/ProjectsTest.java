@@ -54,13 +54,16 @@ public class ProjectsTest {
                 "Project1",
                 dueDate,
                 2,
+                null,
+                null,
                 new MyProjectDatabaseOpListener(context),
                 new MyMilestoneDatabaseOpListener(context), context);
 
         List<Project> projects = new ArrayList<>();
 
         try {
-            projects = Projects.getAllProjects(context);
+            Projects.getAllProjects(context);
+            projects = Projects.projects;
         }
         catch(ParseException ex) {
             fail(ex.getMessage());

@@ -2,9 +2,6 @@ package dontkillthetree.scu.edu.database;
 
 import java.util.Calendar;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public final class DatabaseStatement {
     private static final String PRIMARY_KEY = " PRIMARY KEY AUTOINCREMENT";
     private static final String FOREIGN_KEY = "FOREIGN KEY(";
@@ -22,6 +19,7 @@ public final class DatabaseStatement {
                 DatabaseContract.MilestoneEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_NAME + BLOB_TYPE + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +
+                DatabaseContract.MilestoneEntry.COLUMN_NAME_IS_ON_TIME + INTEGER_TYPE + COMMA_SEP +
                 DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED + INTEGER_TYPE +
                 ")";
 
@@ -35,7 +33,10 @@ public final class DatabaseStatement {
                 DatabaseContract.ProjectEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_NAME + BLOB_TYPE + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +
+                DatabaseContract.ProjectEntry.COLUMN_NAME_IS_ON_TIME + INTEGER_TYPE + COMMA_SEP +
                 DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID + INTEGER_TYPE + COMMA_SEP +
+                DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_NAME + BLOB_TYPE + COMMA_SEP +
+                DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE + BLOB_TYPE + COMMA_SEP + 
                 FOREIGN_KEY + DatabaseContract.ProjectEntry.COLUMN_NAME_CURRENT_MILESTONE_ID +
                         ")" + REFERENCES + DatabaseContract.MilestoneEntry.TABLE_NAME + "(" + DatabaseContract.MilestoneEntry._ID + ")" +
                 ")";

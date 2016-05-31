@@ -1,8 +1,5 @@
 package dontkillthetree.scu.edu.Calender;
 
-/**
- * Created by xcw0420 on 5/19/16.
- */
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

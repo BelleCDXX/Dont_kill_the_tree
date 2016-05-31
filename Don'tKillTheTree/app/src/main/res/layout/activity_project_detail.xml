@@ -15,23 +15,24 @@ android:orientation="vertical">
         android:layout_height="wrap_content"
         android:orientation="horizontal">
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Project name"
-            android:id="@+id/textView" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Project name: "
+                android:id="@+id/textView"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
-            <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            android:layout_weight="1" />
-
-            <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="None"
-            android:id="@+id/projectName"
-            android:layout_alignBaseline="@+id/textView" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:id="@+id/projectName"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:onClick="showFullProjectName"/>
     </LinearLayout>
 
     <LinearLayout
@@ -39,23 +40,21 @@ android:orientation="vertical">
         android:layout_height="wrap_content"
         android:orientation="horizontal">
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Due Date"
-            android:id="@+id/textView2" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Due Date: "
+                android:id="@+id/textView2"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
-            <Space
-                android:layout_width="20px"
-                android:layout_height="20px"
-                android:layout_weight="1" />
-
-            <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="None"
-            android:id="@+id/dueDate"
-            android:layout_alignBaseline="@+id/textView2" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:id="@+id/dueDate"
+                android:layout_weight="1"
+                android:gravity="end"/>
     </LinearLayout>
 
     <LinearLayout
@@ -63,23 +62,21 @@ android:orientation="vertical">
         android:layout_height="wrap_content"
         android:orientation="horizontal">
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="milestones"
-            android:id="@+id/textView3" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="milestones: "
+                android:id="@+id/textView3"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
-            <Space
-                android:layout_width="20px"
-                android:layout_height="20px"
-                android:layout_weight="1" />
-
-            <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="None"
-            android:id="@+id/numberOfMilestone"
-            android:layout_alignBaseline="@+id/textView3" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:id="@+id/numberOfMilestone"
+                android:layout_weight="1"
+                android:gravity="end"/>
     </LinearLayout>
 
     <LinearLayout
@@ -87,23 +84,21 @@ android:orientation="vertical">
         android:layout_height="wrap_content"
         android:orientation="horizontal">
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Project partner"
-            android:id="@+id/textView4" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Project partner: "
+                android:id="@+id/textView4"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin" />
 
-            <Space
-                android:layout_width="20px"
-                android:layout_height="20px"
-                android:layout_weight="1" />
-
-            <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="None"
-            android:id="@+id/projectPartner"
-            android:layout_alignBaseline="@+id/textView4" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:id="@+id/projectPartner"
+                android:layout_weight="1"
+                android:gravity="end"/>
     </LinearLayout>
 
     <LinearLayout

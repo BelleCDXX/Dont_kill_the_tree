@@ -7,9 +7,6 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Milestone;
 
-/**
- * Created by Joey Zheng on 5/14/16.
- */
 public abstract class Util {
     /**
      * Convert a given calendar into string
@@ -45,7 +42,6 @@ public abstract class Util {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
-        //calendar.add(Calendar.DAY_OF_MONTH, 1);
     }
 
     /**
@@ -73,7 +69,7 @@ public abstract class Util {
     }
 
     /**
-     * This method cut the string shorter
+     * This method cut the string shorter, if the length of string is longer than 20, it will be cut with length 17
      * @param s
      * @return String
      */

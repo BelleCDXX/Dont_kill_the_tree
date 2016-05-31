@@ -24,9 +24,6 @@ import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Milestone;
 
 
-/**
- * Created by jasonzhang on 5/19/16.
- */
 public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
     private final List<Milestone> mMilestones;
     private Context context;
@@ -62,36 +59,38 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
             @Override
             public void onClick(View v) {
                 final Milestone mMilestone = mMilestones.get(position);
-                // build a alertDialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                // get the layout inflater
+                if (!mMilestone.isCompleted()) {
+                    // build a alertDialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    // get the layout inflater
 //                LayoutInflater inflater = context.getLayoutInflater(); // doesn't work
-                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService
-                        (Context.LAYOUT_INFLATER_SERVICE);
+                    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService
+                            (Context.LAYOUT_INFLATER_SERVICE);
 
-                // inflate and set the layout for the dialog
-                final View alertDialogView = inflater.inflate(R.layout.milestone_name_alertdialog, null);
-                builder.setView(alertDialogView)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                // get the new milestone name
-                                EditText ET_milestoneName = (EditText) alertDialogView.findViewById(R.id.editMilestoneName);
-                                String newMilestoneName = ET_milestoneName.getText().toString();
-                                // update the new milestone name into db
-                                mMilestone.setName(newMilestoneName);
-                                notifyDataSetChanged();
-                                showToast("New milestone name set!");
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public  void onClick(DialogInterface dialog, int d) {
-                                showToast("Cancel button clicked!");
+                    // inflate and set the layout for the dialog
+                    final View alertDialogView = inflater.inflate(R.layout.milestone_name_alertdialog, null);
+                    builder.setView(alertDialogView)
+                            .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // get the new milestone name
+                                    EditText ET_milestoneName = (EditText) alertDialogView.findViewById(R.id.editMilestoneName);
+                                    String newMilestoneName = ET_milestoneName.getText().toString();
+                                    // update the new milestone name into db
+                                    mMilestone.setName(newMilestoneName);
+                                    notifyDataSetChanged();
+                                    showToast("New milestone name set!");
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public  void onClick(DialogInterface dialog, int d) {
+                                    showToast("Cancel button clicked!");
 //                                context.getDialog().cancel();
-                            }
-                        });
-                builder.create().show();
+                                }
+                            });
+                    builder.create().show();
+                }
             }
         });
 
@@ -100,25 +99,27 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
             @Override
             public void onClick(View v) {
                 final Milestone mMilestone = mMilestones.get(position);
-                // build a datePickerDialog
-                Calendar mCalendar = Calendar.getInstance();
-                // Use the current data as the default date in the picker
-                int mYear = mCalendar.get(Calendar.YEAR);
-                int mMonth = mCalendar.get(Calendar.MONTH);
-                int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        Calendar mCalendar = Calendar.getInstance();
-                        mCalendar.set(year, month, day);
-                        mMilestone.setDueDate(mCalendar);
-                        notifyDataSetChanged();
-                        showToast("New milestone due date set!");
-                    }
-                };
-                // Create a new instance of DatePickerDialog
-                DatePickerDialog mDatePickerDialog = new DatePickerDialog(context, mDateSetListener, mYear, mMonth, mDay);
-                mDatePickerDialog.show();
+                if (!mMilestone.isCompleted()) {
+                    // build a datePickerDialog
+                    Calendar mCalendar = Calendar.getInstance();
+                    // Use the current data as the default date in the picker
+                    int mYear = mCalendar.get(Calendar.YEAR);
+                    int mMonth = mCalendar.get(Calendar.MONTH);
+                    int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int day) {
+                            Calendar mCalendar = Calendar.getInstance();
+                            mCalendar.set(year, month, day);
+                            mMilestone.setDueDate(mCalendar);
+                            notifyDataSetChanged();
+                            showToast("New milestone due date set!");
+                        }
+                    };
+                    // Create a new instance of DatePickerDialog
+                    DatePickerDialog mDatePickerDialog = new DatePickerDialog(context, mDateSetListener, mYear, mMonth, mDay);
+                    mDatePickerDialog.show();
+                }
             }
         });
 

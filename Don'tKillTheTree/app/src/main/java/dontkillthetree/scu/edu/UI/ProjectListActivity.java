@@ -3,14 +3,23 @@ package dontkillthetree.scu.edu.UI;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -21,12 +30,20 @@ import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Tree;
 
-public class ProjectListActivity extends ParentActivity implements AdapterView.OnItemClickListener{
+public class ProjectListActivity extends ParentActivity implements View.OnClickListener{
     private Context context = this;
-    private List<Project> projectList = new ArrayList<>();
-    private ListView projectListView;
-    private int expIncreased = 30;
-    private String TAG = "SEN";
+    public static List<Project> projectList = new ArrayList<>();
+    //private int expIncreased = 30;
+    private String TAG = "CHENG";
+    //fragments
+    private android.app.Fragment doneFrag = new DoneFragement();
+    private android.app.Fragment currentFrag = new CurrentFragement();
+
+    //layouts
+    private FrameLayout currentLayout,doneLayout;
+
+    //textView
+    private TextView currentTextView,doneTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +51,13 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
         setContentView(R.layout.activity_project_list);
 //        context = ProjectListActivity.this;
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         //Get the ListView
-        projectListView = (ListView)findViewById(R.id.projectListView);
+       // projectListView = (ListView)findViewById(R.id.projectListView);
 
         //Populate the arrayList with Project object
         try {
@@ -45,20 +67,71 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
         } catch(ParseException ex) {
             Log.i(TAG, ex.toString());
         }
+        initializeView();
+        intializeClickEvent();
+        intializeFragment();
 
         //Set arrayAdapter
-        projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
-        projectListView.setOnItemClickListener(this);
+        //projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
+        //projectListView.setOnItemClickListener(this);
+
+        //set floating action button which used to create a new project
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        assert fab != null;
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        toastShow("onResume");
-        ((ProjectsArrayAdapter)projectListView.getAdapter()).notifyDataSetChanged();
+        Log.i("cxiong", "onResume run");
+
+        try {
+            Projects.getAllProjects(context);
+            projectList = Projects.projects;
+            //projectList = Projects.getAllProjects(context);
+        } catch(ParseException ex) {
+            Log.i(TAG, ex.toString());
+        }
+
+        //Set arrayAdapter
+        //projectListView.setAdapter(new ProjectsArrayAdapter(this, R.layout.project_row, projectList));
+    }
+    private void initializeView(){
+        currentLayout = (FrameLayout)findViewById(R.id.currentLayout);
+        doneLayout = (FrameLayout)findViewById(R.id.doneLayout);
+        currentTextView =(TextView)findViewById(R.id.currentTextView);
+        doneTextView = (TextView)findViewById(R.id.doneTextView);
+    }
+    private void intializeClickEvent(){
+        currentLayout.setOnClickListener(this);
+        doneLayout.setOnClickListener(this);
+    }
+    private void intializeFragment(){
+        android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if(!currentFrag.isAdded()){
+            transaction.add(R.id.content,currentFrag);
+            transaction.hide(currentFrag);
+        }
+        if(!doneFrag.isAdded()){
+            transaction.add(R.id.content,doneFrag);
+            transaction.hide(doneFrag);
+        }
+        transaction.hide(currentFrag);
+        transaction.hide(doneFrag);
+        //default show is current project list
+        transaction.show(currentFrag);
+        transaction.commit();
     }
 
-    @Override
+
+   /* @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Project mProject = projectList.get(position);
 
@@ -75,20 +148,110 @@ public class ProjectListActivity extends ParentActivity implements AdapterView.O
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Done", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Complete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // update the status of milestone as COMPLETED
-                        mProject.getCurrentMilestone().setCompleted(true);
+                        if(mProject.getCurrentMilestone() != null){
+                            mProject.getCurrentMilestone().setCompleted(true);
+                        }
                         // update the experience of Tree
                         Tree mTree = Tree.getInstance(context);
                         mTree.increaseExperience(expIncreased);
+
+                        try {
+                            Projects.getAllProjects(context);
+                            projectList = Projects.projects;
+                            //projectList = Projects.getAllProjects(context);
+                        } catch(ParseException ex) {
+                            Log.i(TAG, ex.toString());
+                        }
+                        //Set arrayAdapter
+                        //projectListView.setAdapter(new ProjectsArrayAdapter(context, R.layout.project_row, projectList));
                     }
                 })
                 .setCancelable(true);
         builder.create().show();
-    }
+    }*/
 
     private void toastShow(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    //set menu, add go to tree icon
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.create_project_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.create_project_menu:
+                // when click go to tree button in the action bar
+                Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                // when click go to tree button in the action bar
+                Intent intent4 = new Intent(this, HomeActivity.class);
+                intent4.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent4);
+//                finish();
+                break;
+            default:
+                return true;
+        }
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.currentLayout:
+                clickTab(currentFrag);
+                break;
+            case R.id.doneLayout:
+                clickTab(doneFrag);
+                break;
+            default:
+                break;
+        }
+    }
+    private void clickTab(android.app.Fragment fragment){
+        clearSelected();
+        android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.hide(currentFrag);
+        transaction.hide(doneFrag);
+        transaction.show(fragment);
+        transaction.commit();
+
+        changeTab(fragment);
+    }
+    private void clearSelected(){
+        if(!currentFrag.isHidden()){
+            //set to original
+            currentTextView.setTextColor(Color.BLACK);
+            currentLayout.setBackgroundColor(Color.WHITE);
+        }
+        if(!doneFrag.isHidden()){
+            doneTextView.setTextColor(Color.BLACK);
+            doneLayout.setBackgroundColor(Color.WHITE);
+        }
+    }
+    private void changeTab(android.app.Fragment fragment){
+        if(fragment instanceof CurrentFragement){
+            currentLayout.setBackgroundColor(Color.GRAY);
+        }
+        if(fragment instanceof  DoneFragement){
+            doneLayout.setBackgroundColor(Color.GRAY);
+        }
+        }
+
+    public void refresh(){
+        finish();
+        Intent intent = new Intent(ProjectListActivity.this,ProjectListActivity.class);
+        startActivity(intent);
     }
 }

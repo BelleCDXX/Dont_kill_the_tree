@@ -2,9 +2,6 @@ package dontkillthetree.scu.edu.database;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by jasonzhang on 5/13/16.
- */
 public final class DatabaseContract {
 
     // To prevent someone from accidentally instantiating the contract class,
@@ -16,7 +13,10 @@ public final class DatabaseContract {
         public static final String _ID = "ID";
         public static final String COLUMN_NAME_NAME = "Name";
         public static final String COLUMN_NAME_DUE_DATE = "DueDate";
+        public static final String COLUMN_NAME_IS_ON_TIME = "IsOnTime";
         public static final String COLUMN_NAME_CURRENT_MILESTONE_ID = "CurrentMilestoneID";
+        public static final String COLUMN_NAME_GUARDIAN_NAME = "GuardianName";
+        public static final String COLUMN_NAME_GUARDIAN_PHONE = "GuardianPhoneNumber";
     }
 
     public static abstract class MilestoneEntry implements BaseColumns {
@@ -24,6 +24,7 @@ public final class DatabaseContract {
         public static final String _ID = "ID";
         public static final String COLUMN_NAME_NAME = "Name";
         public static final String COLUMN_NAME_DUE_DATE = "DueDate";
+        public static final String COLUMN_NAME_IS_ON_TIME = "IsOnTime";
         public static final String COLUMN_NAME_COMPLETED = "Completed";
     }
 

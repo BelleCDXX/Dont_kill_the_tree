@@ -2,10 +2,8 @@ package dontkillthetree.scu.edu.event;
 
 import java.util.Calendar;
 
-/**
- * Created by Joey Zheng on 5/20/16.
- */
 public interface MilestoneDatabaseOpListener{
+    String[] onSelect(long id);
     long onInsert(String name, Calendar dueDate);
     void onUpdate(PropertyChangeEvent event);
     /**

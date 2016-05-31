@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
 
-/**
- * Created by Joey Zheng on 5/24/16.
- */
 public class MyTreeDatabaseOpListener implements TreeDatabaseOpListener {
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
