@@ -22,7 +22,7 @@ public class Project {
     private Calendar dueDate;
     private boolean onTime;
     private List<Milestone> milestones;
-    private ArrayList<Milestone> milestonesForNotify;
+    private List<Milestone> milestonesForNotify;
     private Milestone currentMilestone;
     private String guardianName;
     private String guardianPhone;
@@ -63,14 +63,11 @@ public class Project {
         milestones.add(new Milestone("Due!" , this.dueDate, milestoneDatabaseOpListener));
 
         this.currentMilestone = milestones.get(0);
-        // when create project, milestonesForNotify has the same member as milestones
-        this.milestonesForNotify = new ArrayList<>();
-        for (Milestone milestone : milestones){
-            milestonesForNotify.add(milestone);
-        }
         this.projectDatabaseOpListener = projectDatabaseOpListener;
         this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
         this.id = this.projectDatabaseOpListener.onInsert(name, this.dueDate, this.guardianName, this.guardianPhone, milestones);
+        this.milestonesForNotify = new ArrayList<>();
+        updateMilestonesForNotify();
     }
 
     /**
@@ -94,6 +91,7 @@ public class Project {
         this.projectDatabaseOpListener.getMilestones(this.id, this.milestones, this.milestoneDatabaseOpListener);
         sortMilestones();
         updateCurrentMilestone();
+        milestonesForNotify = new ArrayList<>();
         updateMilestonesForNotify();
     }
 
@@ -186,7 +184,8 @@ public class Project {
         return currentMilestone;
     }
 
-    public ArrayList<Milestone> getMilestonesForNotify(){
+    public List<Milestone> getMilestonesForNotify(){
+        updateMilestonesForNotify();
         return milestonesForNotify;
     }
 
@@ -204,9 +203,9 @@ public class Project {
         currentMilestone = null;
     }
 
-    public void updateMilestonesForNotify(){
+    private void updateMilestonesForNotify(){
         sortMilestones();
-        this.milestonesForNotify = new ArrayList<>();
+        milestonesForNotify.clear();
         for(Milestone milestone : milestones){
             if(!milestone.isCompleted() && milestone.isOnTime()){
                 milestonesForNotify.add(milestone);
