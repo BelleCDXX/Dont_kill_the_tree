@@ -1,24 +1,17 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +21,6 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
-import dontkillthetree.scu.edu.model.Tree;
 
 public class ProjectListActivity extends ParentActivity implements View.OnClickListener{
     private Context context = this;
@@ -36,8 +28,8 @@ public class ProjectListActivity extends ParentActivity implements View.OnClickL
     //private int expIncreased = 30;
     private String TAG = "CHENG";
     //fragments
-    private android.app.Fragment doneFrag = new DoneFragement();
-    private android.app.Fragment currentFrag = new CurrentFragement();
+    private Fragment doneFrag;
+    private Fragment currentFrag;
 
     //layouts
     private FrameLayout currentLayout,doneLayout;
@@ -114,20 +106,11 @@ public class ProjectListActivity extends ParentActivity implements View.OnClickL
         doneLayout.setOnClickListener(this);
     }
     private void intializeFragment(){
-        android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if(!currentFrag.isAdded()){
-            transaction.add(R.id.content,currentFrag);
-            transaction.hide(currentFrag);
-        }
-        if(!doneFrag.isAdded()){
-            transaction.add(R.id.content,doneFrag);
-            transaction.hide(doneFrag);
-        }
-        transaction.hide(currentFrag);
-        transaction.hide(doneFrag);
-        //default show is current project list
-        transaction.show(currentFrag);
-        transaction.commit();
+        doneFrag = new DoneFragement();
+        currentFrag = new CurrentFragement();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.content,currentFrag).commit();
     }
 
 
@@ -219,15 +202,17 @@ public class ProjectListActivity extends ParentActivity implements View.OnClickL
                 break;
         }
     }
-    private void clickTab(android.app.Fragment fragment){
-        clearSelected();
-        android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.hide(currentFrag);
-        transaction.hide(doneFrag);
-        transaction.show(fragment);
-        transaction.commit();
 
-        changeTab(fragment);
+    private void clickTab(Fragment fragment){
+//        clearSelected();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.hide(currentFrag);
+//        transaction.hide(doneFrag);
+//        transaction.show(fragment);
+//        transaction.commit();
+//
+//        changeTab(fragment);
+        transaction.replace(R.id.content, fragment).commit();
     }
     private void clearSelected(){
         if(!currentFrag.isHidden()){
@@ -240,7 +225,7 @@ public class ProjectListActivity extends ParentActivity implements View.OnClickL
             doneLayout.setBackgroundColor(Color.WHITE);
         }
     }
-    private void changeTab(android.app.Fragment fragment){
+    private void changeTab(Fragment fragment){
         if(fragment instanceof CurrentFragement){
             currentLayout.setBackgroundColor(Color.GRAY);
         }

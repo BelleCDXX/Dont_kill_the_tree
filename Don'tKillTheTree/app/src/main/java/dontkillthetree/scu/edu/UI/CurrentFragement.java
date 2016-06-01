@@ -42,8 +42,8 @@ public class CurrentFragement extends ListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        context = getActivity();
         super.onActivityCreated(savedInstanceState);
+        context = getActivity();
         projects = ProjectListActivity.projectList;
         currentProjects = checkList();
         ProjectsArrayAdapter adapter = new ProjectsArrayAdapter(context, R.layout.project_row, currentProjects);
@@ -52,8 +52,8 @@ public class CurrentFragement extends ListFragment {
 
     @Override
     public void onResume() {
-        context = getActivity();
         super.onResume();
+        context = getActivity();
         projects = ProjectListActivity.projectList;
         currentProjects = checkList();
         ProjectsArrayAdapter adapter = new ProjectsArrayAdapter(getActivity(), R.layout.project_row, currentProjects);
@@ -118,6 +118,7 @@ public class CurrentFragement extends ListFragment {
                 .setCancelable(true);
         builder.create().show();
     }
+
     private List<Project> checkList(){
         List<Project> result = new ArrayList<>();
         for(Project p : projects){

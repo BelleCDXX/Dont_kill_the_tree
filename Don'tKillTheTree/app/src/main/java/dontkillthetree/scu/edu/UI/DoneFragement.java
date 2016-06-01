@@ -1,6 +1,5 @@
 package dontkillthetree.scu.edu.UI;
 
-import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -67,27 +66,27 @@ public class DoneFragement extends ListFragment {
 
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        List<Project> doneProjects = listCheck();
-        final Project mProject = doneProjects.get(position);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.mipmap.ic_launcher)
-                .setTitle("Choosing")
-                .setMessage("What do you want to do next? ")
-                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // link to project detail activity
-                        Intent intent = new Intent(context, ProjectDetailActivity.class);
-                        intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID_FROM_LIST, mProject.getId());
-                        startActivity(intent);
-                    }
-                })
-                .setCancelable(true);
-        builder.create().show();
-    }
+//    @Override
+//    public void onListItemClick(ListView l, View v, int position, long id) {
+//        List<Project> doneProjects = listCheck();
+//        final Project mProject = doneProjects.get(position);
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setIcon(R.mipmap.ic_launcher)
+//                .setTitle("Choosing")
+//                .setMessage("What do you want to do next? ")
+//                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // link to project detail activity
+//                        Intent intent = new Intent(context, ProjectDetailActivity.class);
+//                        intent.putExtra(ProjectDetailActivity.EXTRA_PROJECT_ID_FROM_LIST, mProject.getId());
+//                        startActivity(intent);
+//                    }
+//                })
+//                .setCancelable(true);
+//        builder.create().show();
+//    }
     private List<Project> listCheck(){
         List<Project> result = new ArrayList<Project>();
         for(Project p:projects){
@@ -99,5 +98,5 @@ public class DoneFragement extends ListFragment {
     }
 
 
-    }
+}
 
