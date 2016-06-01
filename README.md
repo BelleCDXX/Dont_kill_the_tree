@@ -2,6 +2,15 @@
 
 This is an Android project.
 
+## Notification
+### About Notification
+When a milestone is due, user will get a notification says 'Your tree is dying'.
+If multiple milstones are due at the same time, user will get only one notification.
+### How to Test Notification
+First set clock to several minutes before 23:59pm, like 23:57
+Then create project, edit project, complete project as you like. Recommend set the due date of an un-complete milestone as the day after current day, so that you will see a notification after several minutes.
+You can alse see the log of notification service in Log.i by filter CXiong-log.
+
 ## Util Package
 There are several methods in the util package. One can make use of them if needed so you don't need to write your own.
 ### String calendarToString(Calendar calendar)

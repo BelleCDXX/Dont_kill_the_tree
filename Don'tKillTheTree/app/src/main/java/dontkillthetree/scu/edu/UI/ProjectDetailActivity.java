@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Notification.CreateNotifyIntent;
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
@@ -126,6 +127,8 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
             if (onCreateProcess){
                 mProject.dispose();
                 getIntent().putExtra(EXTRA_ON_CREATE_PROCESS, false);
+                // create/update notification
+                CreateNotifyIntent.makeIntent(context);
             }
         }catch (Exception e){
             Log.i("cxiong", "not on create process");
@@ -147,6 +150,9 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
             case R.id.save_project:
                 // when click save project button in the action bar
                 finish();
+                // create/update notification
+                CreateNotifyIntent.makeIntent(context);
+
                 Intent intent = new Intent(this, ProjectListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
