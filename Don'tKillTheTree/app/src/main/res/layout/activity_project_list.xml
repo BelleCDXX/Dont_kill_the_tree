@@ -32,10 +32,11 @@
             android:layout_height="2sp"
             android:background="#B6B6B6" />
         <LinearLayout
+            android:id = "@+id/nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/tabLine"
+            android:layout_below="@id/tabLine"
             android:gravity="center_horizontal">
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -72,7 +73,6 @@
                     android:id="@+id/doneTextView"/>
             </FrameLayout>
         </LinearLayout>
-
     </RelativeLayout>
 </RelativeLayout>
 

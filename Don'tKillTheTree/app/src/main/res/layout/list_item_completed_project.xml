@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chauthai.swipereveallayout.SwipeRevealLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_item_completed_swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    app:dragEdge="right"
+    app:mode="same_level">
+
+    <LinearLayout
+        android:id="@+id/list_item_completed_option_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:background="#ffcc0000">
+
+        <TextView
+            android:id="@+id/list_item_completed_edit"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@android:color/holo_orange_light"
+            android:textColor="@android:color/white"
+            android:text="Detail"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/list_item_completed_main_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/list_item_background_config">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView android:id="@+id/list_item_completed_project_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Project name"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Milestone name"
+                    android:id="@+id/list_item_completed_milestone_name"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Due date"
+                    android:id="@+id/list_item_completed_milestone_due_date"
+                    android:singleLine="true"
+                    android:layout_gravity="end"/>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
