@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +32,7 @@ import dontkillthetree.scu.edu.database.DatabaseContract;
 import dontkillthetree.scu.edu.database.DatabaseHelper;
 import dontkillthetree.scu.edu.event.MyMilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.MyProjectDatabaseOpListener;
+import dontkillthetree.scu.edu.model.Audio;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Tree;
@@ -148,6 +151,9 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         int id = item.getItemId();
         switch (id) {
             case R.id.save_project:
+                // when click go to list button in the action bar
+                Audio.makeClickSound(context);
+
                 // when click save project button in the action bar
                 finish();
                 // create/update notification

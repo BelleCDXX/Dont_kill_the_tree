@@ -186,7 +186,8 @@ public class ProjectListActivity extends ParentActivity implements View.OnClickL
             default:
                 return true;
         }
-        return true;
+//        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
