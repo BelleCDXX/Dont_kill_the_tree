@@ -103,30 +103,32 @@ public class CalendarAdapter extends BaseAdapter {
 
         String gridvalue = separatedTime[2].replaceFirst("^0*", "");
         if ((Integer.parseInt(gridvalue) > 1) && (position < firstDay)) {
-            dayView.setTextColor(Color.GRAY);
+            dayView.setTextColor(Color.parseColor("#BCAAA4"));   // light brown #A1887F
             dayView.setClickable(false);
             dayView.setFocusable(false);
         } else if ((Integer.parseInt(gridvalue) < 7) && (position > 28)) {
-            dayView.setTextColor(Color.GRAY);
+            dayView.setTextColor(Color.parseColor("#BCAAA4"));   // light brown
             dayView.setClickable(false);
             dayView.setFocusable(false);
         } else {
             // setting curent month's days in blue color.
-            dayView.setTextColor(Color.WHITE);
+            dayView.setTextColor(Color.parseColor("#674e40")); // browm
         }
 
 
         if (day_string.get(position).equals(curentDateString)) {
 
             // set current date background
-            v.setBackgroundColor(Color.CYAN);
+            //v.setBackgroundColor(Color.CYAN);
+            dayView.setTextColor(Color.parseColor("#79C556"));
         }
         else if (day_string.get(position).equals(selectedGridDate)){
             // set selected date background
-            v.setBackgroundColor(Color.GREEN);
+            //v.setBackgroundColor(Color.GREEN);
+            v.setBackgroundColor(Color.parseColor("#A3DE82"));
         }
         else {
-            v.setBackgroundColor(Color.parseColor("#343434"));
+            v.setBackgroundColor(Color.parseColor("#e6f7de"));
         }
 
 
@@ -162,13 +164,14 @@ public class CalendarAdapter extends BaseAdapter {
 
     public View setSelected(View view,int position) {
         if (previousView != null) {
-            previousView.setBackgroundColor(Color.parseColor("#343434"));
+            previousView.setBackgroundColor(Color.parseColor("#e6f7de"));
         }
 
         selectedGridDate = CalendarAdapter.day_string.get(position);
 
         // set selected date background
-        view.setBackgroundColor(Color.GREEN);
+        //view.setBackgroundColor(Color.GREEN);
+        view.setBackgroundColor(Color.parseColor("#A3DE82"));
 
         int len=day_string.size();
         if (len > position) {

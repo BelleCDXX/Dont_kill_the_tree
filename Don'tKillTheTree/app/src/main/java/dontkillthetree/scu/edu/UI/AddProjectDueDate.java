@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,9 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project_due_date);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Due Date");
 
         context = this;
 
