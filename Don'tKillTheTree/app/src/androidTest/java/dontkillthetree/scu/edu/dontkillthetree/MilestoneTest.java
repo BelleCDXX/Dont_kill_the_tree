@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 import dontkillthetree.scu.edu.database.DatabaseContract;
@@ -40,25 +41,35 @@ public class MilestoneTest{
     }
 
     @Test
-    public void Test_MilestoneCreation() {
+    public void Test_MilestoneCreationAndRecovery() {
         Calendar calendar = Calendar.getInstance();
-        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context));
 
         String[] projection = {DatabaseContract.MilestoneEntry._ID};
         String selection = DatabaseContract.MilestoneEntry._ID + " = " + milestone.getId();
         Cursor cursor = db.query(DatabaseContract.MilestoneEntry.TABLE_NAME, projection, selection, null, null, null, null);
         assertEquals(1, cursor.getCount());
 
+        Milestone milestone2 = null;
+        try {
+            milestone2 = new Milestone(milestone.getId(), new MyMilestoneDatabaseOpListener(context));
+        }
+        catch(ParseException e) {
+            fail("Milestone Recovery Test Failed.");
+        }
+        assertEquals("Test Milestone", milestone2.getName());
+
         milestone.dispose();
+        milestone2.dispose();
     }
 
     @Test
     public void Test_MilestoneEdit(){
         // set up
         Calendar calendar = Calendar.getInstance();
-        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context));
         calendar.add(Calendar.DAY_OF_MONTH, 2);
-        Milestone milestone2 = new Milestone("Test Milestone 2", calendar, new MyMilestoneDatabaseOpListener(context), context);
+        Milestone milestone2 = new Milestone("Test Milestone 2", calendar, new MyMilestoneDatabaseOpListener(context));
 
         // isOnTime
         String[] projection = {DatabaseContract.MilestoneEntry._ID};
@@ -117,13 +128,13 @@ public class MilestoneTest{
     public void Test_IllegalMilestone() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
-        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context));
     }
 
     @Test
     public void Test_MilestoneDeletion() {
         Calendar calendar = Calendar.getInstance();
-        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context), context);
+        Milestone milestone = new Milestone("Test Milestone", calendar, new MyMilestoneDatabaseOpListener(context));
 
         long id = milestone.getId();
         milestone.dispose();

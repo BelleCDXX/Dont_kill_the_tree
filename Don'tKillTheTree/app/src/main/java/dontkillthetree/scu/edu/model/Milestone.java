@@ -1,15 +1,10 @@
 package dontkillthetree.scu.edu.model;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.text.ParseException;
 import java.util.Calendar;
 
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.database.DatabaseContract;
-import dontkillthetree.scu.edu.database.DatabaseHelper;
 import dontkillthetree.scu.edu.event.DisposeEvent;
 import dontkillthetree.scu.edu.event.MilestoneDatabaseOpListener;
 import dontkillthetree.scu.edu.event.PropertyChangeEvent;
@@ -28,12 +23,12 @@ public class Milestone implements Comparable{
      * @param name
      * @param dueDate
      */
-    public Milestone(String name, Calendar dueDate, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) {
+    public Milestone(String name, Calendar dueDate, MilestoneDatabaseOpListener milestoneDatabaseOpListener) {
         Calendar currentDate = Calendar.getInstance();
         this.dueDate = (Calendar) dueDate.clone();
         Util.toNearestDueDate(this.dueDate);
 
-        if (name == null || context == null || this.dueDate.before(currentDate)) {
+        if (name == null || this.dueDate.before(currentDate)) {
             throw new IllegalArgumentException();
         }
 
@@ -48,19 +43,18 @@ public class Milestone implements Comparable{
     /**
      * Use this constructor when it is recovered from the database
      * @param id
-     * @param name
-     * @param dueDate
      */
-    public Milestone(long id, String name, String dueDate, boolean completed, MilestoneDatabaseOpListener milestoneDatabaseOpListener, Context context) throws ParseException{
-        Calendar dueDateCalendar = Util.stringToCalendar(dueDate);
+    public Milestone(long id, MilestoneDatabaseOpListener milestoneDatabaseOpListener) throws ParseException{
+        this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
+        String[] dbMilestone = this.milestoneDatabaseOpListener.onSelect(id);
 
         this.id = id;
-        this.name = name;
+        this.name = dbMilestone[0];
+        Calendar dueDateCalendar = Util.stringToCalendar(dbMilestone[1]);
         this.dueDate = dueDateCalendar;
-        this.completed = completed;
+        this.completed = dbMilestone[2].equals("1") ? true : false;
         this.onTime = Util.isOnTime(dueDateCalendar, null) || this.completed;
         this.shown = false;
-        this.milestoneDatabaseOpListener = milestoneDatabaseOpListener;
     }
 
     public void dispose() {
