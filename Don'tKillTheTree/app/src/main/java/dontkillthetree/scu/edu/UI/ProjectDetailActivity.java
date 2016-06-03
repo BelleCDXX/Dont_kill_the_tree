@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +84,44 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         ET_projectName.setText(mProject.getName());
         ET_dueDate.setText(Util.calendarToString(mProject.getDueDate()));
         ET_numberOfMilestone.setText(Integer.toString(mMilestones.size()));
-        ET_projectPartner.setText("None");
+        ET_projectPartner.setText(mProject.getGuardianName());
+
+        // Set up a dialog for project partner
+        ET_projectPartner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // build a alertDialog
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                // get the layout inflater
+//                LayoutInflater inflater = context.getLayoutInflater(); // doesn't work
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService
+                        (Context.LAYOUT_INFLATER_SERVICE);
+                // inflate and set the layout for the dialog
+                final View alertDialogView = inflater.inflate(R.layout.project_guardian_alertdialog, null);
+                builder.setView(alertDialogView)
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // get the new guardian name
+                                EditText ET_guardianName = (EditText) alertDialogView.findViewById(R.id.editGuardianName);
+                                String newGuardianName = ET_guardianName.getText().toString();
+                                // update the new guardian name into db
+                                mProject.setGuardianName(newGuardianName);
+
+                                EditText ET_gardianPhoneNumber = (EditText) alertDialogView.findViewById(R.id.editGuardianInfo);
+                                String newGuardianPhoneNumber = ET_gardianPhoneNumber.getText().toString();
+                                mProject.setGuardianPhone(newGuardianPhoneNumber);
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public  void onClick(DialogInterface dialog, int d) {}
+                        });
+                builder.create().show();
+
+            }
+        });
 
         // create milestone listView in run-time
         listView.setAdapter(new MilestonesArrayAdapter(this, R.layout.milestone_row, mMilestones));
