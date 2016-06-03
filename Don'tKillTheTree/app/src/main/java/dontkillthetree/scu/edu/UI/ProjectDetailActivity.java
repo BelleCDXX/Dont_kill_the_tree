@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.util.List;
 
@@ -40,10 +42,19 @@ import dontkillthetree.scu.edu.model.Tree;
 
 public class ProjectDetailActivity extends ParentActivity implements AdapterView.OnItemClickListener {
     private Context context;
-    ListView listView;
     private final String TAG = "Sen";
     private List<Milestone> mMilestones;
     private Project mProject;
+    private long mProjectId;
+    private android.app.AlertDialog.Builder builder;
+
+    // views
+    private TextView ET_projectName;
+    private TextView ET_dueDate;
+    private TextView ET_numberOfMilestone;
+    private TextView ET_projectPartner;
+    private ListView listView;
+
 
     // don't delete these
     public static final String EXTRA_PROJECT_NAME = "project_name";
@@ -59,14 +70,15 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         context = this;
 
         // get the widgets
-        TextView ET_projectName = (TextView) findViewById(R.id.projectName);
-        TextView ET_dueDate = (TextView) findViewById(R.id.dueDate);
-        TextView ET_numberOfMilestone = (TextView) findViewById(R.id.numberOfMilestone);
-        TextView ET_projectPartner = (TextView) findViewById(R.id.projectPartner);
+        ET_projectName = (TextView) findViewById(R.id.projectName);
+        ET_dueDate = (TextView) findViewById(R.id.dueDate);
+        ET_numberOfMilestone = (TextView) findViewById(R.id.numberOfMilestone);
+        ET_projectPartner = (TextView) findViewById(R.id.projectPartner);
         listView = (ListView) findViewById(R.id.listView);
+        final TextView ET_projectPartner_Final = ET_projectPartner;
 
         // get data from db and create a list for listView
-        long mProjectId;
+
         if (getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_CREATE) != null) {
             mProjectId = (long) getIntent().getExtras().get(EXTRA_PROJECT_ID_FROM_CREATE);
         } else {
@@ -91,7 +103,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
             @Override
             public void onClick(View v) {
                 // build a alertDialog
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                builder = new android.app.AlertDialog.Builder(context);
                 // get the layout inflater
 //                LayoutInflater inflater = context.getLayoutInflater(); // doesn't work
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService
@@ -118,8 +130,24 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
                             @Override
                             public  void onClick(DialogInterface dialog, int d) {}
                         });
-                builder.create().show();
 
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        try {
+                            mProject = new Project(mProjectId, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
+                        } catch (ParseException ex) {
+                            Log.i(TAG, ex.toString());
+                        }
+                        // get the new guardian name
+                        String newGuardianName = mProject.getGuardianName();
+                        // TextView TV_guardianName = (TextView) findViewById(R.id.editGuardianName);
+                        ET_projectPartner_Final.setText(newGuardianName);
+
+                    }
+                });
+
+                builder.create().show();
             }
         });
 
@@ -145,7 +173,12 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
     public void onResume() {
         super.onResume();
         Log.i("SZhang", "onResume");
-        mMilestones = mProject.getMilestones();
+        try {
+            mProject = new Project(mProjectId, new MyProjectDatabaseOpListener(context), new MyMilestoneDatabaseOpListener(context));
+            mMilestones = mProject.getMilestones();
+        } catch (ParseException e) {
+            Log.i(TAG, e.toString());
+        }
         listView.setAdapter(new MilestonesArrayAdapter(this, R.layout.milestone_row, mMilestones));
         listView.setOnItemClickListener(this);
     }
