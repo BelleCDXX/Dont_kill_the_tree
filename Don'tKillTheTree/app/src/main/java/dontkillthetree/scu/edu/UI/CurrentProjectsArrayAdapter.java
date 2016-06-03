@@ -2,6 +2,10 @@ package dontkillthetree.scu.edu.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.TextView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Notification.CreateNotifyIntent;
@@ -23,11 +28,14 @@ public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {
     private final ViewBinderHelper viewBinderHelper;
     private Context context;
     private static final int expIncreased = 30;
+    private int backgroundImgHeight = -1;
+    private List<BitmapDrawable> listBackgroundImages;
 
     public CurrentProjectsArrayAdapter(Context context, int resource, List<Project> projects) {
         super(context, resource, projects);
         this.mProjects = projects;
         this.context = context;
+        listBackgroundImages = new ArrayList<>();
         viewBinderHelper = new ViewBinderHelper();
         viewBinderHelper.setOpenOnlyOne(true);
     }
@@ -106,6 +114,29 @@ public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {
 
                     // create/update notification
                     CreateNotifyIntent.makeIntent(context);
+                }
+            });
+
+            // set the list item background
+            holder.mainLayout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    final int height = bottom - top;
+                    if (height > 0 && height != backgroundImgHeight) {
+                        backgroundImgHeight = height;
+                        listBackgroundImages.clear();
+
+                        for (int i = 0; i < 5; i++) {
+                            Bitmap bmp= BitmapFactory.decodeResource(context.getResources(), R.drawable.list_item_background);
+                            Bitmap resizedBitmap = Bitmap.createBitmap(bmp, 0, i * height, bmp.getWidth(), height);
+                            BitmapDrawable bitmapDrawable = new BitmapDrawable(resizedBitmap);
+                            bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);
+                            listBackgroundImages.add(bitmapDrawable);
+                        }
+                    }
+                    else if (height > 0) {
+                        v.setBackground(listBackgroundImages.get(position % 5));
+                    }
                 }
             });
         }

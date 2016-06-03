@@ -29,8 +29,7 @@
         android:id="@+id/list_item_completed_main_layout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/list_item_background_config">
+        android:layout_height="70dp">
 
         <LinearLayout
             android:layout_width="match_parent"
