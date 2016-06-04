@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<com.astuetz.PagerSlidingTabStrip-->
-        <!--android:id="@+id/project_list_tabs"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="20dp"-->
-        <!--android:background="@color/colorPrimary"/>-->
-
     <dontkillthetree.scu.edu.UI.CustomViewPager
         android:id="@+id/project_list_view_pager"
         android:layout_width="match_parent"
