@@ -37,7 +37,6 @@ public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {
         this.context = context;
         listBackgroundImages = new ArrayList<>();
         viewBinderHelper = new ViewBinderHelper();
-        viewBinderHelper.setOpenOnlyOne(true);
     }
 
     @Override
@@ -69,6 +68,7 @@ public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {
         if (mProjects.get(position).getCurrentMilestone() != null) {
 
             viewBinderHelper.bind(holder.swipeRevealLayout, String.valueOf(mProjects.get(position).getId()));
+            viewBinderHelper.setOpenOnlyOne(true);
 
             holder.projectName.setText(mProjects.get(position).getName());
             holder.milestoneName.setText(mProjects.get(position).getCurrentMilestone().getName());

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,14 @@ public class DoneProjectsArrayAdapter extends ArrayAdapter<Project> {
     private Context context;
     private int backgroundImgHeight = -1;
     private List<BitmapDrawable> listBackgroundImages;
+    private final ViewBinderHelper viewBinderHelper;
 
     public DoneProjectsArrayAdapter(Context context, int resource, List<Project> projects) {
         super(context, resource, projects);
         this.mProjects = projects;
         this.context = context;
         listBackgroundImages = new ArrayList<>();
+        viewBinderHelper = new ViewBinderHelper();
     }
 
     @Override
@@ -61,6 +64,9 @@ public class DoneProjectsArrayAdapter extends ArrayAdapter<Project> {
 
 
         if (mProjects.get(position).getCurrentMilestone() == null) {
+            viewBinderHelper.bind(holder.swipeRevealLayout, String.valueOf(mProjects.get(position).getId()));
+            viewBinderHelper.setOpenOnlyOne(true);
+
             holder.projectName.setText(mProjects.get(position).getName());
             holder.milestoneName.setText("Done");
             holder.milestoneDueDate.setText(Util.calendarToString(mProjects.get(position).getDueDate()));
