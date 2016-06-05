@@ -95,19 +95,17 @@ public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {
                     if(mProject.getCurrentMilestone() != null){
                         mProject.getCurrentMilestone().setCompleted(true);
 
-//                        if (mProject.getCurrentMilestone() == null) {
-//                            mProjects.remove(position);
-//                        }
-
-                        notifyDataSetChanged();
+                        if (mProject.getCurrentMilestone() == null) {
+                            mProjects.remove(position);
+                        }
                     }
 
                     // update the experience of Tree
                     Tree mTree = Tree.getInstance(context);
                     mTree.increaseExperience(expIncreased);
 
-//                    ProjectListActivity activity = (ProjectListActivity) context;
-//                    activity.refresh();
+                    ProjectListActivity activity = (ProjectListActivity) context;
+                    activity.refresh();
 
                     // create/update notification
                     CreateNotifyIntent.makeIntent(context);

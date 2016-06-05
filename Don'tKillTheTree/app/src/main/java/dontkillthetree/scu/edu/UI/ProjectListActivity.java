@@ -49,12 +49,7 @@ public class ProjectListActivity extends ParentActivity{
         actionBar.setHomeButtonEnabled(true);
 
         //Populate the arrayList with Project object
-        try {
-            Projects.getAllProjects(context);
-            projectList = Projects.projects;
-        } catch(ParseException ex) {
-            Log.i(TAG, ex.toString());
-        }
+        updateProjectList();
 
         backgroundImgHeight = -1;
         backgroundImages = new ArrayList<>();
@@ -66,13 +61,7 @@ public class ProjectListActivity extends ParentActivity{
     @Override
     protected void onResume() {
         super.onResume();
-
-        try {
-            Projects.getAllProjects(context);
-            projectList = Projects.projects;
-        } catch(ParseException ex) {
-            Log.i(TAG, ex.toString());
-        }
+        updateProjectList();
     }
 
     private void initializeView(){
@@ -116,11 +105,15 @@ public class ProjectListActivity extends ParentActivity{
         return true;
     }
 
-//    public void refresh(){
-//        finish();
-//        Intent intent = new Intent(ProjectListActivity.this,ProjectListActivity.class);
-//        startActivity(intent);
-//    }
+    public void refresh(){
+        updateProjectList();
+        currentFrag = new CurrentFragement();
+        doneFrag = new DoneFragement();
+
+        myPaperAdapter = new MyPaperAdapter(getSupportFragmentManager());
+        pager.setAdapter(myPaperAdapter);
+
+    }
 
     public static void updateBackgroundImages(Context context) {
         if (backgroundImgHeight > 0) {
@@ -138,6 +131,15 @@ public class ProjectListActivity extends ParentActivity{
 
     public static void setBackgroundImgHeight(int newHeight) {
         backgroundImgHeight = newHeight;
+    }
+
+    public void updateProjectList() {
+        try {
+            Projects.getAllProjects(context);
+            projectList = Projects.projects;
+        } catch(ParseException ex) {
+            Log.i(TAG, ex.toString());
+        }
     }
 
     public class MyPaperAdapter extends FragmentPagerAdapter {
