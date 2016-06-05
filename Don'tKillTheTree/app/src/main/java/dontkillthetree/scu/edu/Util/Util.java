@@ -1,10 +1,17 @@
 package dontkillthetree.scu.edu.Util;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import dontkillthetree.scu.edu.UI.R;
 import dontkillthetree.scu.edu.model.Milestone;
 
 public abstract class Util {
@@ -78,6 +85,27 @@ public abstract class Util {
             return s;
         } else {
             return s.substring(0, 16) + "...";
+        }
+    }
+
+    /**
+     * Crop R.drawable.list_item_background into several small pieces for a given height
+     * @param bitmapDrawables A list of cropped images. The number of returned images depend on the original image height and the given height. n = (image height) / height
+     * @param height The height for the list item
+     * @param context
+     */
+    public static void cropListItemBackgroundImage(List<BitmapDrawable> bitmapDrawables, int height, Context context) {
+        bitmapDrawables.clear();
+
+        Bitmap bmp= BitmapFactory.decodeResource(context.getResources(), R.drawable.list_item_background);
+        Bitmap resizedBitmap;
+        int n = bmp.getHeight() / height;
+
+        for (int i = 0; i < n; i++) {
+            resizedBitmap = Bitmap.createBitmap(bmp, 0, i * height, bmp.getWidth(), height);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(resizedBitmap);
+            bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);
+            bitmapDrawables.add(bitmapDrawable);
         }
     }
 }
