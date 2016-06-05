@@ -5,20 +5,17 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 
-import java.text.ParseException;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Notification.CreateNotifyIntent;
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Project;
-import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Tree;
 
 public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {

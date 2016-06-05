@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -138,7 +137,7 @@ public class ProjectListActivity extends ParentActivity{
             Projects.getAllProjects(context);
             projectList = Projects.projects;
         } catch(ParseException ex) {
-            Log.i(TAG, ex.toString());
+            MyErrorPage.ShowAlertDialog(this, ex.toString());
         }
     }
 
