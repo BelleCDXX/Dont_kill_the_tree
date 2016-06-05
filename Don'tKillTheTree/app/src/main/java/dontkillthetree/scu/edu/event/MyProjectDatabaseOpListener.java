@@ -46,6 +46,7 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         result[3] = cursor.isNull(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE)) ?
                 null : cursor.getString(cursor.getColumnIndex(DatabaseContract.ProjectEntry.COLUMN_NAME_GUARDIAN_PHONE));
 
+        cursor.close();
         db.close();
         databaseHelper.close();
 
@@ -114,6 +115,7 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
         do {
             milestoneIds.add(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ProjectMilestoneEntry.COLUMN_NAME_MILESTONE_ID)));
         } while (cursor.moveToNext());
+        cursor.close();
 
         String[] milestoneProject = {
                 DatabaseContract.MilestoneEntry._ID};
@@ -138,6 +140,7 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
                     milestoneDatabaseOpListener));
         } while (cursor.moveToNext());
 
+        cursor.close();
         db.close();
         databaseHelper.close();
     }
@@ -176,6 +179,7 @@ public class MyProjectDatabaseOpListener implements ProjectDatabaseOpListener {
                 milestoneIds.add(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ProjectMilestoneEntry.COLUMN_NAME_MILESTONE_ID)));
             } while (cursor.moveToNext());
         }
+        cursor.close();
 
         StringBuilder selectionStringBuilder = new StringBuilder("(");
         for (int i = 0; i < milestoneIds.size(); i++) {
