@@ -5,6 +5,6 @@
         android:orderInCategory="120"
         app:showAsAction = "always"
         android:title="@string/create_project_menu"
-        android:icon="@android:drawable/ic_menu_add"/>
+        android:icon="@android:drawable/ic_input_add"/>
 
 </menu>

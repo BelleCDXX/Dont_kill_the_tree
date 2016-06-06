@@ -4,6 +4,7 @@
         android:id="@+id/save_project"
         android:orderInCategory="120"
         app:showAsAction = "always"
-        android:title="@string/save_project"/>
+        android:title="@string/save_project"
+        android:icon="@android:drawable/ic_menu_save"/>
 
 </menu>
