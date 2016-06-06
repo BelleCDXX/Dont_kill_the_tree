@@ -69,6 +69,9 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
 
         context = this;
 
+        // Set background
+
+
         // get the widgets
         ET_projectName = (TextView) findViewById(R.id.projectName);
         ET_dueDate = (TextView) findViewById(R.id.dueDate);

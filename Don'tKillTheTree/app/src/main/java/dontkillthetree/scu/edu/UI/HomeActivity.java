@@ -118,10 +118,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         spinner.setOnItemSelectedListener(this);
 
         // start playing background music
-//        mMediaPlayer = MediaPlayer.create(context, R.raw.start_all_over_again);
-//        mMediaPlayer.setLooping(true);
-//        mMediaPlayer.start();
-        BackgroundMusic.startPlay(context);
+//        BackgroundMusic.startPlay(context);
 
     }
 
@@ -178,9 +175,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mMediaPlayer.release();
-//        mMediaPlayer = null;
-        BackgroundMusic.stopPlay(context);
+//        BackgroundMusic.stopPlay(context);
     }
 
 
