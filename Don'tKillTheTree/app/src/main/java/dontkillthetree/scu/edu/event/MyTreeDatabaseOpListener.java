@@ -38,6 +38,7 @@ public class MyTreeDatabaseOpListener implements TreeDatabaseOpListener {
             result[1] = 0;
         }
 
+        cursor.close();
         db.close();
         databaseHelper.close();
 

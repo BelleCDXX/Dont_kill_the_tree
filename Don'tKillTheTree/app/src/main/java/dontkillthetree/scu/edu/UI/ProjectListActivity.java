@@ -2,12 +2,12 @@ package dontkillthetree.scu.edu.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,12 +16,15 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 
 public class ProjectListActivity extends ParentActivity{
     private Context context = this;
     public static List<Project> projectList = new ArrayList<>();
+    private static List<BitmapDrawable> backgroundImages;
+    private static int backgroundImgHeight = -1;
     private String TAG = "CHENG";
 
     // fragments
@@ -45,12 +48,11 @@ public class ProjectListActivity extends ParentActivity{
         actionBar.setHomeButtonEnabled(true);
 
         //Populate the arrayList with Project object
-        try {
-            Projects.getAllProjects(context);
-            projectList = Projects.projects;
-        } catch(ParseException ex) {
-            Log.i(TAG, ex.toString());
-        }
+        updateProjectList();
+
+        backgroundImgHeight = -1;
+        backgroundImages = new ArrayList<>();
+
         initializeView();
         intializeFragment();
     }
@@ -58,13 +60,7 @@ public class ProjectListActivity extends ParentActivity{
     @Override
     protected void onResume() {
         super.onResume();
-
-        try {
-            Projects.getAllProjects(context);
-            projectList = Projects.projects;
-        } catch(ParseException ex) {
-            Log.i(TAG, ex.toString());
-        }
+        updateProjectList();
     }
 
     private void initializeView(){
@@ -109,9 +105,40 @@ public class ProjectListActivity extends ParentActivity{
     }
 
     public void refresh(){
-        finish();
-        Intent intent = new Intent(ProjectListActivity.this,ProjectListActivity.class);
-        startActivity(intent);
+        updateProjectList();
+        currentFrag = new CurrentFragement();
+        doneFrag = new DoneFragement();
+
+        myPaperAdapter = new MyPaperAdapter(getSupportFragmentManager());
+        pager.setAdapter(myPaperAdapter);
+
+    }
+
+    public static void updateBackgroundImages(Context context) {
+        if (backgroundImgHeight > 0) {
+            Util.cropListItemBackgroundImage(backgroundImages, backgroundImgHeight, context);
+        }
+    }
+
+    public static List<BitmapDrawable> getBackgroundImages() {
+        return backgroundImages;
+    }
+
+    public static int getBackgroundImgHeight() {
+        return backgroundImgHeight;
+    }
+
+    public static void setBackgroundImgHeight(int newHeight) {
+        backgroundImgHeight = newHeight;
+    }
+
+    public void updateProjectList() {
+        try {
+            Projects.getAllProjects(context);
+            projectList = Projects.projects;
+        } catch(ParseException ex) {
+            MyErrorPage.ShowAlertDialog(this, ex.toString());
+        }
     }
 
     public class MyPaperAdapter extends FragmentPagerAdapter {
