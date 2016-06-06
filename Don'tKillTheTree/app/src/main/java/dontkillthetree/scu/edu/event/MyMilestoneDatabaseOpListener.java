@@ -37,6 +37,7 @@ public class MyMilestoneDatabaseOpListener implements MilestoneDatabaseOpListene
         result[1] = cursor.getString(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_DUE_DATE));
         result[2] = String.valueOf(cursor.getInt(cursor.getColumnIndex(DatabaseContract.MilestoneEntry.COLUMN_NAME_COMPLETED)));
 
+        cursor.close();
         db.close();
         databaseHelper.close();
 
