@@ -2,9 +2,19 @@
 <resources>
     <color name="colorPrimary">#8FD76A</color>
     <color name="colorPrimaryDark">#79C556</color>
-    <color name="colorAccent">#674e40</color>
     <color name="lightGreen">#A3DE82</color>
+    <color name="slightGreen">#e6f7de</color>
+
+    <color name="colorAccent">#674e40</color>
+    <color name="lightBrown">#BCAAA4</color>
+
     <color name="colorWhite">#ffffff</color>
-    <color name="blue_pressed">@android:color/holo_blue_dark</color>
-    <color name="blue_normal">@android:color/holo_blue_light</color>
+
+
+    <color name="gray">#B6B6B6</color>
+    <color name="lightGray">#dfdfdf</color>
+    <color name="darkGray">#80000000</color>
+
+    <color name="red">#ffcc0000</color>
+
 </resources>
