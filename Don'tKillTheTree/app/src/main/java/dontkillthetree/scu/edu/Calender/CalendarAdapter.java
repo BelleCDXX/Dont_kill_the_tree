@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,16 +104,16 @@ public class CalendarAdapter extends BaseAdapter {
 
         String gridvalue = separatedTime[2].replaceFirst("^0*", "");
         if ((Integer.parseInt(gridvalue) > 1) && (position < firstDay)) {
-            dayView.setTextColor(Color.parseColor("#BCAAA4"));   // light brown #A1887F
+            dayView.setTextColor(ContextCompat.getColor(context, R.color.lightBrown));   // light brown #A1887F
             dayView.setClickable(false);
             dayView.setFocusable(false);
         } else if ((Integer.parseInt(gridvalue) < 7) && (position > 28)) {
-            dayView.setTextColor(Color.parseColor("#BCAAA4"));   // light brown
+            dayView.setTextColor(ContextCompat.getColor(context, R.color.lightBrown));   // light brown
             dayView.setClickable(false);
             dayView.setFocusable(false);
         } else {
             // setting curent month's days in blue color.
-            dayView.setTextColor(Color.parseColor("#674e40")); // browm
+            dayView.setTextColor(ContextCompat.getColor(context, R.color.colorAccent)); // browm
         }
 
 
@@ -120,15 +121,15 @@ public class CalendarAdapter extends BaseAdapter {
 
             // set current date background
             //v.setBackgroundColor(Color.CYAN);
-            dayView.setTextColor(Color.parseColor("#79C556"));
+            dayView.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         }
         else if (day_string.get(position).equals(selectedGridDate)){
             // set selected date background
             //v.setBackgroundColor(Color.GREEN);
-            v.setBackgroundColor(Color.parseColor("#A3DE82"));
+            v.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
         }
         else {
-            v.setBackgroundColor(Color.parseColor("#e6f7de"));
+            v.setBackgroundColor(ContextCompat.getColor(context, R.color.slightGreen));
         }
 
 
@@ -164,14 +165,14 @@ public class CalendarAdapter extends BaseAdapter {
 
     public View setSelected(View view,int position) {
         if (previousView != null) {
-            previousView.setBackgroundColor(Color.parseColor("#e6f7de"));
+            previousView.setBackgroundColor(ContextCompat.getColor(context, R.color.slightGreen));
         }
 
         selectedGridDate = CalendarAdapter.day_string.get(position);
 
         // set selected date background
         //view.setBackgroundColor(Color.GREEN);
-        view.setBackgroundColor(Color.parseColor("#A3DE82"));
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
 
         int len=day_string.size();
         if (len > position) {
