@@ -14,9 +14,9 @@ public class UserGuideActivity extends WelcomeActivity {
         return new WelcomeScreenBuilder(this)
                 .theme(R.style.WelcomeScreenTheme_Light)
                 .defaultBackgroundColor(R.color.default_background_color)
-                .titlePage(R.drawable.huan_liu, "Title")
-                .basicPage(R.drawable.long_hair_huan_liu, "Header", "More text.", R.color.colorPrimary)
-                .basicPage(R.drawable.long_hair_huan_liu, "Lorem ipsum", "dolor sit amet.")
+                .titlePage(R.drawable.calender_background, "Time of Tree", R.color.lightGreen)
+                .basicPage(R.drawable.calender_background, "Create a new project", "More text.", R.color.lightGreen)
+                .basicPage(R.drawable.calender_background, "Done a milestone", "More text.", R.color.lightGreen)
                 .swipeToDismiss(true)
                 .build();
     }
