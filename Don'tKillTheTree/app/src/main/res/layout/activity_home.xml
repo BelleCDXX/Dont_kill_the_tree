@@ -29,6 +29,13 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="10dp" />
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_marginTop="86dp"
+        />
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,13 +54,6 @@
             android:src="@drawable/clip_source" />
 
     </FrameLayout>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:layout_marginTop="86dp"
-        />
 
 
 </LinearLayout>

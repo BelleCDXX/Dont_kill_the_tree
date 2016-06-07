@@ -143,6 +143,12 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        myWelcomeScreen.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -374,10 +380,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             HomeActivity.this.fromLevel = toLevel;
         }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        myWelcomeScreen.onSaveInstanceState(outState);
     }
 }
 
