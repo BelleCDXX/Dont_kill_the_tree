@@ -20,8 +20,12 @@
         <activity android:name=".ParentActivity" />
         <activity android:name=".AddProjectName" />
         <activity android:name=".AddProjectDueDate" />
-        <activity android:name=".ListContainerActivity"></activity>
-        <service android:name="dontkillthetree.scu.edu.Notification.NotificationService"></service>
+        <activity android:name=".ListContainerActivity" />
+
+        <service android:name="dontkillthetree.scu.edu.Notification.NotificationService" />
+
+        <activity android:name=".UserGuideActivity"
+            android:theme="@style/WelcomeScreenTheme"/>
     </application>
 
 </manifest>

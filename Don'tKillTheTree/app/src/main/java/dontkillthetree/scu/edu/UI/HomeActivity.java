@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.stephentuso.welcome.WelcomeScreenHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -83,10 +85,16 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }
     };
 
+    private WelcomeScreenHelper myWelcomeScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Set up the welcome screen
+        myWelcomeScreen = new WelcomeScreenHelper(this, UserGuideActivity.class);
+        myWelcomeScreen.show(savedInstanceState);
 
         mTree = Tree.getInstance(this);
         mCurrentStage = mTree.getCurrentStage();
@@ -344,6 +352,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         return true;
     }
 
+
     private void doTheUpAnimation(int fromLevel, int toLevel) {
         mLevel += LEVEL_DIFF;
         mImageDrawable.setLevel(mLevel);
@@ -364,6 +373,11 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             mDownHandler.removeCallbacks(animateDownImage);
             HomeActivity.this.fromLevel = toLevel;
         }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        myWelcomeScreen.onSaveInstanceState(outState);
     }
 }
 
