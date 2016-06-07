@@ -1,5 +1,7 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.graphics.drawable.ClipDrawable;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.content.Context;
@@ -20,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.stephentuso.welcome.WelcomeScreenHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -29,30 +33,68 @@ import java.util.Collections;
 import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
+import dontkillthetree.scu.edu.model.Audio;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
+import dontkillthetree.scu.edu.service.BackgroundMusic;
 
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
 
     private final static String[] DEFAULT_ITEM = {"none"};
 
+    private static MediaPlayer mMediaPlayer;
+
     private Tree mTree;
     private Spinner spinner;
     private Handler mHandler;
     //private int progressBarSpeed = 10;
+    private String TAG = "SEN";
+    private Context context = this;
 
+    private int mCurrentStage = 0;
+    private int mStageMaxExp = 0;
+    private int lastStage = 0;
 
-    int mCurrentStage = 0;
-    int mStageMaxExp = 0;
-    int lastStage = 0;
+    // progress bar
+    private ClipDrawable mImageDrawable;
+
+    // a field in your class
+    private int mLevel = 0;
+    private static int fromLevel = 0;
+    private int toLevel = 0;
+    public static final int MAX_LEVEL = 10000;
+    public static final int LEVEL_DIFF = 100;
+    public static final int DELAY = 30;
+
+    private Handler mUpHandler = new Handler();
+    private Runnable animateUpImage = new Runnable() {
+        @Override
+        public void run() {
+            doTheUpAnimation(fromLevel, toLevel);
+        }
+    };
+
+    private Handler mDownHandler = new Handler();
+    private Runnable animateDownImage = new Runnable() {
+        @Override
+        public void run() {
+            doTheDownAnimation(fromLevel, toLevel);
+        }
+    };
+
+    private WelcomeScreenHelper myWelcomeScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Set up the welcome screen
+        myWelcomeScreen = new WelcomeScreenHelper(this, UserGuideActivity.class);
+        myWelcomeScreen.show(savedInstanceState);
 
         mTree = Tree.getInstance(this);
         mCurrentStage = mTree.getCurrentStage();
@@ -71,32 +113,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         int mCurrentExp = mTree.getExperience();
         mProgressBar.setProgress(mCurrentExp);
 
-       /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // set the max exp of current stage
-                int mCurrentStage = mTree.getCurrentStage();
-                int mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
-                mProgressBar.setMax(mStageMaxExp);
-
-                // get the current exp
-                int mCurrentExp = mTree.getExperience();
-                int mProgressStatus = 0;
-                while (mProgressStatus < mCurrentExp) {
-                    // update the progress bar
-                    mProgressBar.setProgress(mProgressStatus);
-                    mProgressStatus += progressBarSpeed;
-                    try {
-                        Thread.sleep(200);
-                    } catch (Exception ex) {
-                        Log.i(TAG, ex.toString());
-                    }
-                }
-            }
-        }).start();*/
-
-
-
         //set spinner heres
         String[] items = DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
@@ -113,29 +129,29 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         );
         spinner.setOnItemSelectedListener(this);
 
+        // start playing background music
+//        BackgroundMusic.startPlay(context);
+
+        // set progress bar
+        ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
+        mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
+        mImageDrawable.setLevel(0);
+
+
+//        toLevel = (mCurrentExp / mStageMaxExp) * MAX_LEVEL;
 
     }
 
-
-    //get bitmap from assets
-    private static Bitmap getBitmapFromAsset(Context context, String filePath) {
-        AssetManager assetManager = context.getAssets();
-
-        InputStream istr;
-        Bitmap bitmap = null;
-        try {
-            istr = assetManager.open(filePath);
-            bitmap = BitmapFactory.decodeStream(istr);
-        } catch (IOException e) {
-            // handle exception
-        }
-
-        return bitmap;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        myWelcomeScreen.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         //set spinner heres
         String[] items=DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
@@ -166,6 +182,59 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         Bitmap b = getBitmapFromAsset(this,mTree.getCurrentImage());
         treeImage.setImageBitmap(b);
         levelUpToast();
+
+        // renew progress bar
+        double tmp = (double)mCurrentExp / (double)mStageMaxExp;
+        int temp_level = (int) (tmp * MAX_LEVEL);
+
+        if (toLevel == temp_level) {
+            return;
+        } else if(temp_level > MAX_LEVEL) {
+            mLevel = 0;
+            fromLevel = 0;
+            toLevel = 0;
+            ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
+            mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
+            mImageDrawable.setLevel(0);
+        } else {
+            toLevel = (temp_level <= MAX_LEVEL) ? temp_level : toLevel;
+            if (toLevel > fromLevel) {
+                // cancel previous process first
+                mDownHandler.removeCallbacks(animateDownImage);
+                HomeActivity.this.fromLevel = toLevel;
+
+                mUpHandler.post(animateUpImage);
+            } else {
+                // cancel previous process first
+                mUpHandler.removeCallbacks(animateUpImage);
+                HomeActivity.this.fromLevel = toLevel;
+
+                mDownHandler.post(animateDownImage);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        BackgroundMusic.stopPlay(context);
+    }
+
+
+    //get bitmap from assets
+    private static Bitmap getBitmapFromAsset(Context context, String filePath) {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open(filePath);
+            bitmap = BitmapFactory.decodeStream(istr);
+        } catch (IOException e) {
+            // handle exception
+        }
+
+        return bitmap;
     }
 
     @Override
@@ -277,6 +346,8 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         switch (id) {
             case R.id.go_to_list:
                 // when click go to list button in the action bar
+                Audio.makeClickSound(context);
+
                 Intent intent = new Intent(HomeActivity.this, ProjectListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
@@ -285,6 +356,30 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
                 return true;
         }
         return true;
+    }
+
+
+    private void doTheUpAnimation(int fromLevel, int toLevel) {
+        mLevel += LEVEL_DIFF;
+        mImageDrawable.setLevel(mLevel);
+        if (mLevel <= toLevel) {
+            mUpHandler.postDelayed(animateUpImage, DELAY);
+        } else {
+            mUpHandler.removeCallbacks(animateUpImage);
+            HomeActivity.this.fromLevel = toLevel;
+        }
+    }
+
+    private void doTheDownAnimation(int fromLevel, int toLevel) {
+        mLevel -= LEVEL_DIFF;
+        mImageDrawable.setLevel(mLevel);
+        if (mLevel >= toLevel) {
+            mDownHandler.postDelayed(animateDownImage, DELAY);
+        } else {
+            mDownHandler.removeCallbacks(animateDownImage);
+            HomeActivity.this.fromLevel = toLevel;
+        }
+
     }
 }
 

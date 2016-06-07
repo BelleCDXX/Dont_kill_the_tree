@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "dontkillthetree.scu.edu"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -31,6 +31,8 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4.1'
 
     compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.2.1'
+
+    compile 'com.stephentuso:welcome:0.7.2'
 
     // Optional -- Hamcrest library
     // androidTestCompile 'org.hamcrest:hamcrest-library:1.3'

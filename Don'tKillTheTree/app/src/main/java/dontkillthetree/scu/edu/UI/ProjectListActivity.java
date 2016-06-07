@@ -101,7 +101,8 @@ public class ProjectListActivity extends ParentActivity{
             default:
                 return true;
         }
-        return true;
+//        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     public void refresh(){

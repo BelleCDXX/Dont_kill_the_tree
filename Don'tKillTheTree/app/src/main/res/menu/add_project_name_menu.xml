@@ -4,6 +4,7 @@
         android:id="@+id/set_due_date"
         android:orderInCategory="120"
         app:showAsAction = "always"
-        android:title="@string/set_due_date"/>
+        android:title="@string/set_due_date"
+        android:icon="@android:drawable/ic_menu_my_calendar"/>
 
 </menu>
