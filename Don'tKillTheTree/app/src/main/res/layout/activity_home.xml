@@ -29,6 +29,25 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="10dp" />
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/scall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/scall" />
+
+        <ImageView
+            android:id="@+id/clip_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clip_source" />
+
+    </FrameLayout>
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
