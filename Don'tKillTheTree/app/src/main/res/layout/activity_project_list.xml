@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         tools:context=".ProjectListActivity"
-        android:background="@color/slightGreen">
+        android:background="@color/background">
 
         <android.support.v4.view.PagerTitleStrip
             android:id="@+id/project_list_pager_title_strip"

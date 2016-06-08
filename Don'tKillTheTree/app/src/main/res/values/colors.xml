@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#79C556</color>
     <color name="lightGreen">#A3DE82</color>
     <color name="slightGreen">#e6f7de</color>
+    <color name="greenInBar">#abd600</color>
+    <color name="brownInBar">#c18e00</color>
+    <color name="background">#ffffcc</color>
 
     <color name="colorAccent">#674e40</color>
     <color name="darkBrown">#4A372F</color>

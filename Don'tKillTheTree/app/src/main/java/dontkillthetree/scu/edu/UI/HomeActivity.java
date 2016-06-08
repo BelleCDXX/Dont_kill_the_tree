@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.stephentuso.welcome.WelcomeScreenHelper;
 
 import java.io.IOException;
@@ -44,6 +45,10 @@ import dontkillthetree.scu.edu.service.BackgroundMusic;
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
 
     private final static String[] DEFAULT_ITEM = {"none"};
+    //img with overdue
+    private final static int DIE_COUNT = 5;
+    private boolean isDie = false;
+    private int numRabbit;
 
     private static MediaPlayer mMediaPlayer;
 
@@ -69,7 +74,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     public static final int LEVEL_DIFF = 100;
     public static final int DELAY = 30;
 
-    private Handler mUpHandler = new Handler();
+   /* private Handler mUpHandler = new Handler();
     private Runnable animateUpImage = new Runnable() {
         @Override
         public void run() {
@@ -84,7 +89,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             doTheDownAnimation(fromLevel, toLevel);
         }
     };
-
+*/
     private WelcomeScreenHelper myWelcomeScreen;
 
     @Override
@@ -99,19 +104,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         mTree = Tree.getInstance(this);
         mCurrentStage = mTree.getCurrentStage();
         lastStage = mCurrentStage;
-
-        //set tree image
-        ImageView treeImage = (ImageView)findViewById(R.id.treeImage);
-        Bitmap b = getBitmapFromAsset(this,mTree.getCurrentImage());
-        treeImage.setImageBitmap(b);
-
-        //set exp bar
-        final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
-        mProgressBar.setMax(mStageMaxExp);
-
-        int mCurrentExp = mTree.getExperience();
-        mProgressBar.setProgress(mCurrentExp);
 
         //set spinner heres
         String[] items = DEFAULT_ITEM;
@@ -129,13 +121,42 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         );
         spinner.setOnItemSelectedListener(this);
 
+        //set tree image
+        if(isDie){
+            ImageView deadTree = (ImageView)findViewById(R.id.treeImage);
+            Bitmap d = getBitmapFromAsset(this,"tree_die.png");
+            deadTree.setImageBitmap(d);
+            mTree.decreaseExperience(mTree.getExperience());
+        }else {
+            ImageView treeImage = (ImageView) findViewById(R.id.treeImage);
+            Bitmap b = getBitmapFromAsset(this, mTree.getCurrentImage());
+            treeImage.setImageBitmap(b);
+        }
+        //set rabbit image
+        ImageView rabbit = (ImageView) findViewById(R.id.rabbit);
+        Bitmap r = getBitmapFromAsset(this, "rabbit.png");
+        rabbit.setImageBitmap(r);
+        if(numRabbit == 1) {
+            rabbit.setVisibility(View.VISIBLE);
+        }else{
+            rabbit.setVisibility(View.GONE);
+        }
+        //set exp bar
+        /*final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
+        mProgressBar.setMax(mStageMaxExp);
+
+        int mCurrentExp = mTree.getExperience();
+        mProgressBar.setProgress(mCurrentExp);*/
+        renewExpBar();
+
         // start playing background music
 //        BackgroundMusic.startPlay(context);
 
         // set progress bar
-        ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
-        mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
-        mImageDrawable.setLevel(0);
+        //ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
+        //mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
+        //mImageDrawable.setLevel(0);
 
 
 //        toLevel = (mCurrentExp / mStageMaxExp) * MAX_LEVEL;
@@ -162,29 +183,46 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_spinner_dropdown_item,
+                //android.R.layout.simple_spinner_dropdown_item,
                 // android.R.layout.simple_list_item_1,
+                R.layout.mullti_lines_spinner,
                 items)
         );
         spinner.setOnItemSelectedListener(this);
 
+        //renew image
+        if(isDie){
+            ImageView deadTree = (ImageView)findViewById(R.id.treeImage);
+            Bitmap d = getBitmapFromAsset(this,"tree_die.png");
+            deadTree.setImageBitmap(d);
+            mTree.decreaseExperience(mTree.getExperience());
+        }else {
+            ImageView treeImage = (ImageView) findViewById(R.id.treeImage);
+            Bitmap b = getBitmapFromAsset(this, mTree.getCurrentImage());
+            treeImage.setImageBitmap(b);
+        }
+        //set Rabbit
+        ImageView rabbit = (ImageView) findViewById(R.id.rabbit);
+        Bitmap r = getBitmapFromAsset(this, "rabbit.png");
+        rabbit.setImageBitmap(r);
+        if(numRabbit == 1) {
+            rabbit.setVisibility(View.VISIBLE);
+        }else{
+            rabbit.setVisibility(View.GONE);
+        }
+
         //renew exp bar
-        final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        /*final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mCurrentStage = mTree.getCurrentStage();
         mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
         mProgressBar.setMax(mStageMaxExp);
 
         int mCurrentExp = mTree.getExperience();
         mProgressBar.setProgress(mCurrentExp);
-
-        //renew image
-        ImageView treeImage = (ImageView)findViewById(R.id.treeImage);
-        Bitmap b = getBitmapFromAsset(this,mTree.getCurrentImage());
-        treeImage.setImageBitmap(b);
-        levelUpToast();
-
+*/
+        renewExpBar();
         // renew progress bar
-        double tmp = (double)mCurrentExp / (double)mStageMaxExp;
+        /*double tmp = (double)mCurrentExp / (double)mStageMaxExp;
         int temp_level = (int) (tmp * MAX_LEVEL);
 
         if (toLevel == temp_level) {
@@ -211,7 +249,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
                 mDownHandler.post(animateDownImage);
             }
-        }
+        }*/
     }
 
     @Override
@@ -261,7 +299,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         Calendar nearest = null;
         int count = 0;
 
-
         try {
             Projects.getAllProjects(this);
             projects = (ArrayList<Project>) Projects.projects;
@@ -270,18 +307,36 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }
 
         if(projects.size()< 1){
+            numRabbit = 0;
             return milestones;
         }
         //get ontime project's number
+        int die = 0;
         for(Project p:projects){
             if(p.getCurrentMilestone() != null){
                 count ++;
                 currentProjects.add(p);
+                if(!p.getCurrentMilestone().isOnTime()){
+                    die++;
+                }
             }
         }
+        Log.i("Jcheng","die count is:"+die);
+        //decide if let tree die
+        if(die >= DIE_COUNT){
+            isDie = true;
+            numRabbit = 0;
+        }else if(die < DIE_COUNT && die > 0){
+            numRabbit = 1;
+        }else{
+            numRabbit = 0;
+        }
+        Log.i("Jcheng","num of rabbit:"+numRabbit);
+
         if(currentProjects.size()<1){
             return milestones;
         }
+
         Log.i("JCheng","size: " + currentProjects.size());
         //get upcoming duedate
         for(int i = 0; i < currentProjects.size(); i++){
@@ -299,9 +354,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             if(currentProjects.get(i).getCurrentMilestone().getDueDate().equals(nearest)){
                 String s;
                 if(!m.isOnTime()){
-                    s= currentProjects.get(i).getName()+"\n"+m.getName() + " OVERDUE: " + Util.calendarToString(nearest);
+                    s= currentProjects.get(i).getName()+"\n"+m.getName() + " OVERDUE: " + Util.calendarToString(nearest)+"\n";
                 }else{
-                    s= currentProjects.get(i).getName()+"\n"+m.getName() + " DUE AT: " + Util.calendarToString(nearest);
+                    s= currentProjects.get(i).getName()+"\n"+m.getName() + " DUE AT: " + Util.calendarToString(nearest)+"\n";
                 }
                 milestones.add(s);
             }
@@ -309,6 +364,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
         return milestones;
     }
+
     private void levelUpToast(){
         if(mCurrentStage > lastStage){
             Toast.makeText(getApplicationContext(),"Congratulation! Tree level up!",Toast.LENGTH_SHORT).show();
@@ -364,7 +420,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     }
 
 
-    private void doTheUpAnimation(int fromLevel, int toLevel) {
+   /* private void doTheUpAnimation(int fromLevel, int toLevel) {
         mLevel += LEVEL_DIFF;
         mImageDrawable.setLevel(mLevel);
         if (mLevel <= toLevel) {
@@ -385,7 +441,16 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             HomeActivity.this.fromLevel = toLevel;
         }
 
-    }
+    }*/
+
+private void renewExpBar(){
+    final RoundCornerProgressBar expBar = (RoundCornerProgressBar)findViewById(R.id.expBar);
+    mCurrentStage = mTree.getCurrentStage();
+    int maxExp = Stages.getStageMaxExp(mCurrentStage);
+    int currentExp = mTree.getExperience();
+    expBar.setMax(maxExp);
+    expBar.setProgress(currentExp);
+}
 }
 
 
