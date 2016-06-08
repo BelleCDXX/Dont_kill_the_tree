@@ -1,34 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/slightGreen"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set the Milsetone Number"
+        android:layout_gravity="center_horizontal"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@color/slightGreen"/>
 
     <NumberPicker
         android:id="@+id/milestone_number_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp" />
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="45dp"
+        android:layout_gravity="center"/>
 
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/milestone_number_picker"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="98dp"
-        android:layout_toLeftOf="@+id/milestone_number_picker"
-        android:text="Cancel" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
 
-    <Button
-        android:id="@+id/set_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/cancel_button"
-        android:layout_alignBottom="@+id/cancel_button"
-        android:layout_marginRight="16dp"
-        android:layout_toRightOf="@+id/milestone_number_picker"
-        android:text="Set" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:background="@drawable/flat_selector"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:padding="1dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/set_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:background="@drawable/flat_selector"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:padding="1dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

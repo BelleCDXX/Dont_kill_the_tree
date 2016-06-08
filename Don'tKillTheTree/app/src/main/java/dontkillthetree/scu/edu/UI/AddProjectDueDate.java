@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -171,7 +172,8 @@ public class AddProjectDueDate extends ParentActivity implements NumberPicker.On
     {
 
         final Dialog dialog = new Dialog(AddProjectDueDate.this);
-        dialog.setTitle("Set Num of Milestones");
+        //dialog.setTitle("Set Num of Milestones");
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_num_of_milestones);
 
         Button b1 = (Button) dialog.findViewById(R.id.set_button);

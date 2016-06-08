@@ -99,7 +99,7 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
         ET_projectName.setText(mProject.getName());
         ET_dueDate.setText(Util.calendarToString(mProject.getDueDate()));
         ET_numberOfMilestone.setText(Integer.toString(mMilestones.size()));
-        ET_projectPartner.setText(mProject.getGuardianName());
+        //ET_projectPartner.setText(mProject.getGuardianName());
 
         // Set up a dialog for project partner
         ET_projectPartner.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +120,18 @@ public class ProjectDetailActivity extends ParentActivity implements AdapterView
                                 // get the new guardian name
                                 EditText ET_guardianName = (EditText) alertDialogView.findViewById(R.id.editGuardianName);
                                 String newGuardianName = ET_guardianName.getText().toString();
-                                // update the new guardian name into db
-                                mProject.setGuardianName(newGuardianName);
 
                                 EditText ET_gardianPhoneNumber = (EditText) alertDialogView.findViewById(R.id.editGuardianInfo);
                                 String newGuardianPhoneNumber = ET_gardianPhoneNumber.getText().toString();
-                                mProject.setGuardianPhone(newGuardianPhoneNumber);
+
+
+                                if(!(newGuardianName.equals("") || newGuardianPhoneNumber.equals(""))){
+                                    // update the new guardian name into db
+                                    mProject.setGuardianName(newGuardianName);
+                                    mProject.setGuardianPhone(newGuardianPhoneNumber);
+                                }else{
+                                    Toast.makeText(ProjectDetailActivity.this, "Please input valid information.", Toast.LENGTH_SHORT).show();
+                                }
 
                             }
                         })

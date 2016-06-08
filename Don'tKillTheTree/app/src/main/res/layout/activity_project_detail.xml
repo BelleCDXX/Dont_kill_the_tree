@@ -5,119 +5,166 @@ xmlns:tools="http://schemas.android.com/tools"
 tools:context="dontkillthetree.scu.edu.UI.ProjectDetailActivity"
 android:layout_width="match_parent"
 android:layout_height="fill_parent"
-android:paddingBottom="@dimen/activity_vertical_margin"
-android:paddingLeft="@dimen/activity_horizontal_margin"
-android:paddingRight="@dimen/activity_horizontal_margin"
-android:paddingTop="@dimen/activity_vertical_margin"
-android:orientation="vertical"
-    android:background="@drawable/project_detail_background">
+    android:orientation="vertical"
+    android:background="@color/lightGray"
+    android:padding="2dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:background="@color/slightGreen"
+        android:paddingTop="16dp"
+        android:paddingBottom="9dp"
+        android:layout_marginTop="2dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Project name: "
+                android:text="Project Name: "
                 android:id="@+id/textView"
+                android:textColor="@color/textGray"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="8dp"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="None"
+                android:textColor="@color/textGray"
                 android:id="@+id/projectName"
                 android:layout_weight="1"
                 android:gravity="end"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:onClick="showFullProjectName"/>
+                android:onClick="showFullProjectName"
+                android:paddingRight="8dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/slightGreen"
+        android:padding="1dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:background="@color/slightGreen"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Due Date: "
                 android:id="@+id/textView2"
+                android:textColor="@color/textGray"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="None"
+                android:textColor="@color/textGray"
                 android:id="@+id/dueDate"
                 android:layout_weight="1"
-                android:gravity="end"/>
+                android:gravity="end"
+                android:paddingRight="8dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/slightGreen"
+        android:padding="1dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:background="@color/slightGreen"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="milestones: "
+                android:text="Milestones: "
+                android:textColor="@color/textGray"
                 android:id="@+id/textView3"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="None"
+                android:textColor="@color/textGray"
                 android:id="@+id/numberOfMilestone"
                 android:layout_weight="1"
-                android:gravity="end"/>
+                android:gravity="end"
+                android:paddingRight="8dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DBEAD5"
+        android:padding="1dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:background="@color/slightGreen"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Project partner: "
+                android:text="Project Partner: "
                 android:id="@+id/textView4"
+                android:textColor="@color/textGray"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin" />
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="None"
+                android:text="Add New"
                 android:id="@+id/projectPartner"
+                android:textColor="@color/textGray"
                 android:layout_weight="1"
-                android:gravity="end"/>
+                android:gravity="end"
+                android:paddingRight="8dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGray"
+        android:padding="1dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@color/slightGreen"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
             <ListView
             android:layout_width="match_parent"
             android:layout_height="200dp"

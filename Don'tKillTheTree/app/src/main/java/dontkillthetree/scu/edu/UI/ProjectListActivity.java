@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,10 +43,10 @@ public class ProjectListActivity extends ParentActivity{
         setContentView(R.layout.activity_project_list);
 //        context = ProjectListActivity.this;
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
         //Populate the arrayList with Project object
         updateProjectList();
@@ -75,7 +76,7 @@ public class ProjectListActivity extends ParentActivity{
         pager.setAdapter(myPaperAdapter);
     }
 
-    //set menu, add go to tree icon
+    //set menu, go to tree and add new project button
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.create_project_menu, menu);
@@ -87,7 +88,7 @@ public class ProjectListActivity extends ParentActivity{
         int id = item.getItemId();
         switch (id) {
             case R.id.create_project_menu:
-                // when click go to tree button in the action bar
+                // when click add new project button in the action bar
                 Intent intent = new Intent(ProjectListActivity.this, AddProjectName.class);
                 startActivity(intent);
                 break;

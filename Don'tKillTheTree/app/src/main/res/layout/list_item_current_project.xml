@@ -5,14 +5,15 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
+    android:padding="3dp"
     app:dragEdge="right"
-    app:mode="same_level">
+    app:mode="same_level"
+    android:background="@color/slightGreen">
 
     <LinearLayout
         android:id="@+id/delete_layout"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_height="65dp"
         android:background="@color/red">
 
         <TextView
@@ -38,21 +39,28 @@
         android:id="@+id/list_item_main"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="70dp">
+        android:layout_height="65dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView android:id="@+id/project_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Project name"/>
+                android:text="Project name"
+                android:paddingEnd="4dp"
+                android:paddingStart="8dp"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,7 +69,10 @@
                     android:id="@+id/milestone_name"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:layout_marginTop="4dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,7 +81,10 @@
                     android:text="Due date"
                     android:id="@+id/milestone_due_date"
                     android:singleLine="true"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
