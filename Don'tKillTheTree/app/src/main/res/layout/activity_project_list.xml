@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:context=".ProjectListActivity">
+        tools:context=".ProjectListActivity"
+        android:background="@color/slightGreen">
 
         <android.support.v4.view.PagerTitleStrip
             android:id="@+id/project_list_pager_title_strip"
@@ -19,8 +20,9 @@
             android:layout_gravity="top"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorWhite"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp" />
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            style="@style/Base.TextAppearance.AppCompat.Medium"/>
 
     </dontkillthetree.scu.edu.UI.CustomViewPager>
 

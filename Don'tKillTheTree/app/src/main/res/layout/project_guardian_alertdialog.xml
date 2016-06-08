@@ -5,21 +5,41 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Guardian name: "/>
+        android:text="Guardian name: "
+        android:layout_margin="4dp"
+        android:padding="4dp"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorAccent" />
 
     <EditText android:id="@+id/editGuardianName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textColor="@color/darkBrown"
+        android:paddingLeft="4dp"
         />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Guardian phone number: "/>
+        android:text="Guardian phone number: "
+        android:layout_margin="4dp"
+        android:padding="4dp"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorAccent"/>
 
     <EditText android:id="@+id/editGuardianInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textColor="@color/darkBrown"
+        android:paddingLeft="4dp"
         />
 
 </LinearLayout>

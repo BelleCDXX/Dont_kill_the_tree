@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,11 +57,17 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
         }
 
         holder.milestoneName.setText(mMilestones.get(position).getName());
+        if (mMilestones.get(position).isCompleted()){
+            holder.milestoneName.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        }
+        else if (!mMilestones.get(position).isOnTime()){
+            holder.milestoneName.setTextColor(ContextCompat.getColor(context, R.color.lightOrange));
+        }
         holder.milestoneName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Milestone mMilestone = mMilestones.get(position);
-                if (!mMilestone.isCompleted()) {
+                if (!mMilestone.isCompleted() && mMilestone.isOnTime()) {
                     // build a alertDialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     // get the layout inflater
@@ -77,10 +84,15 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                                     // get the new milestone name
                                     EditText ET_milestoneName = (EditText) alertDialogView.findViewById(R.id.editMilestoneName);
                                     String newMilestoneName = ET_milestoneName.getText().toString();
-                                    // update the new milestone name into db
-                                    mMilestone.setName(newMilestoneName);
-                                    notifyDataSetChanged();
-                                    showToast("New milestone name set!");
+                                    if(!newMilestoneName.equals("")){
+                                        // update the new milestone name into db
+                                        mMilestone.setName(newMilestoneName);
+                                        notifyDataSetChanged();
+                                        //showToast("New milestone name set!");
+                                    }else {
+                                        showToast("Please input a valid name.");
+                                    }
+
                                     // create/update notification
                                     // CreateNotifyIntent.makeIntent(context);
                                 }
@@ -88,7 +100,7 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
                                 public  void onClick(DialogInterface dialog, int d) {
-                                    showToast("Cancel button clicked!");
+                                    //showToast("Cancel button clicked!");
 //                                context.getDialog().cancel();
                                 }
                             });
@@ -102,7 +114,7 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
             @Override
             public void onClick(View v) {
                 final Milestone mMilestone = mMilestones.get(position);
-                if (!mMilestone.isCompleted()) {
+                if (!mMilestone.isCompleted() && mMilestone.isOnTime()) {
                     // build a datePickerDialog
                     Calendar mCalendar = Calendar.getInstance();
                     // Use the current data as the default date in the picker
