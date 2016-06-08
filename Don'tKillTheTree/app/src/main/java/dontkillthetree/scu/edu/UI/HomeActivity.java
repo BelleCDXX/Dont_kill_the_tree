@@ -63,7 +63,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
     // a field in your class
     private int mLevel = 0;
-    private static int fromLevel = 0;
+    private int fromLevel = 0;
     private int toLevel = 0;
     public static final int MAX_LEVEL = 10000;
     public static final int LEVEL_DIFF = 100;
@@ -190,25 +190,24 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         if (toLevel == temp_level) {
             return;
         } else if(temp_level > MAX_LEVEL) {
-            mLevel = 0;
-            fromLevel = 0;
-            toLevel = 0;
-            ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
-            mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
-            mImageDrawable.setLevel(0);
+//            mLevel = 0;
+//            fromLevel = 0;
+//            toLevel = 0;
+//            ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
+//            mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
+//            mImageDrawable.setLevel(0);
+
         } else {
             toLevel = (temp_level <= MAX_LEVEL) ? temp_level : toLevel;
             if (toLevel > fromLevel) {
                 // cancel previous process first
                 mDownHandler.removeCallbacks(animateDownImage);
-                HomeActivity.this.fromLevel = toLevel;
-
+                this.fromLevel = toLevel;
                 mUpHandler.post(animateUpImage);
             } else {
                 // cancel previous process first
                 mUpHandler.removeCallbacks(animateUpImage);
-                HomeActivity.this.fromLevel = toLevel;
-
+                this.fromLevel = toLevel;
                 mDownHandler.post(animateDownImage);
             }
         }
