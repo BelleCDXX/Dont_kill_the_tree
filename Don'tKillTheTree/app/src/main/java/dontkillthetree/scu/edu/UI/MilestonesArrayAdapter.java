@@ -29,11 +29,15 @@ import dontkillthetree.scu.edu.model.Milestone;
 public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
     private final List<Milestone> mMilestones;
     private Context context;
+    private Calendar mProjectDueDate;
 
     public MilestonesArrayAdapter(Context context, int resource, List<Milestone> milestones) {
         super(context, resource, milestones);
         this.mMilestones = milestones;
         this.context = context;
+
+        Milestone mLastMilestone = this.mMilestones.get(milestones.size() - 1);
+        mProjectDueDate = mLastMilestone.getDueDate();
     }
 
     @Override
@@ -135,6 +139,8 @@ public class MilestonesArrayAdapter extends ArrayAdapter<Milestone> {
                     };
                     // Create a new instance of DatePickerDialog
                     DatePickerDialog mDatePickerDialog = new DatePickerDialog(context, mDateSetListener, mYear, mMonth, mDay);
+                    mDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                    mDatePickerDialog.getDatePicker().setMaxDate(mProjectDueDate.getTimeInMillis());
                     mDatePickerDialog.show();
                 }
             }
