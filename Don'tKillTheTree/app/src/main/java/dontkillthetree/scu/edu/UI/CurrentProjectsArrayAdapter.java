@@ -2,6 +2,7 @@ package dontkillthetree.scu.edu.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,10 @@ public class CurrentProjectsArrayAdapter extends ArrayAdapter<Project> {
 
             holder.projectName.setText(mProjects.get(position).getName());
             holder.milestoneName.setText(mProjects.get(position).getCurrentMilestone().getName());
+            if(!mProjects.get(position).getCurrentMilestone().isOnTime()){
+                holder.milestoneName.setTextColor(ContextCompat.getColor(context, R.color.lightOrange));
+                holder.projectName.setTextColor(ContextCompat.getColor(context, R.color.lightOrange));
+            }
             holder.milestoneDueDate.setText(Util.calendarToString(mProjects.get(position).getCurrentMilestone().getDueDate()));
             holder.mainLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

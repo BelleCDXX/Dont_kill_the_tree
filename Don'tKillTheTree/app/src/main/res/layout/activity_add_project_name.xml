@@ -8,17 +8,23 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AddProjectName"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/slightGreen">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/project_name" />
+        android:text="@string/project_name"
+        android:padding="4dp"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorAccent"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/project_name"/>
+        android:id="@+id/project_name"
+        android:textColor="@color/darkBrown"
+        android:paddingLeft="4dp" />
 
 </LinearLayout>

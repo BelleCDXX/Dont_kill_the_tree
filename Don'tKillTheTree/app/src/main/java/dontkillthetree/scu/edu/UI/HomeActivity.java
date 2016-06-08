@@ -297,7 +297,12 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         for (int i=0;i<currentProjects.size();i++){
             Milestone m = currentProjects.get(i).getCurrentMilestone();
             if(currentProjects.get(i).getCurrentMilestone().getDueDate().equals(nearest)){
-                String s= currentProjects.get(i).getName()+"_"+m.getName() + " DUE AT:" + Util.calendarToString(nearest);
+                String s;
+                if(!m.isOnTime()){
+                    s= currentProjects.get(i).getName()+"\n"+m.getName() + " OVERDUE: " + Util.calendarToString(nearest);
+                }else{
+                    s= currentProjects.get(i).getName()+"\n"+m.getName() + " DUE AT: " + Util.calendarToString(nearest);
+                }
                 milestones.add(s);
             }
         }

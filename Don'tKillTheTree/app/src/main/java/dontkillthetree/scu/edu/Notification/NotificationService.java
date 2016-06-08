@@ -80,7 +80,7 @@ public class NotificationService extends IntentService {
 
                 Log.i("CXiong-log", "count end. ");
                 String text = notifyText.get(i);
-                showText(text);
+                showText(text); // send notification
             }
             Log.i("CXiong-log", "stopped notify service");
         }

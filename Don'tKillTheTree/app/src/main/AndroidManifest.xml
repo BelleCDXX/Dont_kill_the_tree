@@ -8,24 +8,26 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity">
+        <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProjectListActivity" />
-        <activity android:name=".ProjectDetailActivity" />
-        <activity android:name=".ParentActivity" />
-        <activity android:name=".AddProjectName" />
-        <activity android:name=".AddProjectDueDate" />
-        <activity android:name=".ListContainerActivity" />
+        <activity android:name=".ProjectListActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ProjectDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ParentActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".AddProjectName" android:screenOrientation="portrait"/>
+        <activity android:name=".AddProjectDueDate" android:screenOrientation="portrait"/>
+        <activity android:name=".ListContainerActivity" android:screenOrientation="portrait"/>
 
         <service android:name="dontkillthetree.scu.edu.Notification.NotificationService" />
 
         <activity android:name=".UserGuideActivity"
-            android:theme="@style/WelcomeScreenTheme"/>
+            android:theme="@style/WelcomeScreenTheme"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
