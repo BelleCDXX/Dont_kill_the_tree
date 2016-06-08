@@ -70,9 +70,9 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Due date"
+                    android:gravity="end"
                     android:id="@+id/list_item_completed_milestone_due_date"
                     android:singleLine="true"
-                    android:layout_gravity="end"
                     android:paddingEnd="4dp"
                     android:paddingStart="4dp"
                     android:layout_marginTop="4dp" />
