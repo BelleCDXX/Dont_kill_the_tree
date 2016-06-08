@@ -3,13 +3,11 @@ package dontkillthetree.scu.edu.UI;
 import android.graphics.drawable.ClipDrawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,23 +27,19 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
-import dontkillthetree.scu.edu.model.Audio;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
-import dontkillthetree.scu.edu.service.BackgroundMusic;
 
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
 
     private final static String[] DEFAULT_ITEM = {"none"};
 
-    private static MediaPlayer mMediaPlayer;
+//    private static MediaPlayer mMediaPlayer;
 
     private Tree mTree;
     private Spinner spinner;
@@ -57,6 +51,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     private int mCurrentStage = 0;
     private int mStageMaxExp = 0;
     private int lastStage = 0;
+
+    // cheer up and boo down sound
+    private MediaPlayer mMediaPlayer;
 
     // progress bar
     private ClipDrawable mImageDrawable;
@@ -137,7 +134,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
         mImageDrawable.setLevel(0);
 
-
 //        toLevel = (mCurrentExp / mStageMaxExp) * MAX_LEVEL;
 
     }
@@ -181,7 +177,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         ImageView treeImage = (ImageView)findViewById(R.id.treeImage);
         Bitmap b = getBitmapFromAsset(this,mTree.getCurrentImage());
         treeImage.setImageBitmap(b);
-        levelUpToast();
+
+        // Show toast and sound when tree level up and down
+        levelChangeToast();
 
         // renew progress bar
         double tmp = (double)mCurrentExp / (double)mStageMaxExp;
@@ -217,6 +215,10 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     protected void onDestroy() {
         super.onDestroy();
 //        BackgroundMusic.stopPlay(context);
+//        if (mMediaPlayer != null) {
+//            mMediaPlayer.release();
+//            mMediaPlayer = null;
+//        }
     }
 
 
@@ -308,11 +310,20 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
         return milestones;
     }
-    private void levelUpToast(){
+
+    private void levelChangeToast(){
         if(mCurrentStage > lastStage){
             Toast.makeText(getApplicationContext(),"Congratulation! Tree level up!",Toast.LENGTH_SHORT).show();
-            lastStage = mCurrentStage;
+            mMediaPlayer = MediaPlayer.create(context, R.raw.tree_level_up);
+            mMediaPlayer.setVolume(1.0f, 1.0f);
+            mMediaPlayer.start();
+        } else if (mCurrentStage < lastStage) {
+            Toast.makeText(getApplicationContext(),"Whoops! Tree level down!",Toast.LENGTH_SHORT).show();
+            mMediaPlayer = MediaPlayer.create(context, R.raw.tree_level_down);
+            mMediaPlayer.setVolume(1.0f, 1.0f);
+            mMediaPlayer.start();
         }
+        lastStage = mCurrentStage;
     }
 
 
@@ -349,9 +360,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         int id = item.getItemId();
         switch (id) {
             case R.id.go_to_list:
-                // when click go to list button in the action bar
-                Audio.makeClickSound(context);
-
                 Intent intent = new Intent(HomeActivity.this, ProjectListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);

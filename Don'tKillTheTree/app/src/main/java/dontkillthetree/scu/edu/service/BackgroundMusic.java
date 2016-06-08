@@ -29,7 +29,7 @@ public class BackgroundMusic extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        player = MediaPlayer.create(mContext, R.raw.start_all_over_again);
+        player = MediaPlayer.create(mContext, R.raw.the_city_of_sky);
         player.setLooping(true); // Set looping
         player.setVolume(1.0f, 1.0f);
         player.start();
