@@ -14,9 +14,11 @@ public class UserGuideActivity extends WelcomeActivity {
         return new WelcomeScreenBuilder(this)
                 .theme(R.style.WelcomeScreenTheme_Light)
                 .defaultBackgroundColor(R.color.default_background_color)
-                .titlePage(R.drawable.calender_background, "Time of Tree", R.color.lightGreen)
-                .basicPage(R.drawable.calender_background, "Create a new project", "More text.", R.color.lightGreen)
-                .basicPage(R.drawable.calender_background, "Done a milestone", "More text.", R.color.lightGreen)
+                .titlePage(R.drawable.calender_background, "Don't kill the tree", R.color.lightGreen)
+                .basicPage(R.drawable.small_tree, "Start and own your tree!", "",R.color.lightGreen)
+                .basicPage(R.drawable.create_new_project, "How to start", "Click + to create a new project.", R.color.lightGreen)
+                .basicPage(R.drawable.view_project_detail, "How to edit", "Click the milestone name or due date to edit.", R.color.lightGreen)
+                .basicPage(R.drawable.full_tree, "Complete your milestones, your tree will grow up!", "", R.color.lightGreen)
                 .swipeToDismiss(true)
                 .build();
     }
