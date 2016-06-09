@@ -68,6 +68,40 @@
         android:background="@color/background"
         android:spinnerMode="dialog"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:id="@+id/fruit"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/fruit"
+            android:layout_marginLeft="5dp"
+            android:textAppearance="?android:attr/label"
+            android:textColor="@color/brownInBar"
+            android:text="X"
+            android:textSize="40dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignBottom="@+id/fruit"
+            android:id="@+id/X"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/X"
+            android:layout_marginLeft="5dp"
+            android:textAppearance="?android:attr/label"
+            android:textColor="@color/brownInBar"
+            android:text=""
+            android:textSize="40dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignBottom="@+id/X"
+            android:id="@+id/numFruit"
+            />
 
+    </RelativeLayout>
 
 </LinearLayout>
