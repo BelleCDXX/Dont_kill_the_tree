@@ -1,8 +1,14 @@
 package dontkillthetree.scu.edu.UI;
 
+import android.app.Dialog;
 import android.graphics.drawable.ClipDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +21,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
@@ -42,7 +50,18 @@ import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
 import dontkillthetree.scu.edu.service.BackgroundMusic;
 
-public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener{
+public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener,SensorEventListener {
+
+    //sensor related
+    private SensorManager mSensorManager;
+    private float mAccel; // acceleration apart from gravity
+    private float mAccelCurrent; // current acceleration including gravity
+    private float mAccelLast; // last acceleration including gravity
+    final private static int FRUIT_COST = 50;
+    ImageView fruitImg;
+    TextView fruitText;
+    private int fruitCount = 0;
+    final static String fruitPath="fruit.png";
 
     private final static String[] DEFAULT_ITEM = {"none"};
     //img with overdue
@@ -96,6 +115,12 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //sensor related
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
+
 
         // Set up the welcome screen
         myWelcomeScreen = new WelcomeScreenHelper(this, UserGuideActivity.class);
@@ -104,6 +129,13 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         mTree = Tree.getInstance(this);
         mCurrentStage = mTree.getCurrentStage();
         lastStage = mCurrentStage;
+
+        //set fruit
+        fruitImg = (ImageView)findViewById(R.id.fruit);
+        Bitmap fb = getBitmapFromAsset(this,fruitPath);
+        fruitImg.setImageBitmap(fb);
+        fruitText =(TextView)findViewById(R.id.numFruit);
+        fruitText.setText(String.valueOf(fruitCount));
 
         //set spinner heres
         String[] items = DEFAULT_ITEM;
@@ -172,7 +204,10 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     @Override
     protected void onResume() {
         super.onResume();
-
+        //sensor change
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
         //set spinner heres
         String[] items=DEFAULT_ITEM;
         if(getUpcomingMilestones()==null || getUpcomingMilestones().isEmpty()){
@@ -210,7 +245,8 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }else{
             rabbit.setVisibility(View.GONE);
         }
-
+        //fruit
+        fruitText.setText(String.valueOf(fruitCount));
         //renew exp bar
         /*final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mCurrentStage = mTree.getCurrentStage();
@@ -250,6 +286,12 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
                 mDownHandler.post(animateDownImage);
             }
         }*/
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(this);
+        super.onPause();
     }
 
     @Override
@@ -451,6 +493,54 @@ private void renewExpBar(){
     expBar.setMax(maxExp);
     expBar.setProgress(currentExp);
 }
+    private void displayAcceleration(){
+        float accel = Math.abs( mAccel);
+        if (accel > 1.0f) {
+            shakeOp();
+        }
+    }
+    private void shakeOp(){
+        mCurrentStage = mTree.getCurrentStage();
+        if(mCurrentStage ==Stages.getMaxStage()) {
+            int max = Stages.getStageMaxExp(mCurrentStage);
+            int current = mTree.getExperience();
+            if (max == current) {
+                getFruit();
+                mTree.decreaseExperience(FRUIT_COST);
+                renewExpBar();
+            }
+        }
+    }
+    private void getFruit(){
+        Dialog d = new Dialog(this);
+        d.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        d.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        d.setContentView(getLayoutInflater().inflate(R.layout.fruit_layout
+                , null));
+        d.show();
+        //fruit num change
+        fruitCount++;
+        fruitText.setText(String.valueOf(fruitCount));
+    }
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+        mAccelLast = mAccelCurrent;
+        mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+        float delta = mAccelCurrent - mAccelLast;
+        mAccel = mAccel * 0.9f + delta * 0.1f; // perform low-cut filter
+
+        displayAcceleration();
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+
 }
 
 
