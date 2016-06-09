@@ -62,7 +62,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
 
     private final static String[] DEFAULT_ITEM = {"none"};
     //img with overdue
-    private final static int DIE_COUNT = 5;
+    private final static int DIE_COUNT = 3;
     private boolean isDie = false;
     private int numRabbit;
 
