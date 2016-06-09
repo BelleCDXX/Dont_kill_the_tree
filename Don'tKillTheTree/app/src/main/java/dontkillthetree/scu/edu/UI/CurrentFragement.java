@@ -12,9 +12,7 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.model.Project;
 
-/**
- * Created by cheng11 on 5/29/16.
- */
+
 public class CurrentFragement extends ListFragment {
 
     Context context;

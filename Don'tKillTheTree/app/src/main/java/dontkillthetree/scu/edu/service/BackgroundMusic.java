@@ -6,9 +6,6 @@ import android.os.AsyncTask;
 
 import dontkillthetree.scu.edu.UI.R;
 
-/**
- * Created by jasonzhang on 5/28/16.
- */
 public class BackgroundMusic extends AsyncTask<Void, Void, Void> {
     private static Context mContext;
     private static BackgroundMusic mBackgroundMusic;

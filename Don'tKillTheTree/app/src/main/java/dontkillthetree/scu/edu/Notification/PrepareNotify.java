@@ -12,9 +12,6 @@ import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 
-/**
- * Created by xcw0420 on 5/30/16.
- */
 public class PrepareNotify {
 
     private ArrayList<String> notifyText;

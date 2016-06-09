@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-/**
- * Created by Zhaowei on 6/5/16.
- */
 public class MyErrorPage {
     private MyErrorPage(){}
 

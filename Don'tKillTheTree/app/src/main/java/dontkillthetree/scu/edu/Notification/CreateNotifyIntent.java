@@ -9,9 +9,6 @@ import java.util.Calendar;
 
 import dontkillthetree.scu.edu.UI.R;
 
-/**
- * Created by xcw0420 on 5/30/16.
- */
 public abstract class CreateNotifyIntent {
     static Intent notifyServiceIntent;
 
