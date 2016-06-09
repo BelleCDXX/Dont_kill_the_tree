@@ -296,8 +296,10 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
             numRabbit = 0;
         }else if(die < DIE_COUNT && die > 0){
             numRabbit = 1;
+            isDie = false;
         }else{
             numRabbit = 0;
+            isDie = false;
         }
         Log.i("Jcheng","num of rabbit:"+numRabbit);
 
