@@ -129,7 +129,7 @@ public class CalendarAdapter extends BaseAdapter {
             v.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
         }
         else {
-            v.setBackgroundColor(ContextCompat.getColor(context, R.color.slightGreen));
+            v.setBackgroundColor(ContextCompat.getColor(context, R.color.background));
         }
 
 
@@ -165,7 +165,7 @@ public class CalendarAdapter extends BaseAdapter {
 
     public View setSelected(View view,int position) {
         if (previousView != null) {
-            previousView.setBackgroundColor(ContextCompat.getColor(context, R.color.slightGreen));
+            previousView.setBackgroundColor(ContextCompat.getColor(context, R.color.background));
         }
 
         selectedGridDate = CalendarAdapter.day_string.get(position);
