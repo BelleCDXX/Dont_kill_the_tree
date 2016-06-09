@@ -6,9 +6,6 @@ import android.os.AsyncTask;
 
 import dontkillthetree.scu.edu.UI.R;
 
-/**
- * Created by jasonzhang on 5/28/16.
- */
 public class BackgroundMusic extends AsyncTask<Void, Void, Void> {
     private static Context mContext;
     private static BackgroundMusic mBackgroundMusic;
@@ -29,7 +26,7 @@ public class BackgroundMusic extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        player = MediaPlayer.create(mContext, R.raw.start_all_over_again);
+        player = MediaPlayer.create(mContext, R.raw.the_city_of_sky);
         player.setLooping(true); // Set looping
         player.setVolume(1.0f, 1.0f);
         player.start();

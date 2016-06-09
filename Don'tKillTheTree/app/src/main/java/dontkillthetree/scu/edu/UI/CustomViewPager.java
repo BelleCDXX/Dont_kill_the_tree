@@ -5,9 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-/**
- * Created by Zhaowei on 6/4/16.
- */
 public class CustomViewPager extends ViewPager{
     private float downX;
     private float downY;

@@ -20,7 +20,7 @@ public class ParentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // build action bar
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Tree of Time");
+        actionBar.setTitle("Don't kill the tree");
         //actionBar.setSubtitle("Group1");
         actionBar.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.action_bar_background));
         //actionBar.setIcon(R.mipmap.ic_launcher);

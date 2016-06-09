@@ -1,21 +1,22 @@
 package dontkillthetree.scu.edu.UI;
 
 import android.app.Dialog;
-import android.graphics.drawable.ClipDrawable;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
+
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,17 +39,13 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
-import dontkillthetree.scu.edu.model.Audio;
 import dontkillthetree.scu.edu.model.Milestone;
 import dontkillthetree.scu.edu.model.Project;
 import dontkillthetree.scu.edu.model.Projects;
 import dontkillthetree.scu.edu.model.Stages;
 import dontkillthetree.scu.edu.model.Tree;
-import dontkillthetree.scu.edu.service.BackgroundMusic;
 
 public class HomeActivity extends ParentActivity implements AdapterView.OnItemSelectedListener,SensorEventListener {
 
@@ -69,7 +66,7 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     private boolean isDie = false;
     private int numRabbit;
 
-    private static MediaPlayer mMediaPlayer;
+//    private static MediaPlayer mMediaPlayer;
 
     private Tree mTree;
     private Spinner spinner;
@@ -82,33 +79,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     private int mStageMaxExp = 0;
     private int lastStage = 0;
 
-    // progress bar
-    private ClipDrawable mImageDrawable;
+    // cheer up and boo down sound
+    private MediaPlayer mMediaPlayer;
 
-    // a field in your class
-    private int mLevel = 0;
-    private static int fromLevel = 0;
-    private int toLevel = 0;
-    public static final int MAX_LEVEL = 10000;
-    public static final int LEVEL_DIFF = 100;
-    public static final int DELAY = 30;
-
-   /* private Handler mUpHandler = new Handler();
-    private Runnable animateUpImage = new Runnable() {
-        @Override
-        public void run() {
-            doTheUpAnimation(fromLevel, toLevel);
-        }
-    };
-
-    private Handler mDownHandler = new Handler();
-    private Runnable animateDownImage = new Runnable() {
-        @Override
-        public void run() {
-            doTheDownAnimation(fromLevel, toLevel);
-        }
-    };
-*/
     private WelcomeScreenHelper myWelcomeScreen;
 
     @Override
@@ -173,25 +146,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         }else{
             rabbit.setVisibility(View.GONE);
         }
-        //set exp bar
-        /*final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
-        mProgressBar.setMax(mStageMaxExp);
 
-        int mCurrentExp = mTree.getExperience();
-        mProgressBar.setProgress(mCurrentExp);*/
         renewExpBar();
 
-        // start playing background music
-//        BackgroundMusic.startPlay(context);
-
-        // set progress bar
-        //ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
-        //mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
-        //mImageDrawable.setLevel(0);
-
-
-//        toLevel = (mCurrentExp / mStageMaxExp) * MAX_LEVEL;
 
     }
 
@@ -248,44 +205,9 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         //fruit
         fruitText.setText(String.valueOf(fruitCount));
         //renew exp bar
-        /*final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mCurrentStage = mTree.getCurrentStage();
-        mStageMaxExp = Stages.getStageMaxExp(mCurrentStage);
-        mProgressBar.setMax(mStageMaxExp);
-
-        int mCurrentExp = mTree.getExperience();
-        mProgressBar.setProgress(mCurrentExp);
-*/
         renewExpBar();
-        // renew progress bar
-        /*double tmp = (double)mCurrentExp / (double)mStageMaxExp;
-        int temp_level = (int) (tmp * MAX_LEVEL);
-
-        if (toLevel == temp_level) {
-            return;
-        } else if(temp_level > MAX_LEVEL) {
-            mLevel = 0;
-            fromLevel = 0;
-            toLevel = 0;
-            ImageView img_clipSource = (ImageView) findViewById(R.id.clip_source);
-            mImageDrawable = (ClipDrawable) img_clipSource.getDrawable();
-            mImageDrawable.setLevel(0);
-        } else {
-            toLevel = (temp_level <= MAX_LEVEL) ? temp_level : toLevel;
-            if (toLevel > fromLevel) {
-                // cancel previous process first
-                mDownHandler.removeCallbacks(animateDownImage);
-                HomeActivity.this.fromLevel = toLevel;
-
-                mUpHandler.post(animateUpImage);
-            } else {
-                // cancel previous process first
-                mUpHandler.removeCallbacks(animateUpImage);
-                HomeActivity.this.fromLevel = toLevel;
-
-                mDownHandler.post(animateDownImage);
-            }
-        }*/
+        // Show toast and sound when tree level up and down
+        levelChangeToast();
     }
 
     @Override
@@ -298,6 +220,10 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     protected void onDestroy() {
         super.onDestroy();
 //        BackgroundMusic.stopPlay(context);
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 
 
@@ -407,35 +333,23 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         return milestones;
     }
 
-    private void levelUpToast(){
+
+    private void levelChangeToast(){
+
         if(mCurrentStage > lastStage){
             Toast.makeText(getApplicationContext(),"Congratulation! Tree level up!",Toast.LENGTH_SHORT).show();
-            lastStage = mCurrentStage;
+            mMediaPlayer = MediaPlayer.create(context, R.raw.tree_level_up);
+            mMediaPlayer.setVolume(1.0f, 1.0f);
+            mMediaPlayer.start();
+        } else if (mCurrentStage < lastStage) {
+            Toast.makeText(getApplicationContext(),"Whoops! Tree level down!",Toast.LENGTH_SHORT).show();
+            mMediaPlayer = MediaPlayer.create(context, R.raw.tree_level_down);
+            mMediaPlayer.setVolume(1.0f, 1.0f);
+            mMediaPlayer.start();
         }
+        lastStage = mCurrentStage;
     }
 
-
-    //check if project is completed
-    /*private boolean isProjectComplted(Project project){
-        int count = 0;
-        List<Milestone> list = new ArrayList<Milestone>();
-
-        if(project.getMilestones().size()<1){
-            return true;
-        }
-        list = project.getMilestones();
-
-        for(Milestone m:list){
-            if(!m.isCompleted()){
-                count++;
-            }
-        }
-
-        if(count > 0){
-            return false;
-        }
-        return true;
-    }*/
     //set menu, add go to list icon
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -448,9 +362,6 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
         int id = item.getItemId();
         switch (id) {
             case R.id.go_to_list:
-                // when click go to list button in the action bar
-                Audio.makeClickSound(context);
-
                 Intent intent = new Intent(HomeActivity.this, ProjectListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
@@ -462,37 +373,14 @@ public class HomeActivity extends ParentActivity implements AdapterView.OnItemSe
     }
 
 
-   /* private void doTheUpAnimation(int fromLevel, int toLevel) {
-        mLevel += LEVEL_DIFF;
-        mImageDrawable.setLevel(mLevel);
-        if (mLevel <= toLevel) {
-            mUpHandler.postDelayed(animateUpImage, DELAY);
-        } else {
-            mUpHandler.removeCallbacks(animateUpImage);
-            HomeActivity.this.fromLevel = toLevel;
-        }
+    private void renewExpBar(){
+        final RoundCornerProgressBar expBar = (RoundCornerProgressBar)findViewById(R.id.expBar);
+        mCurrentStage = mTree.getCurrentStage();
+        int maxExp = Stages.getStageMaxExp(mCurrentStage);
+        int currentExp = mTree.getExperience();
+        expBar.setMax(maxExp);
+        expBar.setProgress(currentExp);
     }
-
-    private void doTheDownAnimation(int fromLevel, int toLevel) {
-        mLevel -= LEVEL_DIFF;
-        mImageDrawable.setLevel(mLevel);
-        if (mLevel >= toLevel) {
-            mDownHandler.postDelayed(animateDownImage, DELAY);
-        } else {
-            mDownHandler.removeCallbacks(animateDownImage);
-            HomeActivity.this.fromLevel = toLevel;
-        }
-
-    }*/
-
-private void renewExpBar(){
-    final RoundCornerProgressBar expBar = (RoundCornerProgressBar)findViewById(R.id.expBar);
-    mCurrentStage = mTree.getCurrentStage();
-    int maxExp = Stages.getStageMaxExp(mCurrentStage);
-    int currentExp = mTree.getExperience();
-    expBar.setMax(maxExp);
-    expBar.setProgress(currentExp);
-}
     private void displayAcceleration(){
         float accel = Math.abs( mAccel);
         if (accel > 1.0f) {

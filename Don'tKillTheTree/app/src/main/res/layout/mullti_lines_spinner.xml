@@ -24,4 +24,8 @@ style="?android:attr/spinnerDropDownItemStyle"
 android:singleLine="false"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:ellipsize="marquee"/>
+android:ellipsize="marquee"
+    android:textColor="@color/brownInBar"
+    android:textSize="15sp"
+    android:textAppearance="?android:attr/label"
+    />

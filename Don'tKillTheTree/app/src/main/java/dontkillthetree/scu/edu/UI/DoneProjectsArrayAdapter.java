@@ -15,9 +15,7 @@ import java.util.List;
 
 import dontkillthetree.scu.edu.Util.Util;
 import dontkillthetree.scu.edu.model.Project;
-/**
- * Created by cheng11 on 5/29/16.
- */
+
 public class DoneProjectsArrayAdapter extends ArrayAdapter<Project> {
     private final List<Project> mProjects;
     private Context context;
